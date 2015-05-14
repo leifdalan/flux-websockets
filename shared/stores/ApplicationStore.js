@@ -45,6 +45,7 @@ export default class ApplicationStore extends BaseStore {
     this.currentRoute = null;
     this.loggedIn = false;
     this.email = null;
+    this.userId = null;
     this.redirect = null;
     this.appIsLoading = null;
     this.flashMessage = null;
@@ -101,10 +102,12 @@ export default class ApplicationStore extends BaseStore {
     this.emitChange();
   }
 
-  login({userLevel=1, local}) {
+  login({userLevel=1, local, _id}) {
+    debug('logging in', _id);
     this.loggedIn = true;
     this.email = local.email;
     this.userLevel = userLevel;
+    this.userId = _id;
     this.emitChange();
   }
 
@@ -132,6 +135,7 @@ export default class ApplicationStore extends BaseStore {
       loggedIn: this.loggedIn,
       email: this.email,
       userLevel: this.userLevel,
+      userId: this.userId,
       appIsLoading: this.appIsLoading,
       flashMessage: this.flashMessage,
       pageUserPref: this.pageUserPref,
@@ -150,6 +154,7 @@ export default class ApplicationStore extends BaseStore {
     this.email = state.email;
     this.userLevel = state.userLevel;
     this.appIsLoading = state.appIsLoading;
+    this.userId = state.userId;
     this.flashMessage = state.flashMessage;
     this.pageUserPref = state.pageUserPref;
     this.inPageLoadingProperties = state.inPageLoadingProperties;

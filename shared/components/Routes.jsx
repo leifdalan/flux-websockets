@@ -13,6 +13,7 @@ import CreateUser from './Admin/Users/CreateUser';
 import Pages from './Admin/Pages';
 import Page from './Admin/Pages/Page';
 import CreatePage from './Admin/Pages/CreatePage';
+import ChatRoom from './Chatroom';
 import NotFound from './NotFound';
 
 
@@ -23,6 +24,7 @@ export default (
     <Route name="page" path="/page/:id" handler={Page}/>
     <Route name="dashboard" handler={Dashboard}/>
     <Route name="signin" handler={SignIn}/>
+    <Route name="chatroom" handler={ChatRoom}/>
 
     <Route name="admin">
       <DefaultRoute name="adminDashboard" handler={AdminIndex}/>

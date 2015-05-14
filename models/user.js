@@ -17,8 +17,23 @@ const userSchema = schema({
   lastUpdated: { type: Date, 'default': Date.now }
 });
 
+const somethingElse = schema({
+  groups: Array,
+  isValidated: { type: Boolean, 'default': true },
+  loginToken: { type: String, 'default': uuid.v4() },
+  userLevel: { type: Number, 'default': 1},
+  local: {
+    email: String,
+    password: String
+  },
+  created: { type: Date, 'default': Date.now },
+  lastUpdated: { type: Date, 'default': Date.now }
+}, { capped: { size: 10, max: 10, autoIndexId: true }});
+
 // generating a hash
 userSchema.methods.generateHash = (password) =>
+  bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+somethingElse.methods.generateHash = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 
 
@@ -28,7 +43,13 @@ userSchema.methods.validPassword = function(password) {
 };
 
 userSchema.methods.generateToken = () => uuid.v4();
+somethingElse.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.local.password);
+};
+
+somethingElse.methods.generateToken = () => uuid.v4();
 
 
 // create the model for users and expose it to our app
-export default model('User', userSchema);
+export default model('SomethingElse', somethingElse);
+model('User', userSchema);

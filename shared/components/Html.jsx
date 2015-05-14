@@ -56,6 +56,7 @@ export default class Html extends Component {
         {this.props.shouldClientRender &&
           <script dangerouslySetInnerHTML={{__html: this.props.state}} />
         }
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
       </html>
     );
   }

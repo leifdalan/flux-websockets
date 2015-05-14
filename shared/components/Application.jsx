@@ -3,11 +3,13 @@ import React, {Component, PropTypes as pt} from 'react';
 import {connectToStores} from 'fluxible/addons';
 import ApplicationStore from '../stores/ApplicationStore';
 import UserStore from '../stores/UserStore';
+import ChatStore from '../stores/ChatStore';
 import {autoBindAll} from '../../utils';
 import Nav from './Nav';
 import AdminNav from './Admin/AdminNav';
 import {RouteHandler} from 'react-router';
 import {logoutAction} from '../actions/authActions';
+import {handleMessageAction} from '../actions/chatActions';
 import DocumentTitle from 'react-document-title';
 import {clearFlashAction} from '../actions/appActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
@@ -44,6 +46,21 @@ class Application extends Component {
     this.setState(newState);
   }
 
+  componentDidMount() {
+    const socket = io();
+    socket.on('connect', function () {
+      debug('connected');
+});
+    socket.on('disconnect', function () {
+      debug('disconnected');
+});
+
+    socket.on('chat', (data) => {
+      debug('user....');
+      this.context.executeAction(handleMessageAction, data);
+    });
+  }
+
   logout(e) {
     e.preventDefault();
     const {router} = this.context;
@@ -58,7 +75,10 @@ class Application extends Component {
 
   log() {
     const state = this.context.getStore(ApplicationStore).getState();
+
     const userState = this.context.getStore(UserStore).getState();
+    const chatState = this.context.getStore(ChatStore).getState();
+    debug(chatState);
     debug(userState);
     debug(state);
   }

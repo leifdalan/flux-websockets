@@ -12,6 +12,9 @@ import url from 'url';
 import services from '../services';
 import CST from '../shared/constants';
 import reactRender from './reactrender';
+import socketio from 'socket.io';
+import http from 'http';
+
 
 // Passport imports
 import passport from 'passport';
@@ -34,7 +37,7 @@ mongoose.connect(MONGOLAB_URI);
 
 passportConfig(passport);
 
-const server = express();
+const app = express();
 const PORT = process.env.PORT || DEVELOPMENT_PORT;
 
 debug('Environment Variables:');
@@ -50,34 +53,34 @@ debug(`BrowserSync Dev Server: ${PROTOCOL}${HOSTNAME}:${BSPORT}`);
 // ----------------------------------------------------------------------------
 
 // log every request to the console
-server.use(morgan('dev'));
+app.use(morgan('dev'));
 
 // read cookies (needed for auth)
-server.use(cookieParser());
+app.use(cookieParser());
 
 // get information from html forms
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // required for passport
 // session secret
-server.use(session({
+app.use(session({
   secret: 'asdfoijwefobouz23oiv',
   resave: true,
   saveUninitialized: true
 }));
-server.use(passport.initialize());
+app.use(passport.initialize());
 
 // persistent login sessions
-server.use(passport.session());
+app.use(passport.session());
 
 // use connect-flash for flash messages stored in session
-server.use(flash());
+app.use(flash());
 
 // Login into administrator automatically for certain development modes
-if (process.env.ALWAYS_ADMIN) {
+if (false && process.env.ALWAYS_ADMIN) {
   let initialLogin = false;
-  server.use((req, res, next) => {
+  app.use((req, res, next) => {
     if (initialLogin) {
       return next();
     }
@@ -96,27 +99,47 @@ if (process.env.ALWAYS_ADMIN) {
 
 // Load our services and pass in our app and fully configured passport
 // This is where all the routing for mongoDB service calls live.
-services(server);
+var server = http.createServer(app);
 
-// Proxy public folder to WebPack's hot loading server during development
+server.listen(PORT, function() {
+  debug('Express server listening on port ' + PORT);
+});
+
+// Initialize socket.io
+var io = socketio.listen(server);
+
+io.on('connection', (socket) => {
+  debug(`================================================
+    ===============================================
+    ===========================================
+    =======================a user connected`);
+    socket.on('disconnect', function() {
+      debug('disconnected==================================');
+   });
+});
+
+
+services(app, io);
+
+// Proxy public folder to WebPack's hot loading app during development
 // If not development, we're using an S3 bucket for static assets.
 if (process.env.NODE_ENV === 'development' &&
   process.env.REACT_CLIENT_RENDER !== 'false') {
-  server.use(`${PUBLICPATH}`,
+  app.use(`${PUBLICPATH}`,
     proxy(url.parse(`${PROTOCOL}${HOSTNAME}:${DEVSERVERPORT}${PUBLICPATH}`))
   );
 }
 
-server.use(`${PUBLICPATH}`,
+app.use(`${PUBLICPATH}`,
   express.static(path.join(__dirname, `../${PUBLICPATH}`))
 );
 
-server.use(favicon(path.join(__dirname, '../favicon.ico')));
+app.use(favicon(path.join(__dirname, '../favicon.ico')));
 
 // Fluxible + react-router markup generator, attemps to send response.
-server.use(reactRender);
+app.use(reactRender);
 
-server.use((req, res) => {
+app.use((req, res) => {
 
   // ---------------------------------------------------------------------------
   // Last ditch effort to redirect if there's a react-router
@@ -157,5 +180,5 @@ server.use((req, res) => {
   }
 });
 
-server.listen(PORT);
+
 debug('Listening on port ' + PORT);

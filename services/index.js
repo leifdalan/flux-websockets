@@ -1,6 +1,6 @@
 import {signUp, logOut, login, isAdmin, isLoggedIn} from './authentication';
-import Page from '../models/page';
-
+// import Page from '../models/page';
+import User from '../models/user';
 import {
   redirectUser,
   getUsers,
@@ -17,7 +17,10 @@ import {
   createPage,
   deletePage,
   updateManyPages} from './admin/pages';
+import chatHandler from './admin/chat';
 const debug = require('debug')('Routes');
+
+
 
 // Abstract of sending data from the server to client,
 // whether its the first request or an in-app XHR.
@@ -41,8 +44,9 @@ export function sendData({data, req, res, next}) {
   }
 }
 
-export default function(server) {
-
+export default function(server, io) {
+  // Set up chat listeners
+  chatHandler(io);
   // Middleware check for token logins
   server.use((req, res, next) => {
     if (req.query.token && req.query.un) {
@@ -54,6 +58,17 @@ export default function(server) {
     } else {
       next();
     }
+  });
+
+  const stream = User.find().stream();
+
+  stream.on('data', (user) => {
+    // debug('WOOOOOHOOOOOO SOCKETSSSS==============================================', user);
+    io.emit('user', user);
+  }).on('error', (error) => {
+    debug('SOCKET ERROR', error);
+  }).on('close', () => {
+    debug('SOCKET CLOSED');
   });
 
 
@@ -76,7 +91,7 @@ export default function(server) {
     isAdmin,
     getUsers
   );
-  server.post('/admin/users/', isLoggedIn, isAdmin, createUser);
+  server.post('/admin/users/', isLoggedIn, isAdmin, createUser.bind(io));
   server.put('/admin/users/', isLoggedIn, isAdmin, updateManyUsers);
   server.get('/admin/users/:id', isLoggedIn, isAdmin, getOneUser);
   server.put('/admin/users/:id', isLoggedIn, isAdmin, updateUser);
@@ -103,38 +118,38 @@ export default function(server) {
   // Page resolution
   // ----------------------------------------------------------------------------
 
-  server.get('*', (req, res, next) => {
-    debug('Looking for', req.path);
-    if (req.preRender) {
-
-      next();
-    } else {
-      if (req.path.split('/')[1] === 'dist') {
-        next();
-      } else {
-        Page.findOne({slug: req.path.substring(1)}, (err, page) => {
-          if (err) {
-            next();
-          }
-          if (page) {
-            req.preRender = page;
-            next();
-          } else {
-            next();
-          }
-        });
-      }
-    }
-  });
-
-  // Blacklist undefined http verbs routes
-  function fourHundred(req, res) {
-    res.status(400).json({
-      success: false,
-      error: 'Not allowed.'
-    });
-  }
-  server.delete('*', fourHundred);
-  server.put('*', fourHundred);
-  server.post('*', fourHundred);
+  // server.get('*', (req, res, next) => {
+  //   debug('Looking for', req.path);
+  //   if (req.preRender) {
+  //
+  //     next();
+  //   } else {
+  //     if (req.path.split('/')[1] === 'dist') {
+  //       next();
+  //     } else {
+  //       Page.findOne({slug: req.path.substring(1)}, (err, page) => {
+  //         if (err) {
+  //           next();
+  //         }
+  //         if (page) {
+  //           req.preRender = page;
+  //           next();
+  //         } else {
+  //           next();
+  //         }
+  //       });
+  //     }
+  //   }
+  // });
+  //
+  // // Blacklist undefined http verbs routes
+  // function fourHundred(req, res) {
+  //   res.status(400).json({
+  //     success: false,
+  //     error: 'Not allowed.'
+  //   });
+  // }
+  // server.delete('*', fourHundred);
+  // server.put('*', fourHundred);
+  // server.post('*', fourHundred);
 }

@@ -34,10 +34,11 @@
   },
 
   "globals": {
-    // e.g. "angular": true,
-    "require": true,
-    "module": true,
-    "window": true
+    // e.g. "angular": false,
+    "require": false,
+    "module": false,
+    "window": false,
+    "io": false
   },
 
   "plugins": [

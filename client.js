@@ -9,6 +9,10 @@ import config from './config';
 import FluxibleComponent from 'fluxible/addons/FluxibleComponent';
 
 const bootstrapDebug = debug('Bootstrapping App:');
+// var socket = io();
+// socket.on('user', function() {
+//   console.log('user');
+// });
 
 // // react a11y warnings!
 // require('react-a11y')();

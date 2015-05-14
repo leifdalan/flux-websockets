@@ -31,6 +31,7 @@ export function createUser(req, res, next) {
         success: `User ${user.local.email} created successfully`,
         user
       };
+      this.emit('user', user);
     }
     sendData({data, req, res, next});
   })(req, res, next);
