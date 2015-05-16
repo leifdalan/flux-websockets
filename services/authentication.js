@@ -61,11 +61,13 @@ export function login(req, res, next) {
       if (loginErr) {
         return next(loginErr);
       }
+
       if (req.xhr) {
         res.json({
           success: true,
           user
         });
+
       } else {
 
         if (req.tokenAttempt) {

@@ -6,7 +6,8 @@ const chat = schema({
    ref: 'User'
   },
   content: {type: String},
-  created: { type: Date, 'default': Date.now }
+  created: { type: Date, 'default': Date.now },
+  room: {type: String}
 });
 
 export default model('Chat', chat);

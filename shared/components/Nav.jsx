@@ -85,7 +85,7 @@ export default class Nav extends Component {
             <Link
               onMouseOver={this.mouseOverLink}
               onMouseOut={this.mouseOut}
-              to='chatroom'>Chatroom
+              to='chat'>Chatroom
             </Link>
           </li>
 

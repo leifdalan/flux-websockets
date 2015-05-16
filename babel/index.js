@@ -20,6 +20,9 @@ import http from 'http';
 import passport from 'passport';
 import passportConfig from '../config/passport';
 import config from '../config';
+import passportSocketIo from 'passport.socketio';
+
+const MongoStore = require('connect-mongo')(session);
 
 const {
   PUBLIC_PATH: PUBLICPATH,
@@ -28,7 +31,9 @@ const {
   MONGOLAB_URI,
   HOSTNAME,
   PROTOCOL,
-  DEVELOPMENT_PORT
+  DEVELOPMENT_PORT,
+  SESSION_KEY,
+  SESSION_SECRET
 } = config;
 
 const debug = require('debug')('Server');
@@ -62,10 +67,15 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+var sessionStore = new MongoStore({
+  mongooseConnection: mongoose.connection
+});
 // required for passport
 // session secret
 app.use(session({
-  secret: 'asdfoijwefobouz23oiv',
+  key: SESSION_KEY,
+  secret: SESSION_SECRET,
+  store: sessionStore,
   resave: true,
   saveUninitialized: true
 }));
@@ -76,26 +86,6 @@ app.use(passport.session());
 
 // use connect-flash for flash messages stored in session
 app.use(flash());
-
-// Login into administrator automatically for certain development modes
-if (false && process.env.ALWAYS_ADMIN) {
-  let initialLogin = false;
-  app.use((req, res, next) => {
-    if (initialLogin) {
-      return next();
-    }
-    req.body = {email: 'admin', password: 'admin'};
-    passport.authenticate('local-login', (err, user) => {
-      req.logIn(user, function(loginErr) {
-        if (loginErr) {
-          return next(loginErr);
-        }
-        initialLogin = true;
-        next();
-      });
-    })(req, res, next);
-  });
-}
 
 // Load our services and pass in our app and fully configured passport
 // This is where all the routing for mongoDB service calls live.
@@ -108,16 +98,27 @@ server.listen(PORT, function() {
 // Initialize socket.io
 var io = socketio.listen(server);
 
-io.on('connection', (socket) => {
-  debug(`================================================
-    ===============================================
-    ===========================================
-    =======================a user connected`);
-    socket.on('disconnect', function() {
-      debug('disconnected==================================');
-   });
-});
+// With Socket.io >= 1.0
+io.use(passportSocketIo.authorize({
+  cookieParser: cookieParser,       // the same middleware you registrer in express
+  key: SESSION_KEY,
+  secret: SESSION_SECRET,
+  store: sessionStore,
+  // success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
+  fail: (...args) => {
+    const accept = args[3];
+    debug('authorize failure for socket');
+    // accept anonymous socket connection attempts.
+    accept(null, true);
+  }
+}));
 
+
+io.on('connection', (socket) => {
+  socket.on('disconnect', function() {
+    debug('disconnected==================================');
+ });
+});
 
 services(app, io);
 

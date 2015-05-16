@@ -1,6 +1,5 @@
 import {signUp, logOut, login, isAdmin, isLoggedIn} from './authentication';
 // import Page from '../models/page';
-import User from '../models/user';
 import {
   redirectUser,
   getUsers,
@@ -10,17 +9,11 @@ import {
   deleteUser,
   updateManyUsers} from './admin/users';
 import {
-  redirectPage,
-  getPages,
-  getOnePage,
-  updatePage,
-  createPage,
-  deletePage,
-  updateManyPages} from './admin/pages';
-import chatHandler from './admin/chat';
+  getChatRooms,
+  createChat,
+  getOneChatroom,
+  setUpChatListeners} from './admin/chat';
 const debug = require('debug')('Routes');
-
-
 
 // Abstract of sending data from the server to client,
 // whether its the first request or an in-app XHR.
@@ -45,8 +38,7 @@ export function sendData({data, req, res, next}) {
 }
 
 export default function(server, io) {
-  // Set up chat listeners
-  chatHandler(io);
+
   // Middleware check for token logins
   server.use((req, res, next) => {
     if (req.query.token && req.query.un) {
@@ -59,18 +51,6 @@ export default function(server, io) {
       next();
     }
   });
-
-  const stream = User.find().stream();
-
-  stream.on('data', (user) => {
-    // debug('WOOOOOHOOOOOO SOCKETSSSS==============================================', user);
-    io.emit('user', user);
-  }).on('error', (error) => {
-    debug('SOCKET ERROR', error);
-  }).on('close', () => {
-    debug('SOCKET CLOSED');
-  });
-
 
   // ----------------------------------------------------------------------------
   // Authorization endpoints
@@ -98,58 +78,11 @@ export default function(server, io) {
   server.delete('/admin/users/:id', isLoggedIn, isAdmin, deleteUser);
 
   // ----------------------------------------------------------------------------
-  // Admin Pages CRUD (/admin/pages)
+  // Chat CRUD (/chatLobby)
   // ----------------------------------------------------------------------------
 
-  server.get('/admin/pages/', isLoggedIn, isAdmin, redirectPage);
-  server.get(
-    '/admin/pages/page/:perpage/:currentPageNumber',
-    isLoggedIn,
-    isAdmin,
-    getPages
-  );
-  server.post('/admin/pages/', isLoggedIn, isAdmin, createPage);
-  server.put('/admin/pages/', isLoggedIn, isAdmin, updateManyPages);
-  server.get('/admin/pages/:id', isLoggedIn, isAdmin, getOnePage);
-  server.put('/admin/pages/:id', isLoggedIn, isAdmin, updatePage);
-  server.delete('/admin/pages/:id', isLoggedIn, isAdmin, deletePage);
-
-  // ----------------------------------------------------------------------------
-  // Page resolution
-  // ----------------------------------------------------------------------------
-
-  // server.get('*', (req, res, next) => {
-  //   debug('Looking for', req.path);
-  //   if (req.preRender) {
-  //
-  //     next();
-  //   } else {
-  //     if (req.path.split('/')[1] === 'dist') {
-  //       next();
-  //     } else {
-  //       Page.findOne({slug: req.path.substring(1)}, (err, page) => {
-  //         if (err) {
-  //           next();
-  //         }
-  //         if (page) {
-  //           req.preRender = page;
-  //           next();
-  //         } else {
-  //           next();
-  //         }
-  //       });
-  //     }
-  //   }
-  // });
-  //
-  // // Blacklist undefined http verbs routes
-  // function fourHundred(req, res) {
-  //   res.status(400).json({
-  //     success: false,
-  //     error: 'Not allowed.'
-  //   });
-  // }
-  // server.delete('*', fourHundred);
-  // server.put('*', fourHundred);
-  // server.post('*', fourHundred);
+  server.get('/chat/', getChatRooms.bind(io));
+  server.post('/chat/', createChat.bind(io));
+  server.get('/chat/:id', getOneChatroom.bind(io));
+  setUpChatListeners(io);
 }
