@@ -70,6 +70,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection
 });
+console.log(sessionStore);
 // required for passport
 // session secret
 app.use(session({
