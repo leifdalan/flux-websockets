@@ -37,7 +37,7 @@ class ChatRoom extends Component {
     this.context.executeAction(handleMessageAction, data);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const socket = io(`/${this.props.store.chatRoomTitle}`);
     const activitySocket = io();
 
