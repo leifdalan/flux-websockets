@@ -30,6 +30,7 @@ function listenOnChannel(io, chatroom) {
     });
 
     connectedMap[chatroom._id] = connectedUsers;
+
     function saveChat(chat) {
       chat.room = chatroom.title;
       let newChat = new Chat(chat);
@@ -48,6 +49,7 @@ function listenOnChannel(io, chatroom) {
         }
       });
     }
+
     socket.on('chat', saveChat);
 
     socket.on('disconnect', () => {

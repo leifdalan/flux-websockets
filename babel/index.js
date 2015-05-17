@@ -67,15 +67,15 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var sessionStore = new MongoStore({
-  mongooseConnection: mongoose.connection
-});
+// var sessionStore = new MongoStore({
+//   mongooseConnection: mongoose.connection
+// });
 // required for passport
 // session secret
 app.use(session({
   key: SESSION_KEY,
   secret: SESSION_SECRET,
-  store: sessionStore,
+  // store: sessionStore,
   resave: true,
   saveUninitialized: true
 }));
@@ -99,19 +99,19 @@ server.listen(PORT, function() {
 var io = socketio.listen(server);
 
 // With Socket.io >= 1.0
-io.use(passportSocketIo.authorize({
-  cookieParser: cookieParser,       // the same middleware you registrer in express
-  key: SESSION_KEY,
-  secret: SESSION_SECRET,
-  store: sessionStore,
-  // success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
-  fail: (...args) => {
-    const accept = args[3];
-    debug('authorize failure for socket');
-    // accept anonymous socket connection attempts.
-    accept(null, true);
-  }
-}));
+// io.use(passportSocketIo.authorize({
+//   cookieParser: cookieParser,       // the same middleware you registrer in express
+//   key: SESSION_KEY,
+//   secret: SESSION_SECRET,
+//   store: sessionStore,
+//   // success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
+//   fail: (...args) => {
+//     const accept = args[3];
+//     debug('authorize failure for socket');
+//     // accept anonymous socket connection attempts.
+//     accept(null, true);
+//   }
+// }));
 
 
 io.on('connection', (socket) => {
