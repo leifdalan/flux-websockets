@@ -115,6 +115,9 @@
     "fluxible",
     "react-router"
   ],
+  "engines": {
+    "node": "0.10.x"
+  },
   "author": "Leif Dalan",
   "license": "MIT",
   "bugs": {
