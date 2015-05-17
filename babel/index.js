@@ -20,9 +20,9 @@ import http from 'http';
 import passport from 'passport';
 import passportConfig from '../config/passport';
 import config from '../config';
-import passportSocketIo from 'passport.socketio';
-
-const MongoStore = require('connect-mongo')(session);
+// import passportSocketIo from 'passport.socketio';
+//
+// const MongoStore = require('connect-mongo')(session);
 
 const {
   PUBLIC_PATH: PUBLICPATH,
