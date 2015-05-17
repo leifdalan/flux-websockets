@@ -1,12 +1,12 @@
-import {Schema as schema, model} from 'mongoose';
+const mongoose = require('mongoose');
 
-const chatroom = schema({
+const chatroom = mongoose.Schema({
   user: {
-   type: schema.ObjectId,
+   type: mongoose.Schema.ObjectId,
    ref: 'User'
   },
   title: {type: String},
   created: { type: Date, 'default': Date.now }
 });
 
-export default model('ChatRoom', chatroom);
+export default mongoose.model('ChatRoom', chatroom);

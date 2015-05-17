@@ -1,8 +1,8 @@
-import {Schema as schema, model} from 'mongoose';
+const mongoose = require('mongoose');
 
-const chat = schema({
+const chat = mongoose.Schema({
   user: {
-   type: schema.ObjectId,
+   type: mongoose.Schema.ObjectId,
    ref: 'User'
   },
   content: {type: String},
@@ -10,4 +10,4 @@ const chat = schema({
   room: {type: String}
 });
 
-export default model('Chat', chat);
+export default mongoose.model('Chat', chat);
