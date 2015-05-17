@@ -3,6 +3,7 @@ import {Schema as schema, model} from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
 import uuid from 'uuid';
 
+console.log(schema, model);
 // define the schema for our user model
 const userSchema = schema({
   groups: Array,
@@ -17,7 +18,6 @@ const userSchema = schema({
   lastUpdated: { type: Date, 'default': Date.now }
 });
 
-
 // generating a hash
 userSchema.methods.generateHash = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -29,6 +29,7 @@ userSchema.methods.validPassword = function(password) {
 };
 
 userSchema.methods.generateToken = () => uuid.v4();
+
 
 // create the model for users and expose it to our app
 export default model('User', userSchema);
