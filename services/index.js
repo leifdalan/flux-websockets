@@ -64,19 +64,19 @@ export default function(server, io) {
   // Admin Users CRUD (/admin/users)
   // ----------------------------------------------------------------------------
 
-  server.get('/admin/users/', isLoggedIn, isAdmin, redirectUser);
-  server.get(
-    '/admin/users/page/:perpage/:currentPageNumber',
-    isLoggedIn,
-    isAdmin,
-    getUsers
-  );
-  server.post('/admin/users/', isLoggedIn, isAdmin, createUser);
-  server.put('/admin/users/', isLoggedIn, isAdmin, updateManyUsers);
-  server.get('/admin/users/:id', isLoggedIn, isAdmin, getOneUser);
-  server.put('/admin/users/:id', isLoggedIn, isAdmin, updateUser);
-  server.delete('/admin/users/:id', isLoggedIn, isAdmin, deleteUser);
-
+  // server.get('/admin/users/', isLoggedIn, isAdmin, redirectUser);
+  // server.get(
+  //   '/admin/users/page/:perpage/:currentPageNumber',
+  //   isLoggedIn,
+  //   isAdmin,
+  //   getUsers
+  // );
+  // server.post('/admin/users/', isLoggedIn, isAdmin, createUser);
+  // server.put('/admin/users/', isLoggedIn, isAdmin, updateManyUsers);
+  // server.get('/admin/users/:id', isLoggedIn, isAdmin, getOneUser);
+  // server.put('/admin/users/:id', isLoggedIn, isAdmin, updateUser);
+  // server.delete('/admin/users/:id', isLoggedIn, isAdmin, deleteUser);
+  //
   // ----------------------------------------------------------------------------
   // Chat CRUD (/chatLobby)
   // ----------------------------------------------------------------------------
