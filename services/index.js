@@ -71,7 +71,7 @@ export default function(server, io) {
     isAdmin,
     getUsers
   );
-  server.post('/admin/users/', isLoggedIn, isAdmin, createUser.bind(io));
+  server.post('/admin/users/', isLoggedIn, isAdmin, createUser);
   server.put('/admin/users/', isLoggedIn, isAdmin, updateManyUsers);
   server.get('/admin/users/:id', isLoggedIn, isAdmin, getOneUser);
   server.put('/admin/users/:id', isLoggedIn, isAdmin, updateUser);
