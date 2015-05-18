@@ -40,7 +40,7 @@ export default class ChatStore extends BaseStore {
   }
 
   handleMessageUpdate(payload) {
-    this.chats.push(payload);
+    this.chats.unshift(payload);
     this.emitChange();
   }
 

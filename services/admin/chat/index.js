@@ -112,6 +112,7 @@ export function getOneChatroom(req, res, next) {
         data.success = true;
       }
       Chat.find({room: chatroom.title})
+        .sort({_id: -1})
         .populate('user')
         .exec((errorWithTitle, chatsWithTitle) => {
         debug('PAGE DATA', data);

@@ -17,8 +17,12 @@ class ChatRoom extends Component {
     autoBindAll.call(this, [
       'submitChat',
       'handleMessageAction',
+      'onInputChange',
       'handleActivityAction'
     ]);
+    this.state = {
+      inputValue: ''
+    }
   }
 
   static displayName = 'ChatRoom'
@@ -34,8 +38,18 @@ class ChatRoom extends Component {
     appStore: pt.object.isRequired
   }
 
+  onInputChange(ref, e) {
+    e.preventDefault();
+    this.setState({
+      inputValue: e.target.value
+    });
+  }
+
   handleMessageAction(data) {
     this.context.executeAction(handleMessageAction, data);
+    this.setState({
+      inputValue: ''
+    });
   }
 
   handleActivityAction(data) {
@@ -75,7 +89,6 @@ class ChatRoom extends Component {
   }
 
   render() {
-    debug(this.props.store);
     return (
       <div>
         <h1>{this.props.store.chatRoomTitle}</h1>
@@ -86,7 +99,11 @@ class ChatRoom extends Component {
           )}
         </ul>
         <form onSubmit={this.submitChat}>
-          <input ref="content" type="text" />
+          <input
+            ref="content"
+            type="text"
+            onChange={this.onInputChange.bind(null, 'content')}
+            value={this.state.inputValue} />
           <button type="submit">Submit</button>
         </form>
         <TransitionGroup component="div" transitionName="example">
