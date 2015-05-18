@@ -1,5 +1,4 @@
 'use scrict';
-console.log('STARTING UP......');
 var BABEL_STAGE = require('./config').BABEL_STAGE;
 
 // Babel entry point

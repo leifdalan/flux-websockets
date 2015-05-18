@@ -9,15 +9,6 @@ import config from './config';
 import FluxibleComponent from 'fluxible/addons/FluxibleComponent';
 
 const bootstrapDebug = debug('Bootstrapping App:');
-// var socket = io();
-// socket.on('user', function() {
-//   console.log('user');
-// });
-
-// // react a11y warnings!
-// require('react-a11y')();
-
-// Second part of the server/client relay handoff
 const dehydratedState = window.App;
 
 // Set client dev tool debug level

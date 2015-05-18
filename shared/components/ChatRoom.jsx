@@ -16,7 +16,8 @@ class ChatRoom extends Component {
     super(props);
     autoBindAll.call(this, [
       'submitChat',
-      'handleMessageAction'
+      'handleMessageAction',
+      'handleActivityAction'
     ]);
   }
 
@@ -37,27 +38,31 @@ class ChatRoom extends Component {
     this.context.executeAction(handleMessageAction, data);
   }
 
+  handleActivityAction(data) {
+    this.context.executeAction(handleActivityAction, data);
+  }
+
   componentDidMount() {
-    const socket = io(`/${this.props.store.chatRoomTitle}`);
+    const socket = io(`/${this.props.store.chatRoomTitle}`).connect();
     const activitySocket = io();
 
-    if (socket.disconnected) {
-      socket.connect();
-    }
     socket.on('chat', this.handleMessageAction);
-    activitySocket.on('activity', (data) => {
-      this.context.executeAction(handleActivityAction, data);
-    });
+    activitySocket.on('activity', this.handleActivityAction);
+
     this.interval = window.setInterval(() => {
       this.forceUpdate();
     }.bind(this), 10000);
+
     this.socket = socket;
+    this.activitySocket = activitySocket;
   }
 
   componentWillUnmount() {
     window.clearInterval(this.interval);
     this.socket.removeListener('chat', this.handleMessageAction);
     this.socket.disconnect();
+    // this.activitySocket.disconnect();
+    this.activitySocket.removeListener('activity', this.handleActivityAction);
   }
 
   submitChat(e) {
