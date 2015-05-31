@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
+/*eslint-disable*/
 const chatroom = mongoose.Schema({
+/*eslint-enable*/
   user: {
    type: mongoose.Schema.ObjectId,
    ref: 'User'

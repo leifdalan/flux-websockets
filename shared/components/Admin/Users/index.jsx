@@ -66,10 +66,8 @@ class AdminUserBrowser extends Component {
   static willTransitionTo = CheckAdminWillTransitionTo
 
   componentWillMount() {
-    trace(this);
-    debug('TYPEOF', typeof this.props.userStore);
     const appState = this.props.appStore;
-    const routes = appState.route.routes;
+    const {routes} = this.context.router;
     const currentRouteName = routes[routes.length - 1].name;
     let tablePropChoices;
     debug('CurrentRoute', currentRouteName);

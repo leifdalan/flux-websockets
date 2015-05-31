@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 import bcrypt from 'bcrypt-nodejs';
 import uuid from 'uuid';
 
-
 // define the schema for our user model
+/*eslint-disable*/
 const userSchema = mongoose.Schema({
+/*eslint-enable*/
   groups: Array,
   isValidated: { type: Boolean, 'default': true },
   loginToken: { type: String, 'default': uuid.v4() },
@@ -13,6 +14,10 @@ const userSchema = mongoose.Schema({
   local: {
     email: String,
     password: String
+  },
+  avatar: {
+   type: mongoose.Schema.ObjectId,
+   ref: 'Media'
   },
   created: { type: Date, 'default': Date.now },
   lastUpdated: { type: Date, 'default': Date.now }

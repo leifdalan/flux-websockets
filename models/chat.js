@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-
+/*eslint-disable*/
 const chat = mongoose.Schema({
+/*eslint-enable*/
   user: {
    type: mongoose.Schema.ObjectId,
    ref: 'User'

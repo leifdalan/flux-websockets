@@ -18,7 +18,7 @@ export default function(passport) {
 
   // used to deserialize the user
   passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
+    User.findById(id).populate('avatar').exec((err, user) => {
       done(err, user);
     });
   });

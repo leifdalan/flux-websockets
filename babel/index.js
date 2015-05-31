@@ -14,6 +14,7 @@ import CST from '../shared/constants';
 import reactRender from './reactrender';
 import socketio from 'socket.io';
 import http from 'http';
+import busboy from 'connect-busboy';
 
 
 // Passport imports
@@ -56,6 +57,8 @@ debug(`BrowserSync Dev Server: ${PROTOCOL}${HOSTNAME}:${BSPORT}`);
 // ----------------------------------------------------------------------------
 // Express middleware (order matters!)
 // ----------------------------------------------------------------------------
+// const upload = require('../services/upload');
+app.use(busboy());
 
 // log every request to the console
 app.use(morgan('dev'));
@@ -64,8 +67,15 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 
 // get information from html forms
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json({
+  limit: '5mb'
+}));
+app.use(bodyParser.urlencoded({
+  extended: true,
+  limit: '5mb'
+}));
+
 
 var sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection
@@ -112,6 +122,13 @@ io.use(passportSocketIo.authorize({
     accept(null, true);
   }
 }));
+
+io.on('connect', (socket) => {
+  const user = socket.request.user.local ? socket.request.user.local.email : 'Unauthenticated';
+  debug(`User ${user}/${socket.id} connected.`);
+  socket.emit('id', socket.id);
+
+});
 
 
 services(app, io);

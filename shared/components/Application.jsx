@@ -10,7 +10,7 @@ import AdminNav from './Admin/AdminNav';
 import {RouteHandler} from 'react-router';
 import {logoutAction} from '../actions/authActions';
 import DocumentTitle from 'react-document-title';
-import {clearFlashAction} from '../actions/appActions';
+import {clearFlashAction, storeSocketIdAction} from '../actions/appActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 const debug = require('debug')('Component:Application');
 
@@ -32,6 +32,10 @@ class Application extends Component {
     router: pt.func.isRequired,
     getStore: pt.func.isRequired,
     executeAction: pt.func.isRequired
+  }
+
+  static propTypes = {
+    appStore: pt.object.isRequired
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,9 +75,22 @@ class Application extends Component {
     // window.clearTimeout(this._flashTimeout);
   }
 
+  componentDidMount() {
+    const socket = io();
+    socket.on('id', (payload) => {
+      this.context.executeAction(storeSocketIdAction, payload);
+    });
+  }
+
   render() {
     const name = this.context.router.getCurrentPath();
+    let avatar = false;
+    if (this.props.appStore.avatar) {
+      const filename = this.props.appStore.avatar.thumb.filename;
+      avatar = `http://${this.props.appStore.appConfig.bucket}${filename}`;
+    }
 
+    debug(this.context.router.routes);
     const loggedInForm = (
       <form key={`form${name}`} action="/logout" method="POST">
         <button type="submit" onClick={this.logout}>Log out</button>
@@ -111,6 +128,9 @@ class Application extends Component {
           <div className="container">
 
             {Navigation}
+            {avatar &&
+              <img src={avatar} />
+            }
 
             <TransitionGroup component="div" transitionName="example">
               <section key={name} className="main-content" role="main">

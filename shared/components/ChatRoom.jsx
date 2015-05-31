@@ -22,7 +22,7 @@ class ChatRoom extends Component {
     ]);
     this.state = {
       inputValue: ''
-    }
+    };
   }
 
   static displayName = 'ChatRoom'

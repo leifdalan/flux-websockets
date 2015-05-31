@@ -15,6 +15,12 @@ export default class ApplicationStore extends BaseStore {
     this.perpage = null;
     this.pageAdjustment = null;
     this._lastValidSinglePage = null;
+    this.socketId = null;
+    this.progressTitle = null;
+    this.progress = null;
+    this.showProgress = null;
+    this.avatar = null;
+    this.appConfig = null;
   }
 
   static storeName = 'ApplicationStore'
@@ -31,7 +37,9 @@ export default class ApplicationStore extends BaseStore {
     'SET_PAGE_USER_PREF': 'setPageUserPref',
     'SAVE_REQUEST_ATTEMPT': 'saveRequestAttempt',
     'IN_PAGE_REQUEST_START': 'inPageRequestStart',
-    'IN_PAGE_REQUEST_END': 'inPageRequestEnd'
+    'IN_PAGE_REQUEST_END': 'inPageRequestEnd',
+    'STORE_SOCKET_ID': 'storeSocketId',
+    'SAVE_APP_CONFIG': 'saveAppConfig'
   }
 
   navigationError(payload) {
@@ -53,6 +61,19 @@ export default class ApplicationStore extends BaseStore {
     this.userLevel = null;
     this.inPageLoadingProperties = [];
     this.pageUserPref = null;
+    this.socketId = null;
+  }
+
+  saveAppConfig(payload) {
+    debug('saving app config:', payload);
+    this.appConfig = payload;
+    this.emitChange();
+  }
+
+  storeSocketId(payload) {
+    debug('Storing socket it', payload);
+    this.socketId = payload;
+    this.emitChange();
   }
 
   setPageUserPref({route, preference}) {
@@ -98,16 +119,19 @@ export default class ApplicationStore extends BaseStore {
       return;
     }
 
-    this.currentRoute = route;
+    // this.currentRoute = route;
     this.emitChange();
   }
 
-  login({userLevel=1, local, _id}) {
+  login({userLevel=1, local, _id, avatar}) {
     debug('logging in', _id);
+    debug('AVATAR');
+    debug(avatar);
     this.loggedIn = true;
     this.email = local.email;
     this.userLevel = userLevel;
     this.userId = _id;
+    this.avatar = avatar;
     this.emitChange();
   }
 
@@ -133,14 +157,20 @@ export default class ApplicationStore extends BaseStore {
     return {
       route: this.currentRoute,
       loggedIn: this.loggedIn,
+      socketId: this.socketId,
       email: this.email,
+      avatar: this.avatar,
       userLevel: this.userLevel,
       userId: this.userId,
       appIsLoading: this.appIsLoading,
       flashMessage: this.flashMessage,
       pageUserPref: this.pageUserPref,
       inPageLoadingProperties: this.inPageLoadingProperties,
-      reqAttempt: this.reqAttempt
+      reqAttempt: this.reqAttempt,
+      progressTitle: this.progressTitle,
+      progress: this.progress,
+      appConfig: this.appConfig,
+      showProgress: this.showProgress
     };
   }
 
@@ -151,6 +181,7 @@ export default class ApplicationStore extends BaseStore {
   rehydrate(state) {
     this.currentRoute = state.route;
     this.loggedIn = state.loggedIn;
+    this.socketId = state.socketId;
     this.email = state.email;
     this.userLevel = state.userLevel;
     this.appIsLoading = state.appIsLoading;
@@ -159,5 +190,10 @@ export default class ApplicationStore extends BaseStore {
     this.pageUserPref = state.pageUserPref;
     this.inPageLoadingProperties = state.inPageLoadingProperties;
     this.reqAttempt = state.reqAttempt;
+    this.progressTitle = state.progressTitle;
+    this.progress = state.progress;
+    this.avatar = state.avatar;
+    this.appConfig = state.appConfig;
+    this.showProgress = state.showProgress;
   }
 }

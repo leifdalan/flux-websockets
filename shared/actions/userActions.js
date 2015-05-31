@@ -80,11 +80,13 @@ export function editManyUsersAction(actionContext, payload, done) {
 
 export const deleteUserAction = ({dispatch}, payload, done) => {
   debug('Logging out.');
+  dispatch('REQUEST_START');
   request
     .del(`/admin/users/${payload._id}`)
     .set('Accept', 'application/json')
     .set('X-Requested-With', 'XMLHttpRequest')
     .end((xhrError, res) => {
+      dispatch('REQUEST_END');
       debug('Response:');
       debug(res);
       const {success, user, error} = res.body;

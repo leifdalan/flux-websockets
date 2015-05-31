@@ -13,6 +13,7 @@ import {
   createChat,
   getOneChatroom,
   setUpChatListeners} from './admin/chat';
+import upload, {s3} from './upload';
 const debug = require('debug')('Routes');
 
 // Abstract of sending data from the server to client,
@@ -40,18 +41,22 @@ export function sendData({data, req, res, next}) {
 export default function(server, io) {
 
   // Middleware check for token logins
-  server.use((req, res, next) => {
-    if (req.query.token && req.query.un) {
-      req.body.email = req.query.un;
-      req.body.password = req.query.token;
-      debug('Attempting token login.');
-      req.tokenAttempt = true;
-      login(req, res, next);
-    } else {
-      next();
-    }
+  // server.use((req, res, next) => {
+  //   if (req.query.token && req.query.un) {
+  //     req.body.email = req.query.un;
+  //     req.body.password = req.query.token;
+  //     debug('Attempting token login.');
+  //     req.tokenAttempt = true;
+  //     login(req, res, next);
+  //   } else {
+  //     next();
+  //   }
+  // });
+  var socket;
+  io.on('connection', (client) => {
+    debug('CONNECTED!!!!!');
+    socket = client;
   });
-
   // ----------------------------------------------------------------------------
   // Authorization endpoints
   // ----------------------------------------------------------------------------
@@ -85,4 +90,16 @@ export default function(server, io) {
   server.post('/chat/', createChat.bind(io));
   server.get('/chat/:id', getOneChatroom.bind(io));
   setUpChatListeners(io);
+
+  // ----------------------------------------------------------------------------
+  // Upload
+  // ----------------------------------------------------------------------------
+  /*eslint-disable*/
+  // const uploadRouter = express.Router();
+  // /*eslint-enable*/
+  // uploadRouter.use(busboy());
+  // uploadRouter.post('/', upload);
+  // server.use(busboy());
+  server.post('/upload', upload.bind(io));
+  server.post('/s3', s3.bind(io));
 }

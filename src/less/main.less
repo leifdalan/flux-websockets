@@ -7,7 +7,8 @@
 @import './someModule.less';
 @import './paginator.less';
 body {
-  background: white;
+  background: #222;
+  color: white;
   div {
 
   }
@@ -36,6 +37,25 @@ body {
   border-radius: 0;
 }
 
+a, a:hover{
+  color: #ba4b00;
+}
+
+input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="password"], textarea, select {
+  background-color: #555;
+}
+
+.button.button-primary, button.button-primary, input[type="submit"].button-primary, input[type="reset"].button-primary, input[type="button"].button-primary {
+  background-color: #ff9d00;
+  border-color: #ff9d00;
+}
+
+.button.button-primary:hover, button.button-primary:hover, input[type="submit"].button-primary:hover, input[type="reset"].button-primary:hover, input[type="button"].button-primary:hover, .button.button-primary:focus, button.button-primary:focus, input[type="submit"].button-primary:focus, input[type="reset"].button-primary:focus, input[type="button"].button-primary:focus {
+  background-color: #ba6900;
+  border-color: #ba6900;
+
+}
+
 .main-nav {
   margin-top: 40px;
   margin-bottom: 30px;
@@ -48,7 +68,7 @@ body {
         color: #555;
         transition: none;
         &.hovering, &:hover {
-          background: #33C3F0;
+          background: #ba4b00;
           color: white;
         }
       }
@@ -67,7 +87,6 @@ body {
       text-decoration: none;
       display: inline-block;
       height: 38px;
-      color: #555;
       text-align: center;
       font-size: 11px;
       font-weight: 600;
@@ -82,7 +101,7 @@ body {
       box-sizing: border-box;
       transition: background .5s ease;
       &.active, &.hovering, &:hover {
-        background: #33C3F0;
+        background: #ba4b00;
         color: white;
         transition: none;
       }
@@ -104,7 +123,7 @@ body {
 
 .example-enter {
   width: 100%;
-  background: rgba(255, 255, 255, .6);
+
   opacity: 0.0;
   transition:opacity .15s ease-in, transform .15s ease-out;
   transform: rotateY(20deg);
