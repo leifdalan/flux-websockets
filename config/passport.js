@@ -79,7 +79,7 @@ export default function(passport) {
           });
 
         } else {
-          User.findOne(conditions, (err, user) => {
+          User.findOne(conditions).populate('avatar').exec((err, user) => {
             // if there are any errors, return the error
             if (err) {
               return done(err);

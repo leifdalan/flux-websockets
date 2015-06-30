@@ -12,7 +12,7 @@ const mediaSchema = mongoose.Schema({
     height: Number,
     filename: String
   },
-  thumb: {
+  mobile: {
     width: Number,
     height: Number,
     filename: String
@@ -23,6 +23,21 @@ const mediaSchema = mongoose.Schema({
     filename: String
   },
   retina: {
+    width: Number,
+    height: Number,
+    filename: String
+  },
+  mobileWebp: {
+    width: Number,
+    height: Number,
+    filename: String
+  },
+  mediumWebp: {
+    width: Number,
+    height: Number,
+    filename: String
+  },
+  retinaWebp: {
     width: Number,
     height: Number,
     filename: String

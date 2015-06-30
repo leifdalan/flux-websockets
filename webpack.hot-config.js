@@ -13,7 +13,7 @@ const webpackAddress = `${PROTOCOL}${HOSTNAME}:${WEBPACK_DEV_SERVER_PORT}`;
 const publicPath = `${webpackAddress}${PUBLIC_PATH}`;
 
 export default {
-  devtool: 'eval-source-map',
+  devtool: '#eval-source-map',
   cache: true,
   context: __dirname,
   entry: {

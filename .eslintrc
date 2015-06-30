@@ -42,7 +42,8 @@
   },
 
   "plugins": [
-    "react"
+    "react",
+    "better"
   ],
 
   "rules": {
@@ -51,17 +52,38 @@
     "react/jsx-boolean-value": 1,
     "react/jsx-quotes": 1,
     "react/jsx-no-undef": 1,
-    "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
+    "react/jsx-uses-react": 1,
     "react/no-did-mount-set-state": 1,
     "react/no-did-update-set-state": 1,
     "react/no-multi-comp": 1,
     "react/no-unknown-property": 1,
     "react/prop-types": 1,
-    "react/react-in-jsx-scope": 0,
+    "react/react-in-jsx-scope": 1,
     "react/self-closing-comp": 1,
     "react/wrap-multilines": 1,
-    ////////// Possible Errors //////////
+
+    /////////// Better RUles ///////////
+    "better/no-classes": 0,
+    "better/no-deletes": 2,
+    "better/no-exceptions": 0,
+    "better/no-exports": 0,
+    "better/no-fors": 2,
+    "better/no-function": 0,
+    "better/no-ifs": 0,
+    "better/no-imports": 0,
+    "better/no-instanceofs": 0,
+    "better/no-new": 0,
+    "better/no-typeofs": 0,
+    "better/no-nulls": 2,
+    "better/no-reassigns": 0,
+    "better/no-switches": 0,
+    "better/no-this": 0,
+    "better/no-undefined": 0,
+    "better/no-variable": 0,
+    "better/no-whiles": 2,
+    "better/explicit-return": 0,
+        ////////// Possible Errors //////////
 
     "no-comma-dangle": 1,         // disallow trailing commas in object literals
     "no-cond-assign": 2,          // disallow assignment in conditional expressions

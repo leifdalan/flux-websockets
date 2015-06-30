@@ -12,6 +12,11 @@ import CreateUser from './Admin/Users/CreateUser';
 import ChatLobby from './ChatLobby';
 import ChatRoom from './ChatRoom';
 import NotFound from './NotFound';
+import Pages from './Admin/Pages';
+import Page from './Admin/Pages/Page';
+import CreatePage from './Admin/Pages/CreatePage';
+
+
 
 
 export default (
@@ -48,7 +53,30 @@ export default (
           params={{perpage: 20, pagenumber: 1}}
         />
       </Route>
+      <Route name="pages">
+        <Route path="create" name="createPage" handler={CreatePage} />
+        <Route path=":id" name="adminPageEdit" handler={Page} />
+
+        <Route path="page/:perpage/:pagenumber"
+          name="adminPagesPaginated"
+          handler={Pages}
+          ignoreScrollBehavior
+        />
+      {/* Redirect pages and pages/page to paginated */}
+        <Redirect
+          from="/admin/pages/?"
+          to="adminPagesPaginated"
+          params={{perpage: 20, pagenumber: 1}}
+        />
+        <Redirect
+          from="/admin/pages/page/?"
+          to="adminPagesPaginated"
+          params={{perpage: 20, pagenumber: 1}}
+        />
+      </Route>
+
     </Route>
+
 
     <NotFoundRoute handler={NotFound}/>
   </Route>

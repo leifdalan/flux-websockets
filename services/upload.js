@@ -6,49 +6,69 @@ import http from 'http';
 import knox from 'knox';
 import uuid from 'uuid';
 import Media from '../models/media';
-import User from '../models/user';
+// import User from '../models/user';
 import path from 'path';
 const debug = require('debug')('Server:Upload');
 
+const {
+  AWS_KEY,
+  AWS_SECRET,
+  AWS_BUCKET,
+  CLOUD_NAME,
+  CLOUD_API_KEY,
+  CLOUD_SECRET
+} = config;
+
 var s3client = knox.createClient({
-  key: config.AWS_KEY,
-  secret: config.AWS_SECRET,
-  bucket: config.AWS_BUCKET
+  key: AWS_KEY,
+  secret: AWS_SECRET,
+  bucket: AWS_BUCKET
 });
 
 /*eslint-disable*/
 cloudinaryClient.config({
-  cloud_name: config.CLOUD_NAME,
-  api_key: config.CLOUD_API_KEY,
-  api_secret: config.CLOUD_SECRET
+  cloud_name: CLOUD_NAME,
+  api_key: CLOUD_API_KEY,
+  api_secret: CLOUD_SECRET
 });
 /*eslint-enable*/
 
 const sizes = [{
-    width: 304,
-    height: 304,
-    crop: 'fill',
-    gravity: 'face',
+    width: 1024,
     format: 'jpg',
     type: 'retina'
   },
 
   {
-    width: 152,
-    height: 152,
+    width: 768,
     crop: 'fill',
-    gravity: 'face',
     format: 'jpg',
     type: 'medium'
   },
   {
-    width: 71,
-    height: 71,
+    width: 320,
     crop: 'fill',
-    gravity: 'face',
     format: 'jpg',
-    type: 'thumb'
-    }
+    type: 'mobile'
+  },
+  {
+      width: 1024,
+      format: 'webp',
+      type: 'retinaWebp'
+    },
+
+    {
+      width: 768,
+      crop: 'fill',
+      format: 'webp',
+      type: 'mediumWebp'
+    },
+    {
+      width: 320,
+      crop: 'fill',
+      format: 'webp',
+      type: 'mobileWebp'
+      }
 ];
 
 
@@ -221,9 +241,18 @@ export function singleS3Push({cloudObj, publicId, io, socketId, i, format}) {
   });
 }
 
-function createMediaRecord({original, thumb, medium, retina}) {
+function createMediaRecord(
+  {original, mobile, medium, retina, mobileWebp, mediumWebp, retinaWebp}) {
   return new Promise((resolve, reject) => {
-    const newMedia = {original, thumb, medium, retina};
+    const newMedia = {
+      original,
+      mobile,
+      medium,
+      retina,
+      mobileWebp,
+      mediumWebp,
+      retinaWebp
+    };
     Media.create(newMedia, (error, newMediaRecord) => {
       if (error) {
         reject(error);
@@ -247,22 +276,21 @@ export function s3(req, res, next) {
   let promises = [];
   cloudSizes.map((size, i) => {
     promises.push(singleS3Push({
-        cloudObj: size,
-        io: this,
-        publicId: req.body.public_id,
-        format,
-        socketId,
-        i
-      })
-    );
+      cloudObj: size,
+      io: this,
+      publicId: req.body.public_id,
+      format,
+      socketId,
+      i
+    }));
   }.bind(this));
   Promise.all(promises).then((resArray) => {
     debug('ALL DONE!!!');
     let bodyObj = {};
-    resArray.forEach(({filename, meta}) => {
+    resArray.forEach(({filename, meta}, i) => {
       bodyObj[meta.type] = {
-        width: meta.width,
-        height: meta.height,
+        width: cloudSizes[i].width,
+        height: cloudSizes[i].height,
         filename
       };
       bodyObj.original = {
@@ -275,19 +303,20 @@ export function s3(req, res, next) {
     });
     createMediaRecord(bodyObj).then( (record) => {
       debug('RECORD!!!', record);
-      if (req.user) {
-        debug(req.user);
-        User.findByIdAndUpdate(req.user._id, {avatar: record._id}, {'new': true})
-          .populate('avatar')
-          .exec((userError, userSchema) => {
-          if (userError) {
-            debug(userError);
-          } else {
-            res.json(userSchema);
-            debug(userSchema);
-          }
-        });
-      }
+      res.json(record);
+      // if (req.user) {
+      //   debug(req.user);
+      //   User.findByIdAndUpdate(req.user._id, {avatar: record._id}, {'new': true})
+      //     .populate('avatar')
+      //     .exec((userError, userSchema) => {
+      //     if (userError) {
+      //       debug(userError);
+      //     } else {
+      //       res.json(userSchema);
+      //       debug(userSchema);
+      //     }
+      //   });
+      // }
     });
 
   });

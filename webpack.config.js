@@ -1,8 +1,6 @@
 // Webpack configuration
 var path = require('path');
 var webpack = require('webpack');
-// var ExtractTextPlugin = require('extract-text-webpack-plugin');
-// var CompressionPlugin = require('compression-webpack-plugin');
 require('strip-loader');
 
 module.exports = {
@@ -27,28 +25,6 @@ module.exports = {
           'strip-loader?strip[]=debug'
         ]
       }
-      // {
-      //   test: /\.less$/,
-      //   loader: ExtractTextPlugin.extract(
-      //     'style-loader',
-      //     'css-loader!less-loader!autoprefixer-loader?browsers=last 5 version')
-      // },
-      // {
-      //   test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-      //   loader: 'url?limit=10000&minetype=application/font-woff'
-      // },
-      // {
-      //   test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-      //   loader: 'url?limit=10000&minetype=application/octet-stream'
-      // },
-      // {
-      //   test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-      //   loader: 'file'
-      // },
-      // {
-      //   test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-      //   loader: 'url?limit=10000&minetype=image/svg+xml'
-      // }
     ]
   },
   resolve: {

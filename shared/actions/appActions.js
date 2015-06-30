@@ -61,7 +61,7 @@ export const uploadFileAction = ({dispatch}, payload, done) => {
         debug(err);
 
         debug(response);
-        dispatch('LOGIN', response.body);
+        payload.callback(response.body);
       });
   }
   done();

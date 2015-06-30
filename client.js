@@ -7,13 +7,15 @@ import Router, {HistoryLocation} from 'react-router';
 import navigateAction from './shared/actions/navigate';
 import config from './config';
 import FluxibleComponent from 'fluxible/addons/FluxibleComponent';
-
+import picturefill from 'picturefill';
 const bootstrapDebug = debug('Bootstrapping App:');
 const dehydratedState = window.App;
 
 // Set client dev tool debug level
 window.localStorage &&
   window.localStorage.setItem('debug', config.clientDebug);
+
+window.picturefill = picturefill;
 
 app.rehydrate(dehydratedState, (err, context) => {
   if (err) {

@@ -1,4 +1,5 @@
 import {signUp, logOut, login, isAdmin, isLoggedIn} from './authentication';
+import Page from '../models/page';
 // import Page from '../models/page';
 import {
   redirectUser,
@@ -13,6 +14,16 @@ import {
   createChat,
   getOneChatroom,
   setUpChatListeners} from './admin/chat';
+
+import {
+  redirectPage,
+  getPages,
+  getOnePage,
+  updatePage,
+  createPage,
+  deletePage,
+  updateManyPages} from './admin/pages';
+
 import upload, {s3} from './upload';
 const debug = require('debug')('Routes');
 
@@ -52,10 +63,9 @@ export default function(server, io) {
   //     next();
   //   }
   // });
-  var socket;
+
   io.on('connection', (client) => {
     debug('CONNECTED!!!!!');
-    socket = client;
   });
   // ----------------------------------------------------------------------------
   // Authorization endpoints
@@ -90,6 +100,52 @@ export default function(server, io) {
   server.post('/chat/', createChat.bind(io));
   server.get('/chat/:id', getOneChatroom.bind(io));
   setUpChatListeners(io);
+
+  // ----------------------------------------------------------------------------
+  // Admin Pages CRUD (/admin/pages)
+  // ----------------------------------------------------------------------------
+
+  server.get('/admin/pages/', isLoggedIn, isAdmin, redirectPage);
+  server.get(
+    '/admin/pages/page/:perpage/:currentPageNumber',
+    isLoggedIn,
+    isAdmin,
+    getPages
+  );
+  server.post('/admin/pages/', isLoggedIn, isAdmin, createPage);
+  server.put('/admin/pages/', isLoggedIn, isAdmin, updateManyPages);
+  server.get('/admin/pages/:id', isLoggedIn, isAdmin, getOnePage);
+  server.put('/admin/pages/:id', isLoggedIn, isAdmin, updatePage);
+  server.delete('/admin/pages/:id', isLoggedIn, isAdmin, deletePage);
+
+  // ----------------------------------------------------------------------------
+  // Page resolution
+  // ----------------------------------------------------------------------------
+
+  // server.get('*', (req, res, next) => {
+  //   debug('Looking for', req.path);
+  //   if (req.preRender) {
+  //
+  //     next();
+  //   } else {
+  //     if (req.path.split('/')[1] === 'dist') {
+  //       next();
+  //     } else {
+  //       Page.findOne({slug: req.path.substring(1)}, (err, page) => {
+  //         if (err) {
+  //           next();
+  //         }
+  //         if (page) {
+  //           req.preRender = page;
+  //           next();
+  //         } else {
+  //           next();
+  //         }
+  //       });
+  //     }
+  //   }
+  // });
+
 
   // ----------------------------------------------------------------------------
   // Upload

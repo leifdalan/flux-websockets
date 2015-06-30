@@ -12,6 +12,7 @@ import {logoutAction} from '../actions/authActions';
 import DocumentTitle from 'react-document-title';
 import {clearFlashAction, storeSocketIdAction} from '../actions/appActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import Picture from './Picture';
 const debug = require('debug')('Component:Application');
 
 class Application extends Component {
@@ -84,13 +85,6 @@ class Application extends Component {
 
   render() {
     const name = this.context.router.getCurrentPath();
-    let avatar = false;
-    if (this.props.appStore.avatar) {
-      const filename = this.props.appStore.avatar.thumb.filename;
-      avatar = `http://${this.props.appStore.appConfig.bucket}${filename}`;
-    }
-
-    debug(this.context.router.routes);
     const loggedInForm = (
       <form key={`form${name}`} action="/logout" method="POST">
         <button type="submit" onClick={this.logout}>Log out</button>
@@ -128,9 +122,6 @@ class Application extends Component {
           <div className="container">
 
             {Navigation}
-            {avatar &&
-              <img src={avatar} />
-            }
 
             <TransitionGroup component="div" transitionName="example">
               <section key={name} className="main-content" role="main">
@@ -143,6 +134,17 @@ class Application extends Component {
                 {this.state.loggedIn && loggedInForm}
               </section>
             </TransitionGroup>
+            {this.props.appStore.avatar &&
+              <div>
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+              </div>
+            }
 
           </div>
         </div>

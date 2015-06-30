@@ -72,7 +72,7 @@ class AdminPageBrowser extends Component {
     this.props.pageStore.pageAdjustment &&
       this._adjustPageBounds(this.props.pageStore);
     const appState = this.props.appStore;
-    const routes = appState.route.routes;
+    const {routes} = this.context.router;
     const currentRouteName = routes[routes.length - 1].name;
     let tablePropChoices;
     debug('CurrentRoute', currentRouteName);
