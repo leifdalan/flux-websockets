@@ -85,7 +85,7 @@ class Application extends Component {
   render() {
     const name = this.context.router.getCurrentPath();
     let avatar = false;
-    if (this.props.appStore.avatar) {
+    if (false && this.props.appStore.avatar) {
       const filename = this.props.appStore.avatar.thumb.filename;
       avatar = `http://${this.props.appStore.appConfig.bucket}${filename}`;
     }
