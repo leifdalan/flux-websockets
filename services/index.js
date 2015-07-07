@@ -64,7 +64,7 @@ export default function(server, io) {
   //   }
   // });
 
-  io.on('connection', (client) => {
+  io.on('connection', (socket) => {
     debug('CONNECTED!!!!!');
   });
   // ----------------------------------------------------------------------------

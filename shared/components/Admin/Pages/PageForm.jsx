@@ -33,14 +33,6 @@ class PageForm extends Component {
       'log'
     ]);
 
-    this.defaultBlock = (
-      <p
-        id="content"
-        name="content"
-        key="content"
-        contentEditable>asdf
-      </p>
-    );
     this.counter = 0;
     this.state = props;
     this.state.content = this.state.content || '';
@@ -70,9 +62,16 @@ class PageForm extends Component {
       lastUpdated
     });
 
-    // setState is not gauranteed to be synchronous
+    const blocks = this.props.store.blocks.map((block) => {
+      return {
+        tag: block.tag,
+        content: this.props.store.dict[block.id],
+        mediaRecord: block.mediaRecord
+      };
+    });
+
     const formValues = merge(this.state, {
-      content,
+      blocks,
       lastUpdated
     });
     this.props.handleSubmit(formValues);
@@ -96,34 +95,6 @@ class PageForm extends Component {
 
   }
 
-  makeNewBlock(block) {
-
-
-    // const focussedIndex = this.state.currentFocusedBlockIndex + 1;
-    // debug('making blockzz', focussedIndex, this.state.blocks);
-    // const newNode = block || (
-    //   <Block
-    //     tag="p"
-    //     onFocusCallback={this.onFocusCallback}
-    //     onChangeCallback={this.onChangeCallback}
-    //   />);
-    //
-    // let blocks = this.state.blocks;
-    // blocks.splice(focussedIndex, 0, newNode);
-    // this.setState({blocks}, () => {
-    //   debug('refs');
-    //   debug(this.refs);
-    //   React.findDOMNode(newNode).focus();
-    //   // React.findDOMNode(this.refs[`node${this.counter}`]).focus();
-    //   this.counter++;
-    //
-    // }.bind(this));
-    // // this.state.blocks.splice(focussedIndex, 0, newNode);
-    // // this.setState({farts: 'poo'}, () => {
-    // //   debug('rendered');
-    // // });
-  }
-
   onFocusCallback(index) {
     debug('Parent callback', index);
     this.setState({
@@ -142,17 +113,6 @@ class PageForm extends Component {
     });
   }
 
-  componentDidMount() {
-    // if (window && window.document) {
-    //   const MediumEditor = require('medium-editor-webpack');
-    //   this.mediumEditor = new MediumEditor(findDOMNode(this.refs.content));
-    // }
-  }
-
-  componentWillUnmount() {
-    // this.mediumEditor.destroy();
-  }
-
   log(e) {
     e.preventDefault();
     debug('state', this.state);
@@ -161,7 +121,8 @@ class PageForm extends Component {
     const report = this.props.store.blocks.map((block) => {
       return {
         tag: block.tag,
-        content: this.props.store.dict[block.id]
+        content: this.props.store.dict[block.id],
+        mediaRecord: block.mediaRecord
       };
     }.bind(this));
     debug('REPORT:', report);
@@ -183,10 +144,6 @@ class PageForm extends Component {
   }
 
   render() {
-    this.state.blocks.map((block) => {
-      debug('asdf');
-      debug(block.props);
-    });
 
     return (
       <div>
@@ -235,11 +192,11 @@ class PageForm extends Component {
           </div>
 
           <div>
-            <Uploader callback={(this.insertPicture)} />
+            <Uploader callback={this.insertPicture} />
             <button
               className="button-primary"
               type="submit">
-              {this.state.buttonText || 'Update User'}
+              {this.state.buttonText || 'Update Page'}
             </button>
             <button
               className="button-primary"
@@ -276,11 +233,6 @@ class PageForm extends Component {
               className="button-primary"
               onClick={this.changeBlock.bind(null, 'blockquote')}>
               blockquote
-            </button>
-            <button
-              className="button-primary"
-              onClick={this.changeBlock.bind(null, 'ul')}>
-              ul
             </button>
           </div>
 

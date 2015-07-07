@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+
+/*eslint-disable*/
 import Fs from 'fs';
 import Path from 'path';
 import Async from 'async';
@@ -285,3 +286,6 @@ Async.auto({
   process.exit(0);
 
 });
+
+
+/*eslint-enable*/

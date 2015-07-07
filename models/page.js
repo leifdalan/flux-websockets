@@ -21,7 +21,10 @@ const pageSchema = schema({
   user: {
    type: schema.ObjectId,
    ref: 'User'
-  }
+ },
+ blocks: {
+   type: Array
+ }
 });
 
 // create the model for users and expose it to our app

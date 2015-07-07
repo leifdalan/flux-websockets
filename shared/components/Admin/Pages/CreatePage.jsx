@@ -4,7 +4,7 @@ import React, {Component, PropTypes as pt} from 'react';
 import {autoBindAll} from '../../../../utils';
 import PageForm from './PageForm';
 import {CheckAdminWillTransitionTo} from '../../../mixins/authMixins';
-import {createPageAction} from '../../../actions/pageActions';
+import {editPageAction} from '../../../actions/pageActions';
 
 const debug = require('debug')('Component:CreatePage');
 debug();
@@ -30,7 +30,7 @@ export default class CreatePage extends Component {
 
   handleSubmit(formValues) {
     const router = this.context.router;
-    this.context.executeAction(createPageAction, {
+    this.context.executeAction(editPageAction, {
       formValues,
       router
     });

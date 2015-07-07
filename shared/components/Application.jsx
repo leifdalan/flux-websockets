@@ -105,7 +105,7 @@ class Application extends Component {
                 key="flashMessage"
                 ref="flashMessage"
                 onClick={this.clearFlash}
-                className="u-full-width button button-primary flash">
+                className="u-full-width button button-prima2y flash">
                 {this.state.flashMessage}
               </button>
             }
@@ -136,12 +136,6 @@ class Application extends Component {
             </TransitionGroup>
             {this.props.appStore.avatar &&
               <div>
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
                 <Picture mediaRecord={this.props.appStore.avatar} />
               </div>
             }

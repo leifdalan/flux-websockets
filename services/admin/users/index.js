@@ -168,8 +168,9 @@ export function updateUser(req, res, next) {
   User.findOneAndUpdate(
     {_id: req.params.id},
     req.body,
-    {'new': true},
-    (error, user) => {
+    {'new': true})
+    .populate('avatar')
+    .exec((error, user) => {
       let data;
       if (error) {
         data = {

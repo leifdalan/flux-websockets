@@ -26,11 +26,17 @@ class Paragraph extends Component {
 
   static propTypes = {
     store: pt.object.isRequired,
-    focused: pt.bool
+    focused: pt.bool,
+    tag: pt.string,
+    onFocusCallback: pt.func,
+    onChangeCallback: pt.func,
+    blockId: pt.number,
+    index: pt.number,
+    mediaRecord: pt.object,
+    content: pt.string
   }
 
   onFocus() {
-    debug('i got focuesed');
     this.props.onFocusCallback(this.props.index);
     this.context.executeAction(setFocusAction, {
       index: this.props.index,
