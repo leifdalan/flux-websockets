@@ -90,6 +90,29 @@ export function createChat(req, res, next) {
   });
 }
 
+export function deleteChat(req, res, next) {
+  debug('deleting', req.params.id);
+  ChatRoom.findByIdAndRemove(req.params.id, (error, chatroom) => {
+    let data = {};
+    if (error) {
+      data = {
+        success: false,
+        error
+      };
+      debug('Deletion error');
+    } else {
+      debug(chatroom);
+      data = {
+        success: {
+          message: `Deleted!`
+        },
+        chatroom
+      };
+    }
+    sendData({data, req, res, next});
+  });
+}
+
 export function getOneChatroom(req, res, next) {
   ChatRoom.findOne({_id: req.params.id}, (error, chatroom) => {
     let data;

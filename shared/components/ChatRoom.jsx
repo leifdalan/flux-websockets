@@ -4,7 +4,11 @@ import React, {Component, PropTypes as pt, findDOMNode} from 'react';
 import {connectToStores} from 'fluxible/addons';
 import {sendMessageAction} from '../actions/chatActions';
 import {autoBindAll} from '../../utils';
-import {handleMessageAction, handleActivityAction} from '../actions/chatActions';
+import {
+  handleMessageAction,
+  handleActivityAction,
+  deleteChatAction
+} from '../actions/chatActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import {getTimeAgo} from '../../utils';
 const debug = require('debug')('Component:ChatRoom');
@@ -18,6 +22,7 @@ class ChatRoom extends Component {
       'submitChat',
       'handleMessageAction',
       'onInputChange',
+      'deleteChatRoom',
       'handleActivityAction'
     ]);
     this.state = {
@@ -50,6 +55,15 @@ class ChatRoom extends Component {
     this.setState({
       inputValue: ''
     });
+  }
+
+  deleteChatRoom() {
+    const payload = {
+      router: this.context.router,
+      _id: this.props.store.chatRoomId
+    };
+    debug(payload);
+    this.context.executeAction(deleteChatAction, payload);
   }
 
   handleActivityAction(data) {
@@ -89,6 +103,7 @@ class ChatRoom extends Component {
   }
 
   render() {
+    debug(this.props.store);
     return (
       <div>
         <h1>{this.props.store.chatRoomTitle}</h1>
@@ -115,6 +130,7 @@ class ChatRoom extends Component {
             </div>
           )}
         </TransitionGroup>
+        <button onClick={this.deleteChatRoom}>Delete Chatroom</button>
       </div>
     );
   }

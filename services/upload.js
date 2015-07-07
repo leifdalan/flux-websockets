@@ -304,19 +304,6 @@ export function s3(req, res, next) {
     createMediaRecord(bodyObj).then( (record) => {
       debug('RECORD!!!', record);
       res.json(record);
-      // if (req.user) {
-      //   debug(req.user);
-      //   User.findByIdAndUpdate(req.user._id, {avatar: record._id}, {'new': true})
-      //     .populate('avatar')
-      //     .exec((userError, userSchema) => {
-      //     if (userError) {
-      //       debug(userError);
-      //     } else {
-      //       res.json(userSchema);
-      //       debug(userSchema);
-      //     }
-      //   });
-      // }
     });
 
   });

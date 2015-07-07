@@ -45,3 +45,26 @@ export const createChatAction = ({dispatch}, payload, done) => {
     }
   );
 };
+export const deleteChatAction = ({dispatch}, payload, done) => {
+  debug(payload);
+  request
+    .del(`/chat/${payload._id}`)
+    .set('Accept', 'application/json')
+    .set('X-Requested-With', 'XMLHttpRequest')
+    .end((xhrError, res) => {
+      const {success, error} = res.body;
+      if (xhrError || res.badRequest) {
+        debug(xhrError || res.badRequest);
+        dispatch('FLASH_MESSAGE', 'Bad Request.');
+      } else {
+        if (success) {
+          dispatch('FLASH_MESSAGE', 'Deleted Chat!');
+          payload.router.transitionTo(`/chat`);
+        } else if (error) {
+          dispatch('FLASH_MESSAGE', error);
+        }
+      }
+      done && done();
+    }
+  );
+};

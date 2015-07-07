@@ -35,7 +35,8 @@ class Picture extends Component {
 
   static propTypes = {
     mediaRecord: pt.object.isRequired,
-    store: pt.object.isRequired
+    store: pt.object.isRequired,
+    onClick: pt.func
   }
 
   componentDidMount() {

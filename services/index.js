@@ -13,7 +13,9 @@ import {
   getChatRooms,
   createChat,
   getOneChatroom,
-  setUpChatListeners} from './admin/chat';
+  setUpChatListeners,
+  deleteChat
+} from './admin/chat';
 
 import {
   redirectPage,
@@ -98,6 +100,7 @@ export default function(server, io) {
 
   server.get('/chat/', getChatRooms.bind(io));
   server.post('/chat/', createChat.bind(io));
+  server.delete('/chat/:id', deleteChat.bind(io));
   server.get('/chat/:id', getOneChatroom.bind(io));
   setUpChatListeners(io);
 
