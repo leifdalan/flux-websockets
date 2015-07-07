@@ -15,7 +15,6 @@ function listenOnChannel(io, chatroom) {
   let connectedUsers = [];
 
   nsp.on('connection', function (socket) {
-
     const user = socket.request.user.logged_in ?
       socket.request.user.local.email :
       `Anon-${uuid.v4()}`;

@@ -71,7 +71,12 @@ class ChatRoom extends Component {
   }
 
   componentDidMount() {
-    const socket = io(`/${this.props.store.chatRoomTitle}`).connect();
+    const socket = io(`/${this.props.store.chatRoomTitle}`);
+    debug(socket);
+    if (socket.disconnected) {
+
+      socket.connect({forceNew: true});
+    }
     const activitySocket = io();
 
     socket.on('chat', this.handleMessageAction);
@@ -103,7 +108,6 @@ class ChatRoom extends Component {
   }
 
   render() {
-    debug(this.props.store);
     return (
       <div>
         <h1>{this.props.store.chatRoomTitle}</h1>

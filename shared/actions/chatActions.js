@@ -21,12 +21,14 @@ export const handleActivityAction = ({dispatch}, payload, done) => {
 
 export const createChatAction = ({dispatch}, payload, done) => {
   debug(payload);
+  dispatch('REQUEST_START');
   request
     .post(`/chat`)
     .send({title: payload.title})
     .set('Accept', 'application/json')
     .set('X-Requested-With', 'XMLHttpRequest')
     .end((xhrError, res) => {
+      dispatch('REQUEST_END');
       const {success, chatroom, error} = res.body;
       if (xhrError || res.badRequest) {
         debug(xhrError || res.badRequest);
@@ -47,11 +49,13 @@ export const createChatAction = ({dispatch}, payload, done) => {
 };
 export const deleteChatAction = ({dispatch}, payload, done) => {
   debug(payload);
+  dispatch('REQUEST_START');
   request
     .del(`/chat/${payload._id}`)
     .set('Accept', 'application/json')
     .set('X-Requested-With', 'XMLHttpRequest')
     .end((xhrError, res) => {
+      dispatch('REQUEST_END');
       const {success, error} = res.body;
       if (xhrError || res.badRequest) {
         debug(xhrError || res.badRequest);
