@@ -188,33 +188,43 @@ input[type="email"], input[type="number"], input[type="search"], input[type="tex
 
 .loading-bar {
   background: red;
-  height: 2px;
+  height: 20px;
   position: fixed;
   top: 0;
-  width: 90%;
+  width: 100%;
   opacity: .75;
-  transition: width 2s ease-in-out;
   transform-origin: 50% 0%;
+  .resizing-bar {
+    width: 90%;
+    transition: width 2s ease-in-out;
+  }
 }
 
 .loading-enter {
-  width: 0%;
-  height: 2px;
-  transition: width .2s ease-in;
+  .resizing-bar {
+    width: 0%;
+    height: 20px;
+    transition: width .2s ease-in;
+  }
 }
 
 .loading-enter.loading-enter-active {
-  width: 65%;
+  .resizing-bar {
+    width: 65%;
+  }
   opacity: .75;
 }
 
 .loading-leave {
-  height: 2px;
+  height: 20px;
   position: fixed;
   width: 90%;
   top: 0;
   opacity: .75;
-  transition:opacity .4s linear, width .4s linear;
+  transition:opacity .4s linear;
+  .resizing-bar {
+
+  }
 }
 
 .loading-leave.loading-leave-active {

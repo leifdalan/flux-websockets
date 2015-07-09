@@ -7,10 +7,12 @@ import {autoBindAll} from '../../utils';
 import {
   handleMessageAction,
   handleActivityAction,
-  deleteChatAction
+  deleteChatAction,
+  flashActivityAction
 } from '../actions/chatActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import {getTimeAgo} from '../../utils';
+import {reject, some, clone} from 'lodash';
 const debug = require('debug')('Component:ChatRoom');
 debug();
 
@@ -23,10 +25,12 @@ class ChatRoom extends Component {
       'handleMessageAction',
       'onInputChange',
       'deleteChatRoom',
+      'handleTyping',
       'handleActivityAction'
     ]);
     this.state = {
-      inputValue: ''
+      inputValue: '',
+      typing: []
     };
   }
 
@@ -48,6 +52,10 @@ class ChatRoom extends Component {
     this.setState({
       inputValue: e.target.value
     });
+    this.socket.emit('typing', {
+      user: this.props.appStore.userId,
+      typing: true
+    });
   }
 
   handleMessageAction(data) {
@@ -55,6 +63,26 @@ class ChatRoom extends Component {
     this.setState({
       inputValue: ''
     });
+  }
+
+  handleTyping(data) {
+    let newTyping = clone(this.state.typing);
+    if (data.typing) {
+      if (!some(newTyping, data)) {
+        newTyping.push({
+          user: data.user,
+          typing: true
+        });
+      }
+    } else {
+      newTyping = reject(newTyping, {
+        user: data.user
+      });
+    }
+    this.setState({
+      typing: newTyping
+    });
+
   }
 
   deleteChatRoom() {
@@ -68,19 +96,20 @@ class ChatRoom extends Component {
 
   handleActivityAction(data) {
     this.context.executeAction(handleActivityAction, data);
+    this.context.executeAction(flashActivityAction, data);
   }
 
   componentDidMount() {
     const socket = io(`/${this.props.store.chatRoomTitle}`);
-    debug(socket);
     if (socket.disconnected) {
-
+      debug('FORCING NEW');
       socket.connect({forceNew: true});
     }
     const activitySocket = io();
 
     socket.on('chat', this.handleMessageAction);
     activitySocket.on('activity', this.handleActivityAction);
+    socket.on('typing', this.handleTyping);
 
     this.interval = window.setInterval(() => {
       this.forceUpdate();
@@ -105,9 +134,15 @@ class ChatRoom extends Component {
     const user = this.props.appStore.userId;
     const channel = `/${this.props.store.chatRoomTitle}`;
     this.context.executeAction(sendMessageAction, {content, user, channel});
+    this.socket.emit('typing', {
+      user: this.props.appStore.userId,
+      typing: false
+    });
+
   }
 
   render() {
+    debug(this.state);
     return (
       <div>
         <h1>{this.props.store.chatRoomTitle}</h1>
@@ -115,6 +150,12 @@ class ChatRoom extends Component {
         <ul>
           {this.props.store.connectedUsers.map((user) =>
             <li>{user}</li>
+          )}
+        </ul>
+
+        <ul>
+          {this.state.typing.map((user) =>
+            <li>{user.user} is typing</li>
           )}
         </ul>
         <form onSubmit={this.submitChat}>

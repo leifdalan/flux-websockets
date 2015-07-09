@@ -112,10 +112,11 @@ class Application extends Component {
           </TransitionGroup>
 
           <TransitionGroup component="div" transitionName="loading">
-            {this.state.appIsLoading &&
+            {this.props.appStore.appIsLoading &&
               <div
                 className="loading-bar"
                 key="loading-bar">
+                <div className="resizing-bar" />
               </div>
             }
           </TransitionGroup>
@@ -123,7 +124,7 @@ class Application extends Component {
 
             {Navigation}
 
-            <TransitionGroup component="div" transitionName="example">
+
               <section key={name} className="main-content" role="main">
                 <RouteHandler key={name} {...this.state} />
                 <button
@@ -133,7 +134,7 @@ class Application extends Component {
                 </button>
                 {this.state.loggedIn && loggedInForm}
               </section>
-            </TransitionGroup>
+
             {this.props.appStore.avatar &&
               <div>
                 <Picture mediaRecord={this.props.appStore.avatar} />

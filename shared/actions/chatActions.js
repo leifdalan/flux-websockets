@@ -12,8 +12,14 @@ export const handleMessageAction = ({dispatch}, payload, done) => {
   dispatch('RECEIVED_MESSAGE', payload);
   done();
 };
+
 export const handleActivityAction = ({dispatch}, payload, done) => {
   dispatch('RECEIVED_ACTIVITY', payload);
+  debug(payload);
+  done();
+};
+
+export const flashActivityAction = ({dispatch}, payload, done) => {
   dispatch('FLASH_MESSAGE', payload.activity);
   debug(payload);
   done();

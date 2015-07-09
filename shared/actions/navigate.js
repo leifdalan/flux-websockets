@@ -1,6 +1,5 @@
 'use strict';
 import request from 'superagent';
-import RSVP from 'rsvp';
 import {trace, error as consoleError} from '../../utils';
 const debug = require('debug')('Action:navigate');
 
@@ -9,7 +8,7 @@ export default function navigateAction({dispatch}, payload, done) {
   debug('Navigation Payload vvvvv');
   debug(payload);
 
-  new RSVP.Promise((resolve, reject) => {
+  new Promise((resolve, reject) => {
     if (payload.preRender) {
       debug('PreRender data exists, attaching...');
       resolve(payload.preRender);
@@ -19,7 +18,11 @@ export default function navigateAction({dispatch}, payload, done) {
         .get(payload.path)
         .set('Accept', 'application/json')
         .set('X-Requested-With', 'XMLHttpRequest')
-        .end(function(xhrError, res) {
+        .end((xhrError, res) => {
+          setTimeout(() => {
+              dispatch('REQUEST_END');
+          }, 40)
+
           const {error} = res;
           if (xhrError || res.badRequest) {
             debug(xhrError || res.badRequest);

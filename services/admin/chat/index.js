@@ -1,7 +1,7 @@
 import Chat from '../../../models/chat';
 import ChatRoom from '../../../models/chatroom';
 import {sendData} from '../../../services';
-import {pull} from 'lodash';
+import {pull, includes} from 'lodash';
 import uuid from 'uuid';
 const debug = require('debug')('Chat:ProcessMessages');
 
@@ -19,14 +19,15 @@ function listenOnChannel(io, chatroom) {
       socket.request.user.local.email :
       `Anon-${uuid.v4()}`;
 
-    connectedUsers.push(user);
-
-    io.emit('activity', {
-      roomId: chatroom._id,
-      room: chatroom.title,
-      activity: `${user} joined`,
-      connectedUsers
-    });
+    if (!includes(connectedUsers, user)) {
+      connectedUsers.push(user);
+      io.emit('activity', {
+        roomId: chatroom._id,
+        room: chatroom.title,
+        activity: `${user} joined`,
+        connectedUsers
+      });
+    }
 
     connectedMap[chatroom._id] = connectedUsers;
 
@@ -50,6 +51,12 @@ function listenOnChannel(io, chatroom) {
     }
 
     socket.on('chat', saveChat);
+
+    socket.on('typing', (payload) => {
+      debug('TYPING!!!!!');
+      debug(payload);
+      nsp.emit('typing', payload);
+    });
 
     socket.on('disconnect', () => {
       socket.removeListener('chat', saveChat);
