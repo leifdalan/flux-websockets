@@ -68,7 +68,7 @@
     "better/no-deletes": 2,
     "better/no-exceptions": 0,
     "better/no-exports": 0,
-    "better/no-fors": 2,
+    "better/no-fors": 0,
     "better/no-function": 0,
     "better/no-ifs": 0,
     "better/no-imports": 0,

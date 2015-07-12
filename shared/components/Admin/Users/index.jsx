@@ -2,7 +2,7 @@
 
 import React, {Component, PropTypes as pt} from 'react';
 import {connectToStores} from 'fluxible/addons';
-import {isClient, autoBindAll, trace, getTimeAgo} from '../../../../utils';
+import {isClient, autoBindAll, getTimeAgo} from '../../../../utils';
 import {merge, get, include} from 'lodash';
 import {updateResultsAction, editManyUsersAction} from '../../../actions/userActions';
 import {CheckAdminWillTransitionTo} from '../../../mixins/authMixins';

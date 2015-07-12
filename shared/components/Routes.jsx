@@ -16,9 +16,6 @@ import Pages from './Admin/Pages';
 import Page from './Admin/Pages/Page';
 import CreatePage from './Admin/Pages/CreatePage';
 
-
-
-
 export default (
   <Route name="app" path="/" handler={Application}>
     <Route name="home" path="/" handler={Home}/>

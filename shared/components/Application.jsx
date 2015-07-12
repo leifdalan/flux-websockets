@@ -10,7 +10,11 @@ import AdminNav from './Admin/AdminNav';
 import {RouteHandler} from 'react-router';
 import {logoutAction} from '../actions/authActions';
 import DocumentTitle from 'react-document-title';
-import {clearFlashAction, storeSocketIdAction} from '../actions/appActions';
+import {
+  clearFlashAction,
+  storeSocketIdAction,
+  flashMessageAction
+} from '../actions/appActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Picture from './Picture';
 const debug = require('debug')('Component:Application');
@@ -71,15 +75,18 @@ class Application extends Component {
     debug(state);
   }
 
-  componentWillUnmount() {
-    // window.clearTimeout(this._flashTimeout);
-  }
-
   componentDidMount() {
-    const socket = io();
-    socket.on('id', (payload) => {
-      this.context.executeAction(storeSocketIdAction, payload);
-    });
+    try {
+      const socket = io();
+      socket.on('id', (payload) => {
+        this.context.executeAction(storeSocketIdAction, payload);
+      });
+    } catch (e) {
+      this.context.executeAction(
+        flashMessageAction,
+        'A realtime connection could not be established.'
+      );
+    }
   }
 
   render() {

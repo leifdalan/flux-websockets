@@ -2,7 +2,7 @@
 
 import React, {Component, PropTypes as pt} from 'react';
 import P from './P';
-import Picture from '../Picture'
+import Picture from '../Picture';
 const debug = require('debug')('Component:Block');
 
 debug();

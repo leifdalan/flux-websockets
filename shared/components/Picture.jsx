@@ -110,8 +110,10 @@ class Picture extends Component {
         }}
         onClick={this.props.onClick}
       >
-
-        {this.state.isVisible ?
+        {!this.state.isLoaded &&
+          <i className="loading"></i>
+        }
+        {this.state.isVisible &&
           <picture
             data-width={original.width}
             data-height={original.height}
@@ -142,7 +144,6 @@ class Picture extends Component {
               ref="image" />
             {/*eslint-enable*/}
           </picture>
-          : <i className="loading"></i>
         }
       </figure>
     );

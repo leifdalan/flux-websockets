@@ -1,7 +1,6 @@
 'use strict';
 
 import {BaseStore} from 'fluxible/addons';
-import {find} from 'lodash';
 const debug = require('debug')('Store:Chat');
 
 export default class ChatStore extends BaseStore {

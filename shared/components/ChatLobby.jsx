@@ -32,10 +32,14 @@ class ChatLobby extends Component {
   }
 
   componentDidMount() {
-    const activitySocket = io();
-    activitySocket.on('activity', (data) => {
-      this.context.executeAction(handleActivityAction, data);
-    });
+    try {
+      const activitySocket = io && io();
+      activitySocket.on('activity', (data) => {
+        this.context.executeAction(handleActivityAction, data);
+      });
+    } catch(e) {
+      debug('No connection!');
+    }
   }
 
   createChatRoom(e) {

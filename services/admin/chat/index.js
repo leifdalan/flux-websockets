@@ -53,8 +53,6 @@ function listenOnChannel(io, chatroom) {
     socket.on('chat', saveChat);
 
     socket.on('typing', (payload) => {
-      debug('TYPING!!!!!');
-      debug(payload);
       nsp.emit('typing', payload);
     });
 

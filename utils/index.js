@@ -49,11 +49,13 @@ export function parseSearchQuery(query) {
  */
 export function makeQueryFromObject(obj) {
   let queryString = '';
+  /*eslint-disable*/
   for (let key in obj) {
     if (obj[key].hasOwnProperty) {
       queryString = `${queryString}${key}=${obj[key]}&`;
     }
   }
+  /*eslint-enable*/
   queryString = queryString.slice(0, -1);
   return queryString;
 }
@@ -105,6 +107,7 @@ export function getTimeAgo(isoDate) {
 
   [{year}, {month}, {week}, {day}, {hour}, {minute}, {second}]
     .forEach((valueObj) => {
+      /*eslint-disable*/
       for (let key in valueObj) {
         if (valueObj[key] <= -1 && !stop) {
           quantifier = key;
@@ -112,15 +115,18 @@ export function getTimeAgo(isoDate) {
           stop = true;
         }
       }
+      /*eslint-enable*/
   });
 
+  let statement = '';
   if (quantity && quantifier) {
     quantity = Math.abs(Math.floor(quantity));
     plural = quantity === 1 ? '' : 's';
-    return `${quantity} ${quantifier}${plural} ago.`;
+    statement = `${quantity} ${quantifier}${plural} ago.`;
   } else {
-    return 'Just now'
+    statement = 'Just now';
   }
+  return statement;
 }
 
 /**

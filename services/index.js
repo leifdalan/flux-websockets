@@ -1,5 +1,4 @@
 import {signUp, logOut, login, isAdmin, isLoggedIn} from './authentication';
-import Page from '../models/page';
 // import Page from '../models/page';
 import {
   redirectUser,
@@ -66,8 +65,8 @@ export default function(server, io) {
   //   }
   // });
 
-  io.on('connection', (socket) => {
-    debug('CONNECTED!!!!!');
+  io.on('connection', () => {
+    debug('User connected');
   });
   // ----------------------------------------------------------------------------
   // Authorization endpoints

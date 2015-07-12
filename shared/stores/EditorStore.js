@@ -18,7 +18,7 @@ export default class EditorStore extends BaseStore {
     ];
     this.dict = {
       [initialId]: ''
-    }
+    };
     this.focusPos = 0;
     this._currentTag = 'p';
   }

@@ -6,7 +6,6 @@ import DocumentTitle from 'react-document-title';
 import {connectToStores} from 'fluxible/addons';
 import {autoBindAll} from '../../utils';
 import Uploader from './Editor/Uploader';
-import {uploadFileAction} from '../actions/appActions';
 import {editUserAction} from '../actions/userActions';
 const debug = require('debug')('Component:Dashboard');
 debug();
