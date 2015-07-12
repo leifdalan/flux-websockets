@@ -65,23 +65,4 @@ export const uploadFileAction = ({dispatch}, payload, done) => {
       });
   }
   done();
-  // request
-  //   .post(`/dashboard`)
-  //   .type('multipart/form-data')
-  //   .attach('image', payload)
-  //   .end((xhrError, res) => {
-  //     const {success, chatroom, error} = res.body;
-  //     if (xhrError || res.badRequest) {
-  //       debug(xhrError || res.badRequest);
-  //       dispatch('FLASH_MESSAGE', 'Bad Request.');
-  //     } else {
-  //       if (success) {
-  //         debug('HUH?', res.body);
-  //       } else if (error) {
-  //         debug(error);
-  //       }
-  //     }
-  //     done && done();
-  //   }
-  // );
 };

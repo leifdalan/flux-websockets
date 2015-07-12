@@ -1,12 +1,9 @@
-// import fs from 'fs';
-// import path from 'path';
 import cloudinaryClient from 'cloudinary';
 import config from '../config';
 import http from 'http';
 import knox from 'knox';
 import uuid from 'uuid';
 import Media from '../models/media';
-// import User from '../models/user';
 import path from 'path';
 const debug = require('debug')('Server:Upload');
 
@@ -38,7 +35,6 @@ const sizes = [{
     format: 'jpg',
     type: 'retina'
   },
-
   {
     width: 768,
     crop: 'fill',
@@ -52,23 +48,22 @@ const sizes = [{
     type: 'mobile'
   },
   {
-      width: 1024,
-      format: 'webp',
-      type: 'retinaWebp'
-    },
-
-    {
-      width: 768,
-      crop: 'fill',
-      format: 'webp',
-      type: 'mediumWebp'
-    },
-    {
-      width: 320,
-      crop: 'fill',
-      format: 'webp',
-      type: 'mobileWebp'
-      }
+    width: 1024,
+    format: 'webp',
+    type: 'retinaWebp'
+  },
+  {
+    width: 768,
+    crop: 'fill',
+    format: 'webp',
+    type: 'mediumWebp'
+  },
+  {
+    width: 320,
+    crop: 'fill',
+    format: 'webp',
+    type: 'mobileWebp'
+  }
 ];
 
 
@@ -86,13 +81,16 @@ export default function(req, res, next) {
     });
   }
   if (req.busboy) {
+    // Multi-part http handler
     req.busboy.on('file', (fieldname, file, ...args) => {
       const [filename, farts, mimetype] = args;
       debug(farts);
       debug(mimetype);
       const unique = uuid.v4();
       const extension = path.extname(filename);
-      const uniqueFilename = `${filename}-${unique}`;
+      const uniqueFilename = `${filename.replace(extension, '')}-${unique}`;
+
+      // Stream content to cloudinary API
       const cloudStream = cloudinaryClient.uploader.upload_stream((result) => {
         debug('All done with upload to cloudinaryClient.');
         if (result.error) {
@@ -100,7 +98,6 @@ export default function(req, res, next) {
         } else {
           res.json(result);
         }
-
       },
       {
         /*eslint-disable*/
@@ -112,8 +109,10 @@ export default function(req, res, next) {
         eager: sizes
       });
 
+      // Pipe file reading into the cloudinary client.
       file.pipe(cloudStream);
 
+      // Collect buffer to upload the original to s3
       file.fileRead = [];
       file.on('data', (chunk) => {
         file.fileRead.push(chunk);
@@ -126,6 +125,7 @@ export default function(req, res, next) {
       };
 
       file.on('end', () => {
+        // Push original upload to s3 via stream.
         const finalBuffer = Buffer.concat(file.fileRead);
         const s3Req = s3client.putBuffer(
           finalBuffer,
@@ -150,6 +150,7 @@ export default function(req, res, next) {
 
       });
 
+      // Publish incremental progress to client-only socket.io room
       let cloudStreamProgress = 0;
       cloudStream.on('data', (cloudStreamData) => {
         cloudStreamProgress += cloudStreamData.length;
@@ -161,7 +162,12 @@ export default function(req, res, next) {
       });
     });
   }
+
+  // Pipe request to multipart handler
   req.pipe(req.busboy);
+
+  // Publish progress from client to server back to client
+  // for progress bar
   req.on('data', (reqData) => {
     debug(reqData.length);
     progress += reqData.length;
@@ -179,6 +185,7 @@ export function singleS3Push({cloudObj, publicId, io, socketId, i, format}) {
 
   return new Promise((resolve, reject) => {
 
+    // Retrieve image data from cloudinary
     const gettingCloudObj = http.get(cloudObj.url, (cloudRes) => {
       debug('CONTENT LENGTH', cloudRes.headers['content-length']);
       const total = cloudRes.headers['content-length'];
@@ -197,20 +204,14 @@ export function singleS3Push({cloudObj, publicId, io, socketId, i, format}) {
         }
       });
 
-      // s3Req.on('progress', (written, total, percent) => {
-      //   debug(written);
-      //   debug(total);
-      //   debug(percent);
-      //   debug('DATA FROM S3');
-      // });
-
+      // Pipe read buffer into knox upload
       cloudRes.pipe(s3Req);
 
       cloudRes.on('response', (cRes) => {
         debug('cloud response', cRes);
       });
 
-
+      // Report progress to client
       cloudRes.on('data', (data) => {
         progress += data.length;
         io.to(socketId).emit(
@@ -220,6 +221,7 @@ export function singleS3Push({cloudObj, publicId, io, socketId, i, format}) {
         );
       });
 
+      // Resolve/reject promise
       s3Req.on('response', (s3Res, b, c) => {
         if (s3Res.statusCode !== 200) {
           reject(s3Res);
@@ -232,8 +234,8 @@ export function singleS3Push({cloudObj, publicId, io, socketId, i, format}) {
           meta: sizes[i]
         });
       });
-
     });
+
     gettingCloudObj.on('error', (error) => {
       debug('HTTP GET for cloudinary', i);
       reject(error);
@@ -274,6 +276,8 @@ export function s3(req, res, next) {
   } = req.body;
   debug(req.body);
   let promises = [];
+
+  // For each specified size, push a namespaced version to S3.
   cloudSizes.map((size, i) => {
     promises.push(singleS3Push({
       cloudObj: size,
@@ -284,6 +288,8 @@ export function s3(req, res, next) {
       i
     }));
   }.bind(this));
+
+  // When all promises have been fulfilled, send an HTTP response.
   Promise.all(promises).then((resArray) => {
     debug('ALL DONE!!!');
     let bodyObj = {};
@@ -301,11 +307,9 @@ export function s3(req, res, next) {
       debug(meta, filename);
 
     });
-    createMediaRecord(bodyObj).then( (record) => {
+    createMediaRecord(bodyObj).then(record => {
       debug('RECORD!!!', record);
       res.json(record);
     });
-
   });
-
 }

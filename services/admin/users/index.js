@@ -71,8 +71,6 @@ export function getUsers(req, res, next) {
     };
   }
 
-  // TODO use generators + Promises for multiple async
-  // http://davidwalsh.name/async-generators
   User.count(filter, (countError, totalUsers) => {
     if (countError) {
       data = {
@@ -122,7 +120,6 @@ export function getUsers(req, res, next) {
 }
 
 export function getOneUser(req, res, next) {
-  debug('GETTING USER');
   if (req.params.id === 'create') {
     const data = {
       success: true

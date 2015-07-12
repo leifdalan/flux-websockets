@@ -27,10 +27,9 @@ export default function(passport) {
   // LOCAL LOGIN =============================================================
   // =========================================================================
   passport.use('local-login', new Strategy({
-      // by default, local strategy uses username and password,
-      // we will override with email
       usernameField: 'email',
       passwordField: 'password',
+
       // allows us to pass in the req from our route
       // (lets us check if a user is logged in or not)
       passReqToCallback: true
@@ -51,7 +50,6 @@ export default function(passport) {
         conditions.loginToken = req.query.token;
       }
 
-      // asynchronous
       process.nextTick(() => {
         if (tokenAttempt) {
 
@@ -73,13 +71,15 @@ export default function(passport) {
               );
             }
 
-
             return done(null, user);
 
           });
 
         } else {
-          User.findOne(conditions).populate('avatar').exec((err, user) => {
+          User
+          .findOne(conditions)
+          .populate('avatar')
+          .exec((err, user) => {
             // if there are any errors, return the error
             if (err) {
               return done(err);
@@ -110,24 +110,17 @@ export default function(passport) {
   // LOCAL SIGNUP ============================================================
   // =========================================================================
   passport.use('local-signup', new Strategy({
-      // by default, local strategy uses username and password,
-      // we will override with email
       usernameField: 'email',
       passwordField: 'password',
-      // allows us to pass in the req from our route
-      // (lets us check if a user is logged in or not)
       passReqToCallback: true
       /*eslint-disable*/
     }, (req, email, password, done) => {
       /*eslint-enable*/
       debug('LOCAL SIGNUP');
       if (email) {
-
-        // Use lower-case e-mails to avoid case-sensitive e-mail matching
         email = email.toLowerCase();
       }
 
-      // asynchronous
       process.nextTick(() => {
         // if the user is not already logged in:
         if (!req.user || req.url === '/admin/users') {
@@ -170,38 +163,6 @@ export default function(passport) {
 
           });
           // if the user is logged in but has no local account...
-        } else if (!req.user.local.email) {
-          // ...presumably they're trying to connect a local account
-          // BUT let's check if the email used to connect a local account is
-          // being used by another user
-          User.findOne({
-            'local.email': email
-          }, (findErr, user) => {
-            if (findErr) {
-              return done(findErr);
-            }
-
-            if (user) {
-              return done(
-                null,
-                false,
-                req.flash('loginMessage', 'That email is already taken.'));
-              // Using 'loginMessage instead of
-              // signupMessage because it's used by /connect/local'
-              /*eslint-disable*/
-            } else {
-              /*eslint-enable*/
-              var user = req.user;
-              user.local.email = email;
-              user.local.password = user.generateHash(password);
-              user.save((saveErr) => {
-                if (saveErr) {
-                  return done(saveErr);
-                }
-                return done(null, user);
-              });
-            }
-          });
         } else {
           // user is logged in and already has a local account.
           // Ignore signup.

@@ -55,9 +55,9 @@ debug(`Webpack Dev Server: ${PROTOCOL}${HOSTNAME}:${DEVSERVERPORT}${PUBLICPATH}`
 debug(`BrowserSync Dev Server: ${PROTOCOL}${HOSTNAME}:${BSPORT}`);
 
 // ----------------------------------------------------------------------------
-// Express middleware (order matters!)
+// Express middleware
 // ----------------------------------------------------------------------------
-// const upload = require('../services/upload');
+
 app.use(busboy());
 
 // log every request to the console
@@ -67,7 +67,6 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 
 // get information from html forms
-
 app.use(bodyParser.json({
   limit: '5mb'
 }));
@@ -91,7 +90,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 
-// persistent login sessions
+// persist login sessions
 app.use(passport.session());
 
 // use connect-flash for flash messages stored in session
@@ -110,11 +109,10 @@ var io = socketio.listen(server);
 
 // With Socket.io >= 1.0
 io.use(passportSocketIo.authorize({
-  cookieParser: cookieParser,       // the same middleware you registrer in express
+  cookieParser: cookieParser,
   key: SESSION_KEY,
   secret: SESSION_SECRET,
   store: sessionStore,
-  // success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
   fail: (...args) => {
     const accept = args[3];
     debug('authorize failure for socket');
@@ -128,7 +126,6 @@ io.on('connect', (socket) => {
   debug(`User ${user}/${socket.id} connected.`);
   socket.emit('id', socket.id);
 });
-
 
 services(app, io);
 

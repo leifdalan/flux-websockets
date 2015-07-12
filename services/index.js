@@ -1,5 +1,11 @@
-import {signUp, logOut, login, isAdmin, isLoggedIn} from './authentication';
-// import Page from '../models/page';
+import {
+  signUp,
+  logOut,
+  login,
+  isAdmin,
+  isLoggedIn
+} from './authentication';
+
 import {
   redirectUser,
   getUsers,
@@ -8,6 +14,7 @@ import {
   createUser,
   deleteUser,
   updateManyUsers} from './admin/users';
+
 import {
   getChatRooms,
   createChat,
@@ -31,17 +38,14 @@ const debug = require('debug')('Routes');
 // Abstract of sending data from the server to client,
 // whether its the first request or an in-app XHR.
 export function sendData({data, req, res, next}) {
-  debug('Sending data:');
   const {success, error} = data;
   if (req.xhr) {
-    debug('Via XHR');
     if (error || !success) {
       debug('Error sending data:', error);
       res.status(400).json(data);
     } else {
       res.status(200).json(data);
     }
-
   } else {
     // TODO handle bad requests on the pass-a-long
     debug('Passing data along to server render.');
@@ -52,22 +56,6 @@ export function sendData({data, req, res, next}) {
 
 export default function(server, io) {
 
-  // Middleware check for token logins
-  // server.use((req, res, next) => {
-  //   if (req.query.token && req.query.un) {
-  //     req.body.email = req.query.un;
-  //     req.body.password = req.query.token;
-  //     debug('Attempting token login.');
-  //     req.tokenAttempt = true;
-  //     login(req, res, next);
-  //   } else {
-  //     next();
-  //   }
-  // });
-
-  io.on('connection', () => {
-    debug('User connected');
-  });
   // ----------------------------------------------------------------------------
   // Authorization endpoints
   // ----------------------------------------------------------------------------
@@ -121,43 +109,9 @@ export default function(server, io) {
   server.delete('/admin/pages/:id', isLoggedIn, isAdmin, deletePage);
 
   // ----------------------------------------------------------------------------
-  // Page resolution
+  // Upload API
   // ----------------------------------------------------------------------------
 
-  // server.get('*', (req, res, next) => {
-  //   debug('Looking for', req.path);
-  //   if (req.preRender) {
-  //
-  //     next();
-  //   } else {
-  //     if (req.path.split('/')[1] === 'dist') {
-  //       next();
-  //     } else {
-  //       Page.findOne({slug: req.path.substring(1)}, (err, page) => {
-  //         if (err) {
-  //           next();
-  //         }
-  //         if (page) {
-  //           req.preRender = page;
-  //           next();
-  //         } else {
-  //           next();
-  //         }
-  //       });
-  //     }
-  //   }
-  // });
-
-
-  // ----------------------------------------------------------------------------
-  // Upload
-  // ----------------------------------------------------------------------------
-  /*eslint-disable*/
-  // const uploadRouter = express.Router();
-  // /*eslint-enable*/
-  // uploadRouter.use(busboy());
-  // uploadRouter.post('/', upload);
-  // server.use(busboy());
   server.post('/upload', upload.bind(io));
   server.post('/s3', s3.bind(io));
 }

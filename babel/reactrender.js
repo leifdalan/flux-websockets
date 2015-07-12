@@ -130,7 +130,6 @@ export default function(req, res, next) {
             );
 
             title = DocumentTitle.rewind();
-            debug('DOCUMENT TITLE === %s', title);
           }
         }
 
@@ -140,7 +139,6 @@ export default function(req, res, next) {
           state,
           title,
           markup,
-
           shouldClientRender
         }));
 

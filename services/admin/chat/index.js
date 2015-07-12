@@ -7,7 +7,7 @@ const debug = require('debug')('Chat:ProcessMessages');
 
 let connectedMap = {};
 // ----------------------------------------------------------------------------
-// Chat room CRUD
+// Chat room CRUD + chat socket management
 // ----------------------------------------------------------------------------
 function listenOnChannel(io, chatroom) {
 
@@ -118,7 +118,9 @@ export function deleteChat(req, res, next) {
 }
 
 export function getOneChatroom(req, res, next) {
-  ChatRoom.findOne({_id: req.params.id}, (error, chatroom) => {
+  ChatRoom.findOne(
+    {_id: req.params.id},
+    (error, chatroom) => {
     let data;
     if (error) {
       data = {
@@ -138,7 +140,8 @@ export function getOneChatroom(req, res, next) {
         data = chatroom.toObject();
         data.success = true;
       }
-      Chat.find({room: chatroom.title})
+      Chat
+        .find({room: chatroom.title})
         .sort({_id: -1})
         .populate('user')
         .exec((errorWithTitle, chatsWithTitle) => {
@@ -160,7 +163,6 @@ export function getChatRooms(req, res, next) {
         error: `No chatrooms.`
       };
     } else {
-      debug(chatrooms);
       chatrooms = chatrooms.map((chatroom) => {
         chatroom = chatroom.toObject();
         chatroom.connectedUsers = connectedMap[chatroom._id] || [];
@@ -168,7 +170,6 @@ export function getChatRooms(req, res, next) {
       });
       data = chatrooms;
       data.success = true;
-
     }
     debug('CONNECTED MAP', connectedMap);
     sendData({data, req, res, next});

@@ -83,7 +83,6 @@ export function login(req, res, next) {
 
 export function isLoggedIn(req, res, next) {
   if (req.user) {
-    debug('Is authenticated.');
     next();
   } else {
     debug('Adding abort because not authenticated.');
