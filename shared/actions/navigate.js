@@ -19,10 +19,7 @@ export default function navigateAction({dispatch}, payload, done) {
         .set('Accept', 'application/json')
         .set('X-Requested-With', 'XMLHttpRequest')
         .end((xhrError, res) => {
-          setTimeout(() => {
-              dispatch('REQUEST_END');
-          }, 40)
-
+          dispatch('REQUEST_END');
           const {error} = res;
           if (xhrError || res.badRequest) {
             debug(xhrError || res.badRequest);

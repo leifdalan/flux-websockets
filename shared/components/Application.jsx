@@ -64,7 +64,6 @@ class Application extends Component {
 
   log() {
     const state = this.context.getStore(ApplicationStore).getState();
-
     const userState = this.context.getStore(UserStore).getState();
     const chatState = this.context.getStore(ChatStore).getState();
     debug(chatState);
@@ -111,12 +110,11 @@ class Application extends Component {
             }
           </TransitionGroup>
 
-          <TransitionGroup component="div" transitionName="loading">
+          <TransitionGroup component="div" transitionName="app-load">
             {this.props.appStore.appIsLoading &&
               <div
-                className="loading-bar"
+                className="load-bar"
                 key="loading-bar">
-                <div className="resizing-bar" />
               </div>
             }
           </TransitionGroup>
@@ -137,6 +135,21 @@ class Application extends Component {
 
             {this.props.appStore.avatar &&
               <div>
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
+                <Picture mediaRecord={this.props.appStore.avatar} />
                 <Picture mediaRecord={this.props.appStore.avatar} />
               </div>
             }
