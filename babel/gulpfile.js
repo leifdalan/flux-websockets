@@ -283,7 +283,7 @@ gulp.task('deploy', ['awsJS'], () => {
         `PUBLIC_ASSET_DOMAIN=s3-${aws.region}.amazonaws.com ` +
         `PUBLIC_PATH=/${aws.bucket}`;
   debug(herokuCommand);
-  // $.run(herokuCommand).exec();
+  $.run(herokuCommand).exec();
 
 });
 

@@ -1,8 +1,9 @@
 // load the things we need
-import {Schema as schema, model} from 'mongoose';
+const mongoose = require('mongoose');
 
 // define the schema for our user model
-const pageSchema = schema({
+/*eslint-disable*/
+const pageSchema = mongoose.Schema({
   isPublished: { type: Boolean, 'default': true },
   created: { type: Date, 'default': Date.now },
   lastUpdated: { type: Date, 'default': Date.now },
@@ -19,7 +20,7 @@ const pageSchema = schema({
     required: 'Title cannot be blank'
   },
   user: {
-   type: schema.ObjectId,
+   type: mongoose.Schema.ObjectId,
    ref: 'User'
  },
  blocks: {
@@ -28,4 +29,5 @@ const pageSchema = schema({
 });
 
 // create the model for users and expose it to our app
-export default model('Page', pageSchema);
+export default mongoose.model('Page', pageSchema);
+/*eslint-enable*/
