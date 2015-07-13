@@ -130,37 +130,15 @@ class Application extends Component {
             {Navigation}
 
 
-              <section key={name} className="main-content" role="main">
-                <RouteHandler key={name} {...this.state} />
-                <button
-                  key={`button${name}`}
-                  onClick={this.log}>
-                  Log current application state
-                </button>
-                {this.state.loggedIn && loggedInForm}
-              </section>
-
-            {this.props.appStore.avatar &&
-              <div>
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-                <Picture mediaRecord={this.props.appStore.avatar} />
-              </div>
-            }
-
+            <section key={name} className="main-content" role="main">
+              <RouteHandler key={name} {...this.state} />
+              <button
+                key={`button${name}`}
+                onClick={this.log}>
+                Log current application state
+              </button>
+              {this.state.loggedIn && loggedInForm}
+            </section>
           </div>
         </div>
       </DocumentTitle>
