@@ -136,22 +136,24 @@ class Application extends Component {
               </div>
             }
           </TransitionGroup>
-          <div className="containerz">
-            <nav
-              className="navigation"
-              style={{
-                left: `${this.state.navLeft}px`
-              }}>
-              {Navigation}
-            </nav>
-            <ReactGestures
-              onSwipeRight={this.adjustNavLeft}
-              onSwipeLeft={this.adjustNavLeft}>
+          <ReactGestures
+            onSwipeRight={this.adjustNavLeft}
+            onSwipeLeft={this.adjustNavLeft}>
+
+            <div className="containerz">
+              <nav
+                className="navigation"
+                style={{
+                  left: `${this.state.navLeft}px`
+                }}>
+                {Navigation}
+              </nav>
               <section key={name} className="main-content" role="main">
                 <RouteHandler key={name} {...this.state} />
               </section>
-            </ReactGestures>
-          </div>
+
+            </div>
+          </ReactGestures>
           <footer>
             <button
               key={`button${name}`}
