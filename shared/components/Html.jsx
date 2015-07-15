@@ -31,9 +31,13 @@ export default class Html extends Component {
           <meta charSet="utf-8" />
           <title>{this.props.title}</title>
           <meta name="theme-color" content="#33C3F0" />
-          <meta
-            name="viewport"
-            content="width=device-width, user-scalable=no" />
+            <meta
+              content={
+                'width=device-width, ' +
+                'initial-scale=1.0, ' +
+                'maximum-scale=1.0, ' +
+                'user-scalable=0'}
+              name='viewport' />
           {/* <link
             href="http://fonts.googleapis.com/css?family=Raleway"
             rel="stylesheet"

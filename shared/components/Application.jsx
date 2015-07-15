@@ -10,6 +10,7 @@ import AdminNav from './Admin/AdminNav';
 import {RouteHandler} from 'react-router';
 import {logoutAction} from '../actions/authActions';
 import DocumentTitle from 'react-document-title';
+import ReactGestures from 'react-gestures';
 import {
   clearFlashAction,
   storeSocketIdAction,
@@ -27,10 +28,12 @@ class Application extends Component {
     super(props);
     autoBindAll.call(this, [
       'logout',
+      'adjustNavLeft',
       'clearFlash',
       'log'
     ]);
     this.state = props.appStore;
+    this.state.navLeft = 0;
   }
 
   static contextTypes = {
@@ -73,6 +76,13 @@ class Application extends Component {
     debug(chatState);
     debug(userState);
     debug(state);
+  }
+
+  adjustNavLeft(e) {
+    debug(e.gesture);
+    this.setState({
+      navLeft: e.gesture.deltaX
+    });
   }
 
   componentDidMount() {
@@ -127,13 +137,19 @@ class Application extends Component {
             }
           </TransitionGroup>
           <div className="containerz">
-            <nav className="navigation">
+            <nav
+              className="navigation"
+              style={{
+                left: `${this.state.navLeft}px`
+              }}>
               {Navigation}
             </nav>
-
-            <section key={name} className="main-content" role="main">
-              <RouteHandler key={name} {...this.state} />
-            </section>
+            <ReactGestures
+              onSwipeRight={this.adjustNavLeft}>
+              <section key={name} className="main-content" role="main">
+                <RouteHandler key={name} {...this.state} />
+              </section>
+            </ReactGestures>
           </div>
           <footer>
             <button
