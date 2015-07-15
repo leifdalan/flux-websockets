@@ -145,7 +145,8 @@ class Application extends Component {
               {Navigation}
             </nav>
             <ReactGestures
-              onSwipeRight={this.adjustNavLeft}>
+              onSwipeRight={this.adjustNavLeft}
+              onSwipeLeft={this.adjustNavLeft}>
               <section key={name} className="main-content" role="main">
                 <RouteHandler key={name} {...this.state} />
               </section>
