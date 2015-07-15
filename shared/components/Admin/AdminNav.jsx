@@ -70,16 +70,6 @@ export default class AdminNav extends Component {
             <Link
               onMouseOver={this.mouseOverLink}
               onMouseOut={this.mouseOut}
-              to='adminPagesPaginated'
-              params={{perpage: 20, pagenumber: 1}}
-              >Pages
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              onMouseOver={this.mouseOverLink}
-              onMouseOut={this.mouseOut}
               to='/'>To Site
             </Link>
           </li>

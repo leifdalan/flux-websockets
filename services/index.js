@@ -30,7 +30,8 @@ import {
   updatePage,
   createPage,
   deletePage,
-  updateManyPages} from './admin/pages';
+  updateManyPages
+} from './admin/pages';
 
 import upload, {s3} from './upload';
 const debug = require('debug')('Routes');
@@ -44,12 +45,15 @@ export function sendData({data, req, res, next}) {
       debug('Error sending data:', error);
       res.status(400).json(data);
     } else {
+      data.chatRooms = req.chatRooms;
       res.status(200).json(data);
     }
   } else {
     // TODO handle bad requests on the pass-a-long
     debug('Passing data along to server render.');
+    debug('================================================', req.chatRooms);
     req.preRender = data;
+    req.preRender.chatRooms = req.chatRooms;
     next();
   }
 }
@@ -85,7 +89,24 @@ export default function(server, io) {
   // Chat CRUD (/chatLobby)
   // ----------------------------------------------------------------------------
 
-  server.get('/chat/', getChatRooms.bind(io));
+  server.get('*', getChatRooms.bind(io));
+  server.get('/', (req, res, next) => {
+    const data = {success: true};
+    sendData({data, req, res, next});
+  });
+  server.get('/dashboard', (req, res, next) => {
+    const data = {success: true};
+    sendData({data, req, res, next});
+  });
+  server.get('/signin', (req, res, next) => {
+    const data = {success: true};
+    sendData({data, req, res, next});
+  });
+  server.get('/admin', (req, res, next) => {
+    const data = {success: true};
+    sendData({data, req, res, next});
+  });
+  server.get('/chat', getChatRooms.bind(io));
   server.post('/chat/', createChat.bind(io));
   server.delete('/chat/:id', deleteChat.bind(io));
   server.get('/chat/:id', getOneChatroom.bind(io));

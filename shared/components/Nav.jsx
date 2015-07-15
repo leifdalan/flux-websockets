@@ -4,6 +4,7 @@ import React, {Component, PropTypes as pt} from 'react';
 import {Link} from 'react-router';
 import classnames from 'classnames';
 import {autoBindAll} from '../../utils';
+import ChatLobby from './ChatLobby';
 const debug = require('debug')('Component:Nav');
 debug();
 
@@ -57,7 +58,7 @@ export default class Nav extends Component {
         <Link
           onMouseOver={this.mouseOverLink}
           onMouseOut={this.mouseOut}
-          to='/dashboard'>Dashboard
+          to='/dashboard'>Profile
         </Link>
       </li>
     );
@@ -78,22 +79,7 @@ export default class Nav extends Component {
             <Link
               onMouseOver={this.mouseOverLink}
               onMouseOut={this.mouseOut}
-              to='/'>Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              onMouseOver={this.mouseOverLink}
-              onMouseOut={this.mouseOut}
-              to='chat'>Chatroom
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              onMouseOver={this.mouseOverLink}
-              onMouseOut={this.mouseOut}
-              to='/about'>About
+              to='/'>Lobby
             </Link>
           </li>
           {!this.props.loggedIn &&
@@ -107,8 +93,10 @@ export default class Nav extends Component {
           }
           {this.props.loggedIn && loggedInLinks}
           {this.props.userLevel > 1 && adminLink}
-
         </ul>
+        {this.props.loggedIn &&
+          <ChatLobby />
+        }
       </div>
     );
   }

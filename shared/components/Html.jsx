@@ -44,11 +44,9 @@ export default class Html extends Component {
             href={`${fullPublicPath}/${CSS_PATH}`}
           />
         </head>
-        <body>
-          <div
-            id="app"
-            dangerouslySetInnerHTML={{__html: this.props.markup}}>
-          </div>
+        <body
+          id="app"
+          dangerouslySetInnerHTML={{__html: this.props.markup}}>
         </body>
         {this.props.shouldClientRender &&
           <script src={`${fullPublicPath}/${JS_PATH}`} defer />

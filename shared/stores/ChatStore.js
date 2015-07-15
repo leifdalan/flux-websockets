@@ -21,7 +21,7 @@ export default class ChatStore extends BaseStore {
     'RECEIVED_MESSAGE': 'handleMessageUpdate',
     'RECEIVED_ACTIVITY': 'handleActivityUpdate',
     'CREATE_CHATROOM': 'createChatroom',
-    'chatIndex_PAYLOAD': 'populateChatlobby',
+    'CHATROOM_PAYLOAD': 'populateChatlobby',
     'chatroom_PAYLOAD': 'populateChatroom'
   }
 

@@ -43,6 +43,7 @@ export default function navigateAction({dispatch}, payload, done) {
     debug(activeRouteName);
     // Create dynamic action based on path, dispatch with data.
     const dataAction = `${activeRouteName}_PAYLOAD`;
+
     dispatch(dataAction, resolution.body || resolution);
 
     // dispatch('LOAD_PAGE', payload);
@@ -55,6 +56,9 @@ export default function navigateAction({dispatch}, payload, done) {
     if (resolution.appConfig) {
       dispatch('SAVE_APP_CONFIG', resolution.appConfig);
     }
+    debug('RESOLUTION=========================');
+    console.log(resolution);
+    dispatch('CHATROOM_PAYLOAD', resolution.chatRooms || resolution.body.chatRooms);
     done();
   }).catch((err) => {
     consoleError('Navigation error promise catch', err);

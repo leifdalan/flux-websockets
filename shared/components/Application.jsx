@@ -99,12 +99,13 @@ class Application extends Component {
 
     const Navigation =
       this.state.userLevel > 1 && name.split('/')[1] === 'admin' ?
-        <AdminNav {...this.state} /> :
-        <Nav {...this.state} />;
+        <AdminNav {...this.props.appStore} /> :
+        <Nav {...this.props.appStore} />;
 
     return (
       <DocumentTitle title="Isomorphic Auth Flow">
         <div className="app">
+          <button className="hamburger">0</button>
           <TransitionGroup component="div" transitionName="go-away">
             {this.state.flashMessage &&
               <button
@@ -125,21 +126,23 @@ class Application extends Component {
               </div>
             }
           </TransitionGroup>
-          <div className="container">
-
-            {Navigation}
-
+          <div className="containerz">
+            <nav className="navigation">
+              {Navigation}
+            </nav>
 
             <section key={name} className="main-content" role="main">
               <RouteHandler key={name} {...this.state} />
-              <button
-                key={`button${name}`}
-                onClick={this.log}>
-                Log current application state
-              </button>
-              {this.state.loggedIn && loggedInForm}
             </section>
           </div>
+          <footer>
+            <button
+              key={`button${name}`}
+              onClick={this.log}>
+              Log current application state
+            </button>
+            {this.state.loggedIn && loggedInForm}
+          </footer>
         </div>
       </DocumentTitle>
     );

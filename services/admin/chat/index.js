@@ -172,7 +172,8 @@ export function getChatRooms(req, res, next) {
       data.success = true;
     }
     debug('CONNECTED MAP', connectedMap);
-    sendData({data, req, res, next});
+    req.chatRooms = data;
+    next();
   });
 }
 
