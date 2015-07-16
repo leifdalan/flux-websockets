@@ -11,6 +11,7 @@ import {RouteHandler} from 'react-router';
 import {logoutAction} from '../actions/authActions';
 import DocumentTitle from 'react-document-title';
 import ReactGestures from 'react-gestures';
+import classnames from 'classnames';
 import {
   clearFlashAction,
   storeSocketIdAction,
@@ -30,6 +31,7 @@ class Application extends Component {
       'logout',
       'adjustNavLeft',
       'clearFlash',
+      'handleTouchEnd',
       'log'
     ]);
     this.state = props.appStore;
@@ -79,9 +81,32 @@ class Application extends Component {
   }
 
   adjustNavLeft(e) {
-    this.setState({
-      navLeft: -e.gesture.deltaX
-    });
+    debug(e);
+    const scaled = e.gesture.deltaX / 4;
+    const isTouching = true;
+    let navLeft = scaled > 90 ? 90 : scaled;
+    navLeft = navLeft < 0 ? 0 : navLeft;
+
+    this.setState({navLeft, isTouching});
+    if (e.gesture.done) {
+      this.handleTouchEnd();
+    }
+  }
+
+  handleTouchEnd() {
+    debug('TouchEnd', this.state.navLeft);
+    if (Math.abs(this.state.navLeft) > 45) {
+      this.setState({
+        navIsOpen: true,
+        isTouching: false
+      });
+    } else {
+      this.setState({
+        isTouching: false,
+        navIsOpen: false
+      });
+
+    }
   }
 
   componentDidMount() {
@@ -99,7 +124,22 @@ class Application extends Component {
   }
 
   render() {
+    let navStyle = {};
     const name = this.context.router.getCurrentPath();
+    const navClass = classnames({
+      navigation: true,
+      'open': this.state.navIsOpen
+    });
+    if (this.state.isTouching) {
+      navStyle = {
+        transform: `rotateY(-${this.state.navLeft}deg)`
+      };
+    } else {
+      navStyle = {
+        display: 'block'
+      };
+    }
+
     const loggedInForm = (
       <form key={`form${name}`} action="/logout" method="POST">
         <button type="submit" onClick={this.logout}>Log out</button>
@@ -138,13 +178,12 @@ class Application extends Component {
           <ReactGestures
             onSwipeRight={this.adjustNavLeft}
             onSwipeLeft={this.adjustNavLeft}
-            swipeThreshold={3}>
+            swipeThreshold={3}
+            onTouchEnd={this.handleTouchEnd}>
             <div className="containerz">
               <nav
-                className="navigation"
-                style={{
-                  transform: `rotateY(${this.state.navLeft}deg)`
-                }}>
+                className={navClass}
+                style={navStyle}>
                 {Navigation}
               </nav>
               <section key={name} className="main-content" role="main">

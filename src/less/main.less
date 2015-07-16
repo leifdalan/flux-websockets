@@ -77,7 +77,10 @@ nav {
   height: 100%;
   z-index: 1;
   transform-origin: 0% 0%;
-
+  transition: transform .2s ease-out;
+  &.open {
+    transform: rotateY(-90deg);
+  }
   .main-nav {
   }
 }
