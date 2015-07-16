@@ -81,7 +81,7 @@ class Application extends Component {
   adjustNavLeft(e) {
     debug(e.gesture);
     this.setState({
-      navLeft: e.gesture.deltaX
+      navLeft: -e.gesture.deltaX
     });
   }
 
@@ -138,8 +138,8 @@ class Application extends Component {
           </TransitionGroup>
           <ReactGestures
             onSwipeRight={this.adjustNavLeft}
-            onSwipeLeft={this.adjustNavLeft}>
-
+            onSwipeLeft={this.adjustNavLeft}
+            swipeThreshold={2}>
             <div className="containerz">
               <nav
                 className="navigation"
