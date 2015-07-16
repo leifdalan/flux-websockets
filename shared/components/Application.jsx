@@ -79,7 +79,6 @@ class Application extends Component {
   }
 
   adjustNavLeft(e) {
-    debug(e.gesture);
     this.setState({
       navLeft: -e.gesture.deltaX
     });
@@ -139,12 +138,12 @@ class Application extends Component {
           <ReactGestures
             onSwipeRight={this.adjustNavLeft}
             onSwipeLeft={this.adjustNavLeft}
-            swipeThreshold={2}>
+            swipeThreshold={3}>
             <div className="containerz">
               <nav
                 className="navigation"
                 style={{
-                  left: `${this.state.navLeft}px`
+                  transform: `rotateY(${this.state.navLeft}deg)`
                 }}>
                 {Navigation}
               </nav>
