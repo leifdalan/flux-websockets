@@ -10,7 +10,7 @@ import AdminNav from './Admin/AdminNav';
 import {RouteHandler} from 'react-router';
 import {logoutAction} from '../actions/authActions';
 import DocumentTitle from 'react-document-title';
-import ReactSidebar from 'react-sidebar';
+import ReactSidebar from './Sidebar';
 import classnames from 'classnames';
 import Hamburger from './Hamburger';
 import {

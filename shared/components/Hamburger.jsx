@@ -10,9 +10,6 @@ class Hamburger extends Component {
 
   constructor(props) {
     super(props);
-    autoBindAll.call(this, [
-      'sendClick'
-    ]);
     this.state = {
       showClose: false
     };
