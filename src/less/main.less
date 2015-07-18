@@ -29,7 +29,7 @@ html {
 }
 
 body {
-  background: hsla(5, 43%, 36%, 0.65);
+  // background: hsl(5, 43%, 36%);
   width: 100%;
   height: 100%;
   position: relative;
@@ -44,11 +44,14 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  font-size: 24px;
-  color: black;
   z-index: 1;
   display: block;
-  background: red;
+  z-index: 1000;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+  padding-left: 8px;
+  height: auto;
 }
 .containerz {
 
@@ -57,41 +60,42 @@ body {
   min-height: 100%;
   width: 100%;
   overflow:hidden;
-  perspective: 400;
+  perspective: 800;
 }
 
 footer {
   position: fixed;
   bottom: 0;
-  background: rgba(81, 222, 246, 0.64);
+  background: rgba(81, 222, 246, .90);
   width: 100%;
+  form {
+    padding: 5px 0;
+    text-align: center;
+    margin-bottom: 0;
+    button {
+      margin-bottom: 0;
+    }
+  }
 }
 
 
 nav {
   // flex-grow: 1;
-  background: hsla(273, 96%, 89%, 0.64);
+  // background: hsl(273, 96%, 89%);
   width: 200px;
-  position: relative;
-  position: fixed;
   height: 100%;
   z-index: 1;
-  transform-origin: 0% 0%;
-  transition: transform .2s ease-out;
-  &.open {
-    transform: rotateY(-90deg);
-  }
-  .main-nav {
-  }
+  padding-top: 55px;
 }
 
 .main-content {
   // flex-grow: 5;
   width: 100%;
-  padding-left: 200px;
-  background: hsla(124, 80%, 78%, 0.61);
+  // background: hsl(124, 80%, 78%);
+  padding: 55px 10px 0 10px;
   // position: fixed;
   // overflow: scroll;
+
 }
 
 .loading-bar, .flash {
@@ -106,6 +110,78 @@ nav {
   white-space: normal;
   height: auto;
   border-radius: 0;
+}
+
+
+.svg-menu-toggle {
+
+	fill:#111;
+	pointer-events:all; //needs to be there so the hover works
+	cursor:pointer;
+
+	.bar {
+
+		-webkit-transform:rotate(0) translateY(0) translateX(0);
+		transform:rotate(0) translateY(0) translateX(0);
+		opacity:1;
+
+
+		-webkit-transform-origin: 20px 10px;
+		transform-origin: 20px 10px;
+
+		-webkit-transition: -webkit-transform 0.4s ease-in-out, opacity 0.2s ease-in-out, fill 0.2s ease-in-out;
+	    transition: transform 0.4s ease-in-out, opacity 0.2s ease-in-out, fill 0.2s ease-in-out;
+
+	}
+  .bar:nth-of-type(1) {
+    -webkit-transform-origin: 20px 10px;
+		transform-origin: 20px 10px;
+
+  }
+   .bar:nth-of-type(3) {
+    -webkit-transform-origin: 20px 20px;
+		transform-origin: 20px 20px;
+
+   }
+
+
+}
+
+
+.open .svg-menu-toggle {
+  fill:#000;
+
+    .bar:nth-of-type(1) {
+
+
+		-webkit-transform:rotate(-45deg) translateY(0) translateX(0);
+		transform:rotate(-45deg) translateY(0) translateX(0);
+
+    }
+
+    .bar:nth-of-type(2) {
+
+		opacity:0;
+
+    }
+
+    .bar:nth-of-type(3) {
+
+
+    	-webkit-transform:rotate(45deg) translateY(0em) translateX(0em);
+		transform:rotate(45deg) translateY(0em) translateX(0em);
+
+    }
+}
+.inline-svg {
+  display:block;
+  margin:0 auto;
+}
+
+body {
+
+  // background-color:#4c4c4c;
+
 }
 //
 // .main-nav {

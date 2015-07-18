@@ -133,7 +133,7 @@ export default class Paginator extends Component {
   }
 
   render() {
-    debug(this.props);
+
     const shouldrender = this.state.totalPages > 1;
     return (
       <div className="paginator">

@@ -48,6 +48,7 @@
     "react-bootstrap-modal": "^1.0.2",
     "react-document-title": "^1.0.2",
     "react-gestures": "^0.1.8",
+    "react-sidebar": "^1.0.2",
     "react-router": "bobpace/react-router#transitionContext",
     "rsvp": "^3.0.18",
     "serialize-javascript": "^1.0.0",

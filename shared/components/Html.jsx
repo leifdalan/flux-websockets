@@ -5,9 +5,14 @@ import {
   PUBLIC_PATH,
   PUBLIC_ASSET_DOMAIN,
   CSS_PATH,
-  JS_PATH} from '../../config';
+  JS_PATH,
+  NODE_ENV
+} from '../../config';
 
-const fullPublicPath = `${PROTOCOL}${PUBLIC_ASSET_DOMAIN}${PUBLIC_PATH}`;
+const fullPublicPath = NODE_ENV === 'development' ?
+  `${PUBLIC_PATH}` :
+  `${PROTOCOL}${PUBLIC_ASSET_DOMAIN}${PUBLIC_PATH}`;
+
 
 export default class Html extends Component {
 

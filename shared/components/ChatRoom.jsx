@@ -142,7 +142,6 @@ class ChatRoom extends Component {
   }
 
   render() {
-    debug(this.state);
     return (
       <div>
         <h1>{this.props.store.chatRoomTitle}</h1>

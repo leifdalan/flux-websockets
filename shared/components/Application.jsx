@@ -10,16 +10,17 @@ import AdminNav from './Admin/AdminNav';
 import {RouteHandler} from 'react-router';
 import {logoutAction} from '../actions/authActions';
 import DocumentTitle from 'react-document-title';
-import ReactGestures from 'react-gestures';
+import ReactSidebar from 'react-sidebar';
 import classnames from 'classnames';
+import Hamburger from './Hamburger';
 import {
   clearFlashAction,
   storeSocketIdAction,
   flashMessageAction
 } from '../actions/appActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import Picture from './Picture';
 const debug = require('debug')('Component:Application');
+React.initializeTouchEvents(true);
 
 class Application extends Component {
 
@@ -31,7 +32,11 @@ class Application extends Component {
       'logout',
       'adjustNavLeft',
       'clearFlash',
+      'handleTouchStart',
+      'handleTouchMove',
       'handleTouchEnd',
+      'sidebarOpen',
+      'onSetSidebarOpen',
       'log'
     ]);
     this.state = props.appStore;
@@ -80,22 +85,35 @@ class Application extends Component {
     debug(state);
   }
 
-  adjustNavLeft(e) {
-    debug(e);
-    const scaled = e.gesture.deltaX / 4;
-    const isTouching = true;
-    let navLeft = scaled > 90 ? 90 : scaled;
-    navLeft = navLeft < 0 ? 0 : navLeft;
+  handleTouchStart(e) {
+    debug('start', e);
+    this.setState({
+      isTouching: true
+    });
+    this._startX = e.touches[0].pageX;
+    this._startY = e.touches[0].pageY;
+  }
 
-    this.setState({navLeft, isTouching});
-    if (e.gesture.done) {
-      this.handleTouchEnd();
+  handleTouchMove(e) {
+    const comparisonX = this._lastMoveX || this._startX;
+    const comparisonY = this._lastMoveY || this._startY;
+    this._deltaX = comparisonX - e.touches[0].pageX;
+    this._deltaY = comparisonY - e.touches[0].pageY;
+    this._lastMoveX = e.touches[0].pageX;
+    this._lastMoveY = e.touches[0].pageY;
+    // debug('move', this._deltaX, this._deltaY);
+    if (Math.abs(this._deltaX) > Math.abs(this._deltaY)) {
+      const navLeft = (e.touches[0].pageX - this._startX) / 1;
+      // debug('moving sideways!', navLeft);
+      this.setState({navLeft});
     }
   }
 
   handleTouchEnd() {
     debug('TouchEnd', this.state.navLeft);
-    if (Math.abs(this.state.navLeft) > 45) {
+    this._deltaX = 0;
+    this._deltaY = 0;
+    if (Math.abs(this.state.navLeft) > 100) {
       this.setState({
         navIsOpen: true,
         isTouching: false
@@ -107,6 +125,24 @@ class Application extends Component {
       });
 
     }
+
+  }
+
+  adjustNavLeft(e) {
+    debug(e);
+    const scaled = e.gesture.deltaX / 3;
+    const isTouching = true;
+    let navLeft = scaled;
+    navLeft = navLeft < 0 ? 0 : navLeft;
+    navLeft = Math.round(navLeft);
+    this.setState({navLeft, isTouching});
+    if (e.gesture.done) {
+      //this.handleTouchEnd();
+    }
+  }
+
+  onSetSidebarOpen(open) {
+    this.setState({sidebarOpen: open});
   }
 
   componentDidMount() {
@@ -132,7 +168,7 @@ class Application extends Component {
     });
     if (this.state.isTouching) {
       navStyle = {
-        transform: `rotateY(-${this.state.navLeft}deg)`
+        left: `${this.state.navLeft}`
       };
     } else {
       navStyle = {
@@ -150,11 +186,23 @@ class Application extends Component {
       this.state.userLevel > 1 && name.split('/')[1] === 'admin' ?
         <AdminNav {...this.props.appStore} /> :
         <Nav {...this.props.appStore} />;
+    const NavBar = (
+      <nav
+        className={navClass}
+        style={navStyle}>
+        {Navigation}
+      </nav>
+    );
 
     return (
       <DocumentTitle title="Isomorphic Auth Flow">
         <div className="app">
-          <button className="hamburger">0</button>
+          <Hamburger
+            className="hamburger"
+            showClose={this.state.sidebarOpen}
+            handleClick={this.onSetSidebarOpen.bind(null, !this.state.sidebarOpen)}
+            >0
+          </Hamburger>
           <TransitionGroup component="div" transitionName="go-away">
             {this.state.flashMessage &&
               <button
@@ -175,29 +223,32 @@ class Application extends Component {
               </div>
             }
           </TransitionGroup>
-          <ReactGestures
-            onSwipeRight={this.adjustNavLeft}
-            onSwipeLeft={this.adjustNavLeft}
-            swipeThreshold={3}
-            onTouchEnd={this.handleTouchEnd}>
-            <div className="containerz">
-              <nav
-                className={navClass}
-                style={navStyle}>
-                {Navigation}
-              </nav>
+
+          <ReactSidebar
+            sidebar={NavBar}
+            open={this.state.sidebarOpen}
+            onSetOpen={this.onSetSidebarOpen}>
+            <div
+              className="containerz"
+              onTouchStart={this.handleTouchStart}
+              onTouchMove={this.handleTouchMove}
+              onTouchEnd={this.handleTouchEnd}
+              >
               <section key={name} className="main-content" role="main">
                 <RouteHandler key={name} {...this.state} />
               </section>
 
             </div>
-          </ReactGestures>
+          </ReactSidebar>
+
           <footer>
+            {/*
             <button
               key={`button${name}`}
               onClick={this.log}>
               Log current application state
             </button>
+            */}
             {this.state.loggedIn && loggedInForm}
           </footer>
         </div>
