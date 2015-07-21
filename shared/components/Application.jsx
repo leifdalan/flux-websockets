@@ -37,6 +37,7 @@ class Application extends Component {
       'handleTouchEnd',
       'sidebarOpen',
       'onSetSidebarOpen',
+      'handleNavigation',
       'log'
     ]);
     this.state = props.appStore;
@@ -107,6 +108,10 @@ class Application extends Component {
       // debug('moving sideways!', navLeft);
       this.setState({navLeft});
     }
+  }
+
+  handleNavigation() {
+    this.setState({sidebarOpen: false});
   }
 
   handleTouchEnd() {
@@ -184,10 +189,15 @@ class Application extends Component {
 
     const Navigation =
       this.state.userLevel > 1 && name.split('/')[1] === 'admin' ?
-        <AdminNav {...this.props.appStore} /> :
-        <Nav {...this.props.appStore} />;
+        <AdminNav onNavigation={this.handleNavigation}
+          {...this.props.appStore}
+        /> :
+        <Nav
+          onNavigation={this.handleNavigation}
+          {...this.props.appStore} />;
     const NavBar = (
       <nav
+        handleClick={this.handleNavigation}
         className={navClass}
         style={navStyle}>
         {Navigation}

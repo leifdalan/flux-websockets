@@ -50,14 +50,14 @@ export default class AdminNav extends Component {
     return (
       <div className="main-nav">
         <ul className={classes}>
-          <li>
+          <li onClick={this.props.onNavigation}>
             <Link
               onMouseOver={this.mouseOverLink}
               onMouseOut={this.mouseOut}
               to='admin'>Admin
             </Link>
           </li>
-          <li>
+          <li onClick={this.props.onNavigation}>
             <Link
               onMouseOver={this.mouseOverLink}
               onMouseOut={this.mouseOut}
@@ -66,7 +66,7 @@ export default class AdminNav extends Component {
               >Users
             </Link>
           </li>
-          <li>
+          <li onClick={this.props.onNavigation}>
             <Link
               onMouseOver={this.mouseOverLink}
               onMouseOut={this.mouseOut}

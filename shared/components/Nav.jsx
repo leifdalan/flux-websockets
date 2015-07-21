@@ -54,7 +54,7 @@ export default class Nav extends Component {
     });
     const loggedInLinks =
     (
-      <li>
+      <li onClick={this.props.onNavigation}>
         <Link
           onMouseOver={this.mouseOverLink}
           onMouseOut={this.mouseOut}
@@ -63,7 +63,7 @@ export default class Nav extends Component {
       </li>
     );
     const adminLink = (
-      <li>
+      <li onClick={this.props.onNavigation}>
         <Link
           onMouseOver={this.mouseOverLink}
           onMouseOut={this.mouseOut}
@@ -75,7 +75,7 @@ export default class Nav extends Component {
     return (
       <div className="main-nav">
         <ul className={classes}>
-          <li>
+          <li onClick={this.props.onNavigation}>
             <Link
               onMouseOver={this.mouseOverLink}
               onMouseOut={this.mouseOut}
@@ -83,7 +83,7 @@ export default class Nav extends Component {
             </Link>
           </li>
           {!this.props.loggedIn &&
-            <li>
+            <li onClick={this.props.onNavigation}>
               <Link
                 onMouseOver={this.mouseOverLink}
                 onMouseOut={this.mouseOut}
@@ -95,7 +95,7 @@ export default class Nav extends Component {
           {this.props.userLevel > 1 && adminLink}
         </ul>
         {this.props.loggedIn &&
-          <ChatLobby />
+          <ChatLobby {...this.props} />
         }
       </div>
     );
