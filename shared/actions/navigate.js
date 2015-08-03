@@ -56,8 +56,6 @@ export default function navigateAction({dispatch}, payload, done) {
     if (resolution.appConfig) {
       dispatch('SAVE_APP_CONFIG', resolution.appConfig);
     }
-    debug('RESOLUTION=========================');
-    console.log(resolution);
     dispatch('CHATROOM_PAYLOAD', resolution.chatRooms || resolution.body.chatRooms);
     done();
   }).catch((err) => {

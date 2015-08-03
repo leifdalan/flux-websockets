@@ -1,5 +1,5 @@
 import XDate from 'xdate';
-
+import {each, isObject, isArray} from 'lodash';
 const debug = require('debug')('Utils');
 
 /**
@@ -192,3 +192,38 @@ export function trace(...args) {
   }
   /*eslint-enable*/
 }
+
+export function table(...args) {
+  /*eslint-disable*/
+  if (typeof window !== 'undefined' && window.console && window.console.table) {
+    window.console.table(...args);
+  } else {
+    debug('Error', ...args);
+  }
+  /*eslint-enable*/
+}
+
+export const expandedLog = (() => {
+  /*eslint-disable*/
+  var MAX_DEPTH = 100;
+  return (item, depth) => {
+    depth = depth || 0;
+
+    if (depth > MAX_DEPTH ) {
+      console.log(item);
+      return;
+    }
+
+    if (isObject(item) || isArray(item)) {
+      console.table(item);
+      each(item, (value, key) => {
+        console.group(`${key} : (${typeof value})`);
+        expandedLog(value, depth + 1);
+        console.groupEnd();
+      });
+    } else {
+        console.log(item);
+    }
+  };
+  /*eslint-enable*/
+})();

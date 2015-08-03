@@ -28,7 +28,8 @@ class ChatLobby extends Component {
   }
 
   static propTypes = {
-    store: pt.object.isRequired
+    store: pt.object.isRequired,
+    onNavigation: pt.func
   }
 
   componentDidMount() {

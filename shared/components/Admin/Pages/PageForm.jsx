@@ -45,7 +45,7 @@ class PageForm extends Component {
   static contextTypes = {
     router: pt.func.isRequired,
     getStore: pt.func.isRequired,
-    executeAction: pt.func.isRequired,
+    executeAction: pt.func.isRequired
   }
 
   static propTypes = {

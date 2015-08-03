@@ -28,6 +28,10 @@ export default class AdminNav extends Component {
     executeAction: pt.func.isRequired
   }
 
+  static propTypes = {
+    onNavigation: pt.func
+  }
+
   mouseOverLink(e) {
     e.target.classList.add('hovering');
     this.setState({

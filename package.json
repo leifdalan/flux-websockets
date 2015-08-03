@@ -45,7 +45,7 @@
     "q": "^1.4.1",
     "react": "0.13.x",
     "react-bootstrap": "^0.20.3",
-    "react-bootstrap-modal": "^1.0.2",
+    "react-bootstrap-modal": "1.0.2",
     "react-document-title": "^1.0.2",
     "react-gestures": "^0.1.8",
     "react-sidebar": "^1.0.2",

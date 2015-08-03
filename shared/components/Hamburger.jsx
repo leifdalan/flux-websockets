@@ -1,7 +1,6 @@
 'use strict';
 
 import React, {Component, PropTypes as pt} from 'react';
-import {autoBindAll} from '../../utils';
 import classnames from 'classnames';
 const debug = require('debug')('Component:Hamburger');
 debug();

@@ -76,6 +76,8 @@ class Uploader extends Component {
   }
 
   handleProgress(key, value) {
+    debug('key', key);
+    debug('value', value);
     this._progress[key] = value;
     this.calculateProgress();
   }
@@ -89,6 +91,9 @@ class Uploader extends Component {
     this.setState({
       totalProgress: totalProgress / subProgresses
     });
+
+    debug('totalProgress / subProgresses', totalProgress / subProgresses);
+    debug('this._progress', this._progress);
     if (Math.round(totalProgress / subProgresses) === 1) {
       this.setState({
         isUploading: false

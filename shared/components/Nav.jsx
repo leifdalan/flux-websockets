@@ -31,7 +31,8 @@ export default class Nav extends Component {
 
   static propTypes = {
     loggedIn: pt.bool,
-    userLevel: pt.number
+    userLevel: pt.number,
+    onNavigation: pt.func
   }
 
   mouseOverLink(e) {

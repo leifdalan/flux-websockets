@@ -4,7 +4,7 @@ import {connectToStores} from 'fluxible/addons';
 import ApplicationStore from '../stores/ApplicationStore';
 import UserStore from '../stores/UserStore';
 import ChatStore from '../stores/ChatStore';
-import {autoBindAll} from '../../utils';
+import {autoBindAll, expandedLog} from '../../utils';
 import Nav from './Nav';
 import AdminNav from './Admin/AdminNav';
 import {RouteHandler} from 'react-router';
@@ -30,14 +30,9 @@ class Application extends Component {
     super(props);
     autoBindAll.call(this, [
       'logout',
-      'adjustNavLeft',
       'clearFlash',
-      'handleTouchStart',
-      'handleTouchMove',
-      'handleTouchEnd',
-      'sidebarOpen',
-      'onSetSidebarOpen',
       'handleNavigation',
+      'onSetSidebarOpen',
       'log'
     ]);
     this.state = props.appStore;
@@ -81,69 +76,13 @@ class Application extends Component {
     const state = this.context.getStore(ApplicationStore).getState();
     const userState = this.context.getStore(UserStore).getState();
     const chatState = this.context.getStore(ChatStore).getState();
-    debug(chatState);
-    debug(userState);
-    debug(state);
-  }
-
-  handleTouchStart(e) {
-    debug('start', e);
-    this.setState({
-      isTouching: true
-    });
-    this._startX = e.touches[0].pageX;
-    this._startY = e.touches[0].pageY;
-  }
-
-  handleTouchMove(e) {
-    const comparisonX = this._lastMoveX || this._startX;
-    const comparisonY = this._lastMoveY || this._startY;
-    this._deltaX = comparisonX - e.touches[0].pageX;
-    this._deltaY = comparisonY - e.touches[0].pageY;
-    this._lastMoveX = e.touches[0].pageX;
-    this._lastMoveY = e.touches[0].pageY;
-    // debug('move', this._deltaX, this._deltaY);
-    if (Math.abs(this._deltaX) > Math.abs(this._deltaY)) {
-      const navLeft = (e.touches[0].pageX - this._startX) / 1;
-      // debug('moving sideways!', navLeft);
-      this.setState({navLeft});
-    }
+    expandedLog(chatState);
+    expandedLog(userState);
+    expandedLog(state);
   }
 
   handleNavigation() {
     this.setState({sidebarOpen: false});
-  }
-
-  handleTouchEnd() {
-    debug('TouchEnd', this.state.navLeft);
-    this._deltaX = 0;
-    this._deltaY = 0;
-    if (Math.abs(this.state.navLeft) > 100) {
-      this.setState({
-        navIsOpen: true,
-        isTouching: false
-      });
-    } else {
-      this.setState({
-        isTouching: false,
-        navIsOpen: false
-      });
-
-    }
-
-  }
-
-  adjustNavLeft(e) {
-    debug(e);
-    const scaled = e.gesture.deltaX / 3;
-    const isTouching = true;
-    let navLeft = scaled;
-    navLeft = navLeft < 0 ? 0 : navLeft;
-    navLeft = Math.round(navLeft);
-    this.setState({navLeft, isTouching});
-    if (e.gesture.done) {
-      //this.handleTouchEnd();
-    }
   }
 
   onSetSidebarOpen(open) {
@@ -249,18 +188,19 @@ class Application extends Component {
               </section>
 
             </div>
+            <footer>
+              {
+              <button
+                key={`button${name}`}
+                onClick={this.log}>
+                Log current application state
+              </button>
+              }
+              {this.state.loggedIn && loggedInForm}
+            </footer>
+
           </ReactSidebar>
 
-          <footer>
-            {/*
-            <button
-              key={`button${name}`}
-              onClick={this.log}>
-              Log current application state
-            </button>
-            */}
-            {this.state.loggedIn && loggedInForm}
-          </footer>
         </div>
       </DocumentTitle>
     );

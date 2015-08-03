@@ -182,7 +182,7 @@ export default function(req, res, next) {
 }
 
 export function singleS3Push({cloudObj, publicId, io, socketId, i, format}) {
-
+  debug('socketId', socketId);
   return new Promise((resolve, reject) => {
 
     // Retrieve image data from cloudinary
@@ -214,6 +214,7 @@ export function singleS3Push({cloudObj, publicId, io, socketId, i, format}) {
       // Report progress to client
       cloudRes.on('data', (data) => {
         progress += data.length;
+        debug('CloudResData', progress / total);
         io.to(socketId).emit(
           'progress',
           `cloudRes${i}`,

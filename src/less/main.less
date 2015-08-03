@@ -64,7 +64,6 @@ body {
 }
 
 footer {
-  position: fixed;
   bottom: 0;
   background: rgba(81, 222, 246, .90);
   width: 100%;
@@ -92,7 +91,7 @@ nav {
   // flex-grow: 5;
   width: 100%;
   // background: hsl(124, 80%, 78%);
-  padding: 55px 10px 0 10px;
+  padding: 55px 10px 55px 10px;
   // position: fixed;
   // overflow: scroll;
 
@@ -463,10 +462,14 @@ button.warning {
 }
 
 .picture-figure {
+  width: 100%;
   position: relative;
   height: 0;
   margin: 0;
-  background: rgb(194, 194, 194);
+  background: rgb(244, 244, 244);
+  &.loading {
+    box-shadow: inset 0px 0px 64px 0px rgba(0,0,0,0.75);
+  }
   .loading {
     width: 30px;
     height: 26px;
@@ -476,10 +479,10 @@ button.warning {
     position: absolute;
     top: 50%;
     left: 50%;
-    color: #ddd;
+    color: hsl(0, 0%, 47%);
     margin-left: -15px;
     margin-top: -13px;
-    border: 2px solid #ddd;
+    border: 2px solid hsl(0, 0%, 47%);
     &:before {
       content: '';
       position: absolute;

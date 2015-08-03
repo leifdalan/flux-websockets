@@ -21,8 +21,7 @@ class Block extends Component {
     handleFocus: pt.func.isRequired,
     index: pt.number,
     onFocusCallback: pt.func,
-    onChangeCallback: pt.func,
-
+    onChangeCallback: pt.func
   }
 
   render() {

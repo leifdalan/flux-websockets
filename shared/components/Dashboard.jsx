@@ -6,6 +6,7 @@ import DocumentTitle from 'react-document-title';
 import {connectToStores} from 'fluxible/addons';
 import {autoBindAll} from '../../utils';
 import Uploader from './Editor/Uploader';
+import Picture from './Picture';
 import {editUserAction} from '../actions/userActions';
 const debug = require('debug')('Component:Dashboard');
 debug();
@@ -44,10 +45,12 @@ class Dashboard extends Component {
   }
 
   render() {
+    debug(this.props.store);
     return (
       <DocumentTitle title="Dashboard">
         <div>
           <Uploader callback={this.uploadCallback} />
+          <Picture mediaRecord={this.props.store.avatar} />
         </div>
       </DocumentTitle>
     );

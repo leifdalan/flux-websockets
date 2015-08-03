@@ -105,7 +105,6 @@ class Picture extends Component {
       <figure
         className={classes}
         style={{
-          width: '100%',
           paddingBottom: `${ratio}%`
         }}
         onClick={this.props.onClick}

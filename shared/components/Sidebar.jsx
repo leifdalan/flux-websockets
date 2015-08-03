@@ -1,5 +1,5 @@
 import React from 'react/addons';
-
+/*eslint-disable*/
 const update = React.addons.update;
 
 const CANCEL_DISTANCE_ON_SCROLL = 20;
@@ -348,3 +348,4 @@ Sidebar.defaultProps = {
 };
 
 export default Sidebar;
+/*eslint-enable*/

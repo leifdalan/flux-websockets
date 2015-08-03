@@ -23,7 +23,7 @@ export default class Html extends Component {
   static displayName = 'Html'
 
   static propTypes = {
-    state: pt.object.isRequired,
+    state: pt.string.isRequired,
     markup: pt.string.isRequired,
     title: pt.object,
     shouldClientRender: pt.bool
