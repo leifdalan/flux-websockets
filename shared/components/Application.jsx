@@ -1,4 +1,3 @@
-'use strict';
 import React, {Component, PropTypes as pt} from 'react';
 import {connectToStores} from 'fluxible/addons';
 import ApplicationStore from '../stores/ApplicationStore';
@@ -20,7 +19,7 @@ import {
 } from '../actions/appActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 const debug = require('debug')('Component:Application');
-React.initializeTouchEvents(true);
+debug('Component:Application');
 
 class Application extends Component {
 

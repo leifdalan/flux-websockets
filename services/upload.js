@@ -67,7 +67,7 @@ const sizes = [{
 ];
 
 
-export default function(req, res, next) {
+export default function(req, res) {
   const total = req.headers['content-length'];
   const socketId = req.headers['x-socketid'];
   debug(total);
@@ -181,7 +181,7 @@ export default function(req, res, next) {
 
 }
 
-export function singleS3Push({cloudObj, publicId, io, socketId, i, format}) {
+export function singleS3Push({cloudObj, publicId, io, socketId, i}) {
   debug('socketId', socketId);
   return new Promise((resolve, reject) => {
 
@@ -267,7 +267,7 @@ function createMediaRecord(
 }
 
 
-export function s3(req, res, next) {
+export function s3(req, res) {
   const {
     eager: cloudSizes,
     socketId,

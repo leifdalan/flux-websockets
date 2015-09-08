@@ -130,6 +130,51 @@ export function getTimeAgo(isoDate) {
 }
 
 /**
+ * Some console methods
+ */
+
+ export function warn(...args) {
+   /*eslint-disable*/
+   if (typeof window !== 'undefined' && window.console && window.console.warn) {
+     window.console.warn(...args);
+   } else {
+     debug('Warn', ...args);
+   }
+
+   /*eslint-enable*/
+ }
+
+ export function error(...args) {
+   /*eslint-disable*/
+   if (typeof window !== 'undefined' && window.console && window.console.error) {
+     window.console.error(...args);
+   } else {
+     debug('Error', ...args);
+   }
+   /*eslint-enable*/
+ }
+
+ export function trace(...args) {
+   /*eslint-disable*/
+   if (typeof window !== 'undefined' && window.console && window.console.trace) {
+     window.console.trace(...args);
+   } else {
+     debug('Error', ...args);
+   }
+   /*eslint-enable*/
+ }
+
+ export function table(...args) {
+   /*eslint-disable*/
+   if (typeof window !== 'undefined' && window.console && window.console.table) {
+     window.console.table(...args);
+   } else {
+     debug('Error', ...args);
+   }
+   /*eslint-enable*/
+ }
+
+/**
  * Bind method for react ES6 classes, as they don't support auto-binding.
  * See http://www.ian-thomas.net/autobinding-react-and-es6-classes/
  * Note: Must pass class' "this" context.
@@ -160,47 +205,6 @@ export function autoBindAll(arrayOfFuncStrings) {
   arrayOfFuncStrings.forEach((funcString) => {
     autoBind.call(this, funcString);
   });
-}
-
-export function warn(...args) {
-  /*eslint-disable*/
-  if (typeof window !== 'undefined' && window.console && window.console.warn) {
-    window.console.warn(...args);
-  } else {
-    debug('Warn', ...args);
-  }
-
-  /*eslint-enable*/
-}
-
-export function error(...args) {
-  /*eslint-disable*/
-  if (typeof window !== 'undefined' && window.console && window.console.error) {
-    window.console.error(...args);
-  } else {
-    debug('Error', ...args);
-  }
-  /*eslint-enable*/
-}
-
-export function trace(...args) {
-  /*eslint-disable*/
-  if (typeof window !== 'undefined' && window.console && window.console.trace) {
-    window.console.trace(...args);
-  } else {
-    debug('Error', ...args);
-  }
-  /*eslint-enable*/
-}
-
-export function table(...args) {
-  /*eslint-disable*/
-  if (typeof window !== 'undefined' && window.console && window.console.table) {
-    window.console.table(...args);
-  } else {
-    debug('Error', ...args);
-  }
-  /*eslint-enable*/
 }
 
 export const expandedLog = (() => {

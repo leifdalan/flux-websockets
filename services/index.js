@@ -59,7 +59,7 @@ export function sendData({data, req, res, next}) {
 }
 
 export default function(server, io) {
-
+  server.get('*', getChatRooms.bind(io));
   // ----------------------------------------------------------------------------
   // Authorization endpoints
   // ----------------------------------------------------------------------------
@@ -89,7 +89,6 @@ export default function(server, io) {
   // Chat CRUD (/chatLobby)
   // ----------------------------------------------------------------------------
 
-  server.get('*', getChatRooms.bind(io));
   server.get('/', (req, res, next) => {
     const data = {success: true};
     sendData({data, req, res, next});

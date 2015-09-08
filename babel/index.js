@@ -16,7 +16,6 @@ import socketio from 'socket.io';
 import http from 'http';
 import busboy from 'connect-busboy';
 
-
 // Passport imports
 import passport from 'passport';
 import passportConfig from '../config/passport';
@@ -70,11 +69,11 @@ app.use(cookieParser());
 app.use(bodyParser.json({
   limit: '5mb'
 }));
+
 app.use(bodyParser.urlencoded({
   extended: true,
   limit: '5mb'
 }));
-
 
 var sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection

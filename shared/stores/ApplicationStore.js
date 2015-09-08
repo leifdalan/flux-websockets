@@ -123,7 +123,7 @@ export default class ApplicationStore extends BaseStore {
     this.emitChange();
   }
 
-  login({userLevel=1, local, _id, avatar}) {
+  login({userLevel = 1, local, _id, avatar}) {
     debug('logging in', _id);
     debug('AVATAR');
     debug(avatar);

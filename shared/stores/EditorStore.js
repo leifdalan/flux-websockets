@@ -30,7 +30,7 @@ export default class EditorStore extends BaseStore {
     'SET_FOCUS': 'setFocus',
     'SET_CONTENT': 'setContent',
     'CHANGE_BLOCK': 'changeBlock',
-    'DELETE_BLOCK': 'deleteBlock',
+    'DELETE_BLOCK': 'deleteBlock'
   }
 
   addBlock(payload) {
