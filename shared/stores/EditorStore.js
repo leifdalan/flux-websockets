@@ -10,10 +10,9 @@ export default class EditorStore extends BaseStore {
     const initialId = uuid.v4();
     this.blocks = [
       {
-          id: initialId,
-          tag: 'p',
-          focused: true
-
+        id: initialId,
+        tag: 'p',
+        focused: true
       }
     ];
     this.dict = {

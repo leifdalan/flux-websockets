@@ -62,6 +62,7 @@ export default class ApplicationStore extends BaseStore {
     this.inPageLoadingProperties = [];
     this.pageUserPref = null;
     this.socketId = null;
+    this.user = null;
   }
 
   saveAppConfig(payload) {
@@ -123,7 +124,9 @@ export default class ApplicationStore extends BaseStore {
     this.emitChange();
   }
 
-  login({userLevel = 1, local, _id, avatar}) {
+  login(payload) {
+    debug(payload);
+    const {userLevel, local, _id, avatar} = payload;
     debug('logging in', _id);
     debug('AVATAR');
     debug(avatar);
@@ -133,12 +136,14 @@ export default class ApplicationStore extends BaseStore {
     this.userId = _id;
     this.avatar = avatar;
     this.emitChange();
+    this.user = payload;
   }
 
   logout() {
     this.loggedIn = false;
     this.email = null;
     this.userLevel = null;
+    this.user = null;
     this.emitChange();
   }
 
@@ -170,7 +175,8 @@ export default class ApplicationStore extends BaseStore {
       progressTitle: this.progressTitle,
       progress: this.progress,
       appConfig: this.appConfig,
-      showProgress: this.showProgress
+      showProgress: this.showProgress,
+      user: this.user
     };
   }
 
@@ -195,5 +201,6 @@ export default class ApplicationStore extends BaseStore {
     this.avatar = state.avatar;
     this.appConfig = state.appConfig;
     this.showProgress = state.showProgress;
+    this.user = state.user;
   }
 }
