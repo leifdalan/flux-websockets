@@ -46,17 +46,18 @@ export function logOut(req, res) {
 export function login(req, res, next) {
   passport.authenticate('local-login', (err, user) => {
     debug('Logging in.');
-    const failMessage = {
-      success: false,
-      message: 'Username or password incorrect.'
-    };
-
     if (err) {
-      return res.status(401).json(failMessage);
+      return res.status(401).json({
+        success: false,
+        message: err
+      });
     }
 
     if (!user) {
-      return res.status(401).json(failMessage);
+      return res.status(401).json({
+        success: false,
+        message: 'No user found.'
+      });
     }
 
     req.logIn(user, function(loginErr) {
