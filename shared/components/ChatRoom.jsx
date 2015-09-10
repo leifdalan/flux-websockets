@@ -12,7 +12,7 @@ import {
 } from '../actions/chatActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import {getTimeAgo} from '../../utils';
-import {reject, some, clone} from 'lodash';
+import {includes, pull, clone} from 'lodash';
 const debug = require('debug')('Component:ChatRoom');
 debug();
 
@@ -53,36 +53,26 @@ class ChatRoom extends Component {
       inputValue: e.target.value
     });
     this.socket.emit('typing', {
-      user: this.props.appStore.userId,
+      user: this.props.appStore.user.local.username,
       typing: true
     });
   }
 
   handleMessageAction(data) {
     this.context.executeAction(handleMessageAction, data);
-    this.setState({
-      inputValue: ''
-    });
   }
 
-  handleTyping(data) {
-    let newTyping = clone(this.state.typing);
-    if (data.typing) {
-      if (!some(newTyping, data)) {
-        newTyping.push({
-          user: data.user,
-          typing: true
-        });
+  handleTyping(payload) {
+    let typing = clone(this.state.typing);
+    if (payload.typing) {
+      if (!includes(typing, payload.user)) {
+        typing.push(payload.user);
       }
     } else {
-      newTyping = reject(newTyping, {
-        user: data.user
-      });
+      pull(typing, payload.user);
     }
-    this.setState({
-      typing: newTyping
-    });
 
+    this.setState({typing});
   }
 
   deleteChatRoom() {
@@ -101,16 +91,20 @@ class ChatRoom extends Component {
 
   componentDidMount() {
     const socket = io(`/${this.props.store.chatRoomTitle}`);
+
     if (socket.disconnected) {
       debug('FORCING NEW');
       socket.connect({forceNew: true});
     }
+
     const activitySocket = io();
 
+    // bind sockets
     socket.on('chat', this.handleMessageAction);
     activitySocket.on('activity', this.handleActivityAction);
     socket.on('typing', this.handleTyping);
 
+    // set interval
     this.interval = window.setInterval(() => {
       this.forceUpdate();
     }.bind(this), 10000);
@@ -123,25 +117,46 @@ class ChatRoom extends Component {
     window.clearInterval(this.interval);
     this.socket.removeListener('chat', this.handleMessageAction);
     this.socket.disconnect();
-    // this.activitySocket.disconnect();
     this.activitySocket.removeListener('activity', this.handleActivityAction);
   }
 
   submitChat(e) {
     e.preventDefault();
     const content = findDOMNode(this.refs.content).value;
-    debug('content', content);
     const user = this.props.appStore.userId;
     const channel = `/${this.props.store.chatRoomTitle}`;
     this.context.executeAction(sendMessageAction, {content, user, channel});
     this.socket.emit('typing', {
-      user: this.props.appStore.userId,
+      user: this.props.appStore.user.local.username,
       typing: false
     });
-
+    this.setState({
+      inputValue: ''
+    });
   }
 
   render() {
+    let typingMarkup;
+    switch (this.state.typing.length) {
+      case 1:
+        typingMarkup = <div>{this.state.typing[0]} is typing...</div>;
+      break;
+      case 2:
+        typingMarkup = (
+          <div>
+            {this.state.typing[0]} and {this.state.typing[1]} are typing...
+          </div>
+        );
+      break;
+      default:
+        typingMarkup = (
+          <div>
+            Many are typing...
+          </div>
+        );
+      break;
+    }
+
     return (
       <div>
         <h1>{this.props.store.chatRoomTitle}</h1>
@@ -152,16 +167,13 @@ class ChatRoom extends Component {
           )}
         </ul>
 
-        <ul>
-          {this.state.typing.map((user) =>
-            <li>{user.user} is typing</li>
-          )}
-        </ul>
+        {this.state.typing.length ? typingMarkup : ''}
+
         <form onSubmit={this.submitChat}>
           <input
             ref="content"
             type="text"
-            onChange={this.onInputChange.bind(null, 'content')}
+            onChange={this.onInputChange.bind(this, 'content')}
             value={this.state.inputValue} />
           <button type="submit">Submit</button>
         </form>
