@@ -138,7 +138,7 @@ export default function(passport) {
             if (user) {
               debug('Signup Error, user already exists.');
               return done(
-                {message: `${username} already exists.`}, false,
+                `${username} already exists.`, false,
                 req.flash('signupMessage', 'That username is already taken.'));
             /*eslint-disable*/
             } else {

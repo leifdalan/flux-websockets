@@ -4,15 +4,17 @@ const debug = require('debug')('Routes:Authentication');
 export function signUp(req, res, next) {
   passport.authenticate('local-signup', (err, user) => {
     debug('Attempting passport authenticate.');
-    const failMessage = {
-      success: false,
-      message: 'Well, that didn\'t work.'
-    };
     if (err) {
-      return res.status(401).json(failMessage);
+      return res.status(401).json({
+        success: false,
+        message: err
+      });
     }
     if (!user) {
-      return res.status(401).json(failMessage);
+      return res.status(401).json({
+        success: false,
+        message: 'No user...'
+      });
     }
     req.logIn(user, function(loginErr) {
       if (loginErr) {
