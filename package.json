@@ -125,7 +125,8 @@
     "react-router"
   ],
   "engines": {
-    "node": "0.10.x"
+    "node": "4.0.0",
+    "npm": "2.13.1"
   },
   "author": "Leif Dalan",
   "license": "MIT",
