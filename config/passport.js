@@ -164,6 +164,8 @@ export default function(passport) {
           });
           // if the user is logged in but has no local account...
         } else {
+          debug(req.user);
+          debug('already logged in?');
           // user is logged in and already has a local account.
           // Ignore signup.
           return done(null, req.user);
