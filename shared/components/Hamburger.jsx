@@ -23,7 +23,6 @@ class Hamburger extends Component {
   }
 
   static propTypes = {
-    store: pt.object.isRequired,
     handleClick: pt.func,
     showClose: pt.bool
   }

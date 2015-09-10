@@ -45,7 +45,8 @@ class Application extends Component {
   }
 
   static propTypes = {
-    appStore: pt.object.isRequired
+    appStore: pt.object.isRequired,
+    chatStore: pt.object
   }
 
   componentWillReceiveProps(nextProps) {
@@ -139,6 +140,25 @@ class Application extends Component {
         className={navClass}
         style={navStyle}>
         {Navigation}
+        <section className="user-list">
+          <ul>
+            {this.props.chatStore.connectedUsers.map((user) =>
+              <li>{user}</li>
+            )}
+          </ul>
+                    <button onClick={this.deleteChatRoom}>Delete Chatroom</button>
+        </section>
+
+        <footer>
+          {
+          <button
+            key={`button${name}`}
+            onClick={this.log}>
+            Log current application state
+          </button>
+          }
+          {this.state.loggedIn && loggedInForm}
+        </footer>
       </nav>
     );
 
@@ -187,16 +207,6 @@ class Application extends Component {
               </section>
 
             </div>
-            <footer>
-              {
-              <button
-                key={`button${name}`}
-                onClick={this.log}>
-                Log current application state
-              </button>
-              }
-              {this.state.loggedIn && loggedInForm}
-            </footer>
 
           </ReactSidebar>
 
@@ -206,9 +216,10 @@ class Application extends Component {
   }
 }
 
-Application = connectToStores(Application, ['ApplicationStore'], (stores) => {
+Application = connectToStores(Application, ['ApplicationStore', 'ChatStore'], (stores) => {
   return {
-    appStore: stores.ApplicationStore.getState()
+    appStore: stores.ApplicationStore.getState(),
+    chatStore: stores.ChatStore.getState()
   };
 });
 

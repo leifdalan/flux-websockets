@@ -28,7 +28,7 @@ export default class ChatStore extends BaseStore {
   populateChatroom(payload) {
     this.chatRoomId = payload._id;
     this.chatRoomTitle = payload.title;
-    this.chats = payload.chats || [];
+    this.chats = payload.chats.reverse() || [];
     this.connectedUsers = this.connectedUsers || [];
     this.emitChange();
   }
@@ -39,7 +39,7 @@ export default class ChatStore extends BaseStore {
   }
 
   handleMessageUpdate(payload) {
-    this.chats.unshift(payload);
+    this.chats.push(payload);
     this.emitChange();
   }
 

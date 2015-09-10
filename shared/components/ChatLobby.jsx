@@ -61,9 +61,10 @@ class ChatLobby extends Component {
     return (
       <div>
         <ul>
-          {this.props.store.chatRooms.map((chatRoom) =>
+          {this.props.store.chatRooms.map((chatRoom, i) =>
             <li>
               <Link
+                key={`chatroom${i}`}
                 onClick={this.props.onNavigation}
                 to={`/chat/${chatRoom._id}`}>
                 {chatRoom.title} ({chatRoom.connectedUsers.length} connected)

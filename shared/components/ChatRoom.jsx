@@ -1,6 +1,7 @@
 'use strict';
 
 import React, {Component, PropTypes as pt, findDOMNode} from 'react';
+import DocumentTitle from 'react-document-title';
 import {connectToStores} from 'fluxible/addons';
 import {sendMessageAction} from '../actions/chatActions';
 import {autoBindAll} from '../../utils';
@@ -32,6 +33,7 @@ class ChatRoom extends Component {
       inputValue: '',
       typing: []
     };
+    this._lastMessageCount = props.store.chats.length;
   }
 
   static displayName = 'ChatRoom'
@@ -59,6 +61,7 @@ class ChatRoom extends Component {
   }
 
   handleMessageAction(data) {
+    this._lastMessageCount = this.props.store.chats.length;
     this.context.executeAction(handleMessageAction, data);
   }
 
@@ -111,6 +114,8 @@ class ChatRoom extends Component {
 
     this.socket = socket;
     this.activitySocket = activitySocket;
+    const chatbody = this.refs.chatBody.getDOMNode();
+    chatbody.scrollTop = chatbody.scrollHeight;
   }
 
   componentWillUnmount() {
@@ -118,6 +123,17 @@ class ChatRoom extends Component {
     this.socket.removeListener('chat', this.handleMessageAction);
     this.socket.disconnect();
     this.activitySocket.removeListener('activity', this.handleActivityAction);
+  }
+
+  componentDidUpdate() {
+    debug('componentDidUpdate');
+    debug(this._lastMessageCount);
+    debug(this.props.store.chats.length);
+    if (this._lastMessageCount !== this.props.store.chats.length) {
+      this._lastMessageCount = this.props.store.chats.length;
+      const chatbody = this.refs.chatBody.getDOMNode();
+      chatbody.scrollTop = chatbody.scrollHeight;
+    }
   }
 
   submitChat(e) {
@@ -139,18 +155,18 @@ class ChatRoom extends Component {
     let typingMarkup;
     switch (this.state.typing.length) {
       case 1:
-        typingMarkup = <div>{this.state.typing[0]} is typing...</div>;
+        typingMarkup = <div className="istyping">{this.state.typing[0]} is typing...</div>;
       break;
       case 2:
         typingMarkup = (
-          <div>
+          <div className="istyping">
             {this.state.typing[0]} and {this.state.typing[1]} are typing...
           </div>
         );
       break;
       default:
         typingMarkup = (
-          <div>
+          <div className="istyping">
             Many are typing...
           </div>
         );
@@ -158,36 +174,33 @@ class ChatRoom extends Component {
     }
 
     return (
-      <div>
-        <h1>{this.props.store.chatRoomTitle}</h1>
-        <h2>{this.props.store.connectedUsers.length} connected</h2>
-        <ul>
-          {this.props.store.connectedUsers.map((user) =>
-            <li>{user}</li>
-          )}
-        </ul>
+      <DocumentTitle title={this.props.store.chatRoomTitle}>
+        <div className="chatroom-container">
+          <h1>{this.props.store.chatRoomTitle}</h1>
 
-        {this.state.typing.length ? typingMarkup : ''}
+          {this.state.typing.length ? typingMarkup : ''}
 
-        <form onSubmit={this.submitChat}>
-          <input
-            ref="content"
-            type="text"
-            onChange={this.onInputChange.bind(this, 'content')}
-            value={this.state.inputValue} />
-          <button type="submit">Submit</button>
-        </form>
-        <TransitionGroup component="div" transitionName="example">
-          {this.props.store.chats.map((chat, i) =>
-            <div key={`chat${i}`}>
-              <div>{chat.user ? chat.user.local.username : 'Anon'}:</div>
-              <div>{chat.content}</div>
-              <div>{getTimeAgo(chat.created)}</div>
-            </div>
-          )}
-        </TransitionGroup>
-        <button onClick={this.deleteChatRoom}>Delete Chatroom</button>
-      </div>
+          <TransitionGroup component="div" transitionName="example">
+            <section ref="chatBody" className="chat-body">
+              {this.props.store.chats.map((chat, i) =>
+                <div className="chat-message" key={`chat${i}`}>
+                  <div className="body">{chat.user ? chat.user.local.username : 'Anon'}: {chat.content}</div>
+                  <div className="time">{getTimeAgo(chat.created)}</div>
+                </div>
+              )}
+            </section>
+          </TransitionGroup>
+          <form onSubmit={this.submitChat}>
+            <input
+              ref="content"
+              type="text"
+              onChange={this.onInputChange.bind(this, 'content')}
+              value={this.state.inputValue} />
+            <button type="submit">Submit</button>
+          </form>
+
+        </div>
+    </DocumentTitle>
     );
   }
 }

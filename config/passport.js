@@ -35,6 +35,7 @@ export default function(passport) {
       passReqToCallback: true
       /*eslint-disable*/
     }, (req, username, password, done) => {
+      console.log('login callback');
       /*eslint-enable*/
       if (username) {
         // Use lower-case e-mails to avoid case-sensitive e-mail matching
@@ -76,6 +77,10 @@ export default function(passport) {
           });
 
         } else {
+          /*eslint-disable*/
+          console.log('finding user');
+          /*eslint-enable*/
+
           User
           .findOne(conditions)
           .populate('avatar')
@@ -123,7 +128,10 @@ export default function(passport) {
       }
 
       process.nextTick(() => {
-        console.log('nextTick');
+        /*eslint-disable*/
+        console.log('local signup');
+        /*eslint-enable*/
+
         User.findOne({
           'local.username': username
         }, (err, user) => {
@@ -138,7 +146,7 @@ export default function(passport) {
           if (user) {
             debug('Signup Error, user already exists.');
             return done(
-              `${username} already exists.`, false,
+              {message: `${username} already exists.`}, false,
               req.flash('signupMessage', 'That username is already taken.'));
           /*eslint-disable*/
           } else {
