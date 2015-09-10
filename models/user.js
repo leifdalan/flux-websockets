@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
   loginToken: { type: String, 'default': uuid.v4() },
   userLevel: { type: Number, 'default': 1},
   local: {
-    email: String,
+    username: String,
     password: String
   },
   avatar: {

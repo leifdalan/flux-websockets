@@ -29,10 +29,10 @@ class Signin extends Component {
 
   login(e) {
     e.preventDefault();
-    const {usernameValue: email, passwordValue: password} = this.state;
+    const {usernameValue: username, passwordValue: password} = this.state;
     if (!this.state.flashWarning) {
       this.context.executeAction(loginAction, {
-        email,
+        username,
         password,
         reqAttempt: this.state.reqAttempt,
         router: this.context.router
@@ -70,7 +70,7 @@ class Signin extends Component {
     const number = this.state.numberValue;
     !this.state.flashWarning &&
     this.context.executeAction(signUpAction, {
-      email: username,
+      username: username,
       router: this.context.router,
       password,
       userLevel: number
@@ -86,7 +86,7 @@ class Signin extends Component {
         <div className="row">
           <input
             type="text"
-            name="email"
+            name="username"
             ref="username"
             placeholder="Username"
             value={this.state.usernameValue}

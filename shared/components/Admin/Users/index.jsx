@@ -26,11 +26,11 @@ class AdminUserBrowser extends Component {
 
     const users = state.users.map((user) => {
       user.selected = false;
-      user.email = user.local.email;
+      user.username = user.local.username;
       if (state.search) {
         const searchLetters = state.search.split('');
-        user.email =
-          this._setHighlightedMarkup(user.email, searchLetters);
+        user.username =
+          this._setHighlightedMarkup(user.username, searchLetters);
       }
 
       user.lastUpdated = getTimeAgo(user.lastUpdated);
@@ -77,7 +77,7 @@ class AdminUserBrowser extends Component {
       [
         {
           label: 'Name',
-          valueProp: 'email',
+          valueProp: 'username',
           selected: true
         },
         {
@@ -114,12 +114,12 @@ class AdminUserBrowser extends Component {
 
     let state = nextProps.userStore;
     const users = state.users.map((user) => {
-      user.email = user.local.email;
+      user.username = user.local.username;
       user.lastUpdated = getTimeAgo(user.lastUpdated);
       if (state.search) {
         const searchLetters = state.search.split('');
-        user.email =
-          this._setHighlightedMarkup(user.email, searchLetters);
+        user.username =
+          this._setHighlightedMarkup(user.username, searchLetters);
       }
 
       return user;

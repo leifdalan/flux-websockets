@@ -109,11 +109,11 @@ export const deleteUserAction = ({dispatch}, payload, done) => {
 
 export const createUserAction = ({dispatch}, {formValues, router}, done) => {
   debug('createUser');
-  if (formValues.local && formValues.local.email && formValues.local.password) {
-    formValues.email = formValues.local.email;
+  if (formValues.local && formValues.local.username && formValues.local.password) {
+    formValues.username = formValues.local.username;
     formValues.password = formValues.local.password;
   } else {
-    dispatch('FLASH_MESSAGE', 'Need email and password fields.');
+    dispatch('FLASH_MESSAGE', 'Need username and password fields.');
     return done();
   }
   dispatch('REQUEST_START');

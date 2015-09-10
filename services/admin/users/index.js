@@ -28,7 +28,7 @@ export function createUser(req, res, next) {
       };
     } else {
       data = {
-        success: `User ${user.local.email} created successfully`,
+        success: `User ${user.local.username} created successfully`,
         user
       };
       this.emit('user', user);
@@ -53,7 +53,7 @@ export function getUsers(req, res, next) {
 
     filter = {
       $or: [
-        {'local.email': new RegExp(search, 'i')},
+        {'local.username': new RegExp(search, 'i')},
         {'userLevel': number}
       ]
     };
@@ -64,7 +64,7 @@ export function getUsers(req, res, next) {
     let sortAndDirection = sort.split('|'),
       sortTerm = sortAndDirection[0],
       sortDirection = sortAndDirection[1];
-    sortTerm = sortTerm === 'email' ? 'local.email' : sortTerm;
+    sortTerm = sortTerm === 'username' ? 'local.username' : sortTerm;
     const sortValue = sortDirection === 'asc' ? 1 : -1;
     sortCriteria = {
       [sortTerm]: sortValue
@@ -186,7 +186,7 @@ export function updateUser(req, res, next) {
           data = {
             user,
             success: {
-              message: `${user.local.email} saved successfully.`
+              message: `${user.local.username} saved successfully.`
             }
           };
         }
@@ -246,7 +246,7 @@ export function deleteUser(req, res, next) {
     } else {
       data = {
         success: {
-          message: `"${user.local.email}" deleted successfully`
+          message: `"${user.local.username}" deleted successfully`
         },
         user
       };

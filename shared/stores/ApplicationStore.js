@@ -52,7 +52,7 @@ export default class ApplicationStore extends BaseStore {
   initialize() {
     this.currentRoute = null;
     this.loggedIn = false;
-    this.email = null;
+    this.username = null;
     this.userId = null;
     this.redirect = null;
     this.appIsLoading = null;
@@ -131,7 +131,7 @@ export default class ApplicationStore extends BaseStore {
     debug('AVATAR');
     debug(avatar);
     this.loggedIn = true;
-    this.email = local.email;
+    this.username = local.username;
     this.userLevel = userLevel;
     this.userId = _id;
     this.avatar = avatar;
@@ -141,7 +141,7 @@ export default class ApplicationStore extends BaseStore {
 
   logout() {
     this.loggedIn = false;
-    this.email = null;
+    this.username = null;
     this.userLevel = null;
     this.user = null;
     this.emitChange();
@@ -163,7 +163,7 @@ export default class ApplicationStore extends BaseStore {
       route: this.currentRoute,
       loggedIn: this.loggedIn,
       socketId: this.socketId,
-      email: this.email,
+      username: this.username,
       avatar: this.avatar,
       userLevel: this.userLevel,
       userId: this.userId,
@@ -188,7 +188,7 @@ export default class ApplicationStore extends BaseStore {
     this.currentRoute = state.route;
     this.loggedIn = state.loggedIn;
     this.socketId = state.socketId;
-    this.email = state.email;
+    this.username = state.username;
     this.userLevel = state.userLevel;
     this.appIsLoading = state.appIsLoading;
     this.userId = state.userId;

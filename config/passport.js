@@ -27,22 +27,22 @@ export default function(passport) {
   // LOCAL LOGIN =============================================================
   // =========================================================================
   passport.use('local-login', new Strategy({
-      usernameField: 'email',
+      usernameField: 'username',
       passwordField: 'password',
 
       // allows us to pass in the req from our route
       // (lets us check if a user is logged in or not)
       passReqToCallback: true
       /*eslint-disable*/
-    }, (req, email, password, done) => {
+    }, (req, username, password, done) => {
       /*eslint-enable*/
-      if (email) {
+      if (username) {
         // Use lower-case e-mails to avoid case-sensitive e-mail matching
-        email = email.toLowerCase();
+        username = username.toLowerCase();
       }
 
       let conditions = {
-        'local.email': email
+        'local.username': username
       }, tokenAttempt = false;
       if (req.tokenAttempt) {
         tokenAttempt = true;
@@ -110,22 +110,22 @@ export default function(passport) {
   // LOCAL SIGNUP ============================================================
   // =========================================================================
   passport.use('local-signup', new Strategy({
-      usernameField: 'email',
+      usernameField: 'username',
       passwordField: 'password',
       passReqToCallback: true
       /*eslint-disable*/
-    }, (req, email, password, done) => {
+    }, (req, username, password, done) => {
       /*eslint-enable*/
       debug('LOCAL SIGNUP');
-      if (email) {
-        email = email.toLowerCase();
+      if (username) {
+        username = username.toLowerCase();
       }
 
       process.nextTick(() => {
         // if the user is not already logged in:
         if (!req.user || req.url === '/admin/users') {
           User.findOne({
-            'local.email': email
+            'local.username': username
           }, (err, user) => {
 
             // if there are any errors, return the error
@@ -134,19 +134,19 @@ export default function(passport) {
               return done(err);
             }
 
-            // check to see if theres already a user with that email
+            // check to see if theres already a user with that username
             if (user) {
               debug('Signup Error, user already exists.');
               return done(
-                {message: `${email} already exists.`}, false,
-                req.flash('signupMessage', 'That email is already taken.'));
+                {message: `${username} already exists.`}, false,
+                req.flash('signupMessage', 'That username is already taken.'));
             /*eslint-disable*/
             } else {
             /*eslint-enable*/
               // create the user
               var newUser = new User();
 
-              newUser.local.email = email;
+              newUser.local.username = username;
               newUser.local.password = newUser.generateHash(password);
               newUser.loginToken = newUser.generateToken();
               newUser.userLevel = req.body.userLevel;

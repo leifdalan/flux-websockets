@@ -150,7 +150,7 @@ Async.auto({
     Async.series([
       (seriesDone) => {
         User.findOne({
-          'local.email': results.adminUsername
+          'local.username': results.adminUsername
         }, (err, user) => {
 
           if (user) {
@@ -159,7 +159,7 @@ Async.auto({
           } else {
             const newUser = new User();
 
-            newUser.local.email = results.adminUsername;
+            newUser.local.username = results.adminUsername;
             newUser.local.password = newUser.generateHash(results.adminPassword);
             newUser.userLevel = 3;
 
@@ -178,7 +178,7 @@ Async.auto({
 
       (seriesDone) => {
         User.findOne({
-          'local.email': results.regularUserUsername
+          'local.username': results.regularUserUsername
         }, (err, user) => {
 
           if (user) {
@@ -187,7 +187,7 @@ Async.auto({
           } else {
             const newUser = new User();
 
-            newUser.local.email = results.regularUserUsername;
+            newUser.local.username = results.regularUserUsername;
             newUser.local.password = newUser.generateHash(results.regularUserPassword);
             newUser.loginToken = newUser.generateToken();
             newUser.userLevel = 1;
@@ -225,9 +225,10 @@ Async.auto({
     function createUser(callback) {
       const newUser = {local: {}};
 
-      newUser.local.email = makeid();
+      newUser.local.username = makeid();
       newUser.local.password = 'meh.';
       newUser.loginToken = 'token';
+      debug(newUser);
       newUser.userLevel = Math.floor(Math.random() * 3 + 1);
       tick++;
       progressBar.step(`Adding user`)
