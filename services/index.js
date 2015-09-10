@@ -33,8 +33,6 @@ import {
   updateManyPages
 } from './admin/pages';
 
-import User from '../models/user';
-
 import upload, {s3} from './upload';
 const debug = require('debug')('Routes');
 
@@ -61,7 +59,9 @@ export function sendData({data, req, res, next}) {
 }
 
 export default function(server, io) {
+  // all routes have a sidebar with the available chatrooms
   server.get('*', getChatRooms.bind(io));
+
   // ----------------------------------------------------------------------------
   // Authorization endpoints
   // ----------------------------------------------------------------------------
