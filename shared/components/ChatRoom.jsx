@@ -168,7 +168,7 @@ class ChatRoom extends Component {
         <TransitionGroup component="div" transitionName="example">
           {this.props.store.chats.map((chat, i) =>
             <div key={`chat${i}`}>
-              <div>{chat.user ? chat.user.local.email : 'Anon'}:</div>
+              <div>{chat.user ? chat.user.local.username : 'Anon'}:</div>
               <div>{chat.content}</div>
               <div>{getTimeAgo(chat.created)}</div>
             </div>

@@ -39,7 +39,7 @@ export default class UserForm extends Component {
   }
 
   handleChange(field, e) {
-    if (field === 'email' || field === 'password') {
+    if (field === 'username' || field === 'password') {
       if (!this.state.local) {
         this.setState({
           local: {}
@@ -47,7 +47,7 @@ export default class UserForm extends Component {
       }
       this.setState({
         local: {
-          email: this.state.local.email,
+          username: this.state.local.username,
           password: this.state.local.password,
           [field]: e.target.value
         }
@@ -90,14 +90,14 @@ export default class UserForm extends Component {
             onChange={this.handleChange.bind(null, 'loginToken')}
             value={this.state.loginToken}
             />
-          <label htmlFor="email">email</label>
+          <label htmlFor="username">username</label>
           <input
             type="text"
-            id="email"
-            name="email"
-            key="email"
-            onChange={this.handleChange.bind(null, 'email')}
-            value={this.state.local && this.state.local.email}
+            id="username"
+            name="username"
+            key="username"
+            onChange={this.handleChange.bind(null, 'username')}
+            value={this.state.local && this.state.local.username}
             />
           <label htmlFor="password">Change Password</label>
           <input

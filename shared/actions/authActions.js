@@ -3,7 +3,7 @@ const debug = require('debug')('Action:authAction');
 
 export const loginAction = (
   {dispatch}, {
-    email,
+    username,
     password,
     user,
     reqAttempt,
@@ -17,7 +17,7 @@ export const loginAction = (
   } else {
     request
       .post('/login')
-      .send({email, password})
+      .send({username, password})
       .set('Accept', 'application/json')
       .set('X-Requested-With', 'XMLHttpRequest')
       .end((err, {body}) => {
@@ -56,14 +56,14 @@ export const logoutAction = ({dispatch}, {router}, done) => {
 
 export const signUpAction = (
   {dispatch},
-  {email, password, userLevel, router},
+  {username, password, userLevel, router},
   done) => {
   debug('SignUpAction');
   request
     .post('/signup')
     .set('Accept', 'application/json')
     .set('X-Requested-With', 'XMLHttpRequest')
-    .send({email, password, userLevel})
+    .send({username, password, userLevel})
     .end((err, {body}) => {
       const {success, user, message} = body;
       debug('RESPONSE?!');

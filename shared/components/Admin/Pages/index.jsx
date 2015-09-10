@@ -95,7 +95,7 @@ class AdminPageBrowser extends Component {
         },
         {
           label: 'Created By',
-          valueProp: 'user.local.email',
+          valueProp: 'user.local.username',
           selected: true
         }
       ];

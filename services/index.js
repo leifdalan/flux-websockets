@@ -33,6 +33,8 @@ import {
   updateManyPages
 } from './admin/pages';
 
+import User from '../models/user';
+
 import upload, {s3} from './upload';
 const debug = require('debug')('Routes');
 

@@ -121,7 +121,7 @@ io.use(passportSocketIo.authorize({
 }));
 
 io.on('connect', (socket) => {
-  const user = socket.request.user.local ? socket.request.user.local.email : 'Unauthenticated';
+  const user = socket.request.user.local ? socket.request.user.local.username : 'Unauthenticated';
   debug(`User ${user}/${socket.id} connected.`);
   socket.emit('id', socket.id);
 });
