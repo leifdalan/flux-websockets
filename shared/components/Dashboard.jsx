@@ -50,7 +50,9 @@ class Dashboard extends Component {
       <DocumentTitle title="Dashboard">
         <div>
           <Uploader callback={this.uploadCallback} />
-          <Picture mediaRecord={this.props.store.avatar} />
+          {this.props.store.avatar &&
+            <Picture mediaRecord={this.props.store.avatar} />
+          }
         </div>
       </DocumentTitle>
     );
