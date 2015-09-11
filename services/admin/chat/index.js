@@ -145,8 +145,12 @@ export function getOneChatroom(req, res, next) {
         .find({room: chatroom.title})
         .sort({created: 1})
         .populate('user')
+        .populate('user.avatar')
         .exec((errorWithTitle, chatsWithTitle) => {
-        debug('sorted', chatsWithTitle);
+
+        // chatsWithTitle.user.populate('avatar', (err, chatWAvatar) => {
+        //   debug(chatWAvatar);
+        // });
         data.chats = chatsWithTitle;
         sendData({data, req, res, next});
       });

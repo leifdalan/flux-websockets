@@ -60,7 +60,14 @@ export function sendData({data, req, res, next}) {
 export default function(server, io) {
   // all routes have a sidebar with the available chatrooms
   server.get('*', getChatRooms.bind(io));
-
+  server.get('*', (req, res, next) => {
+    if (req.query.token) {
+      req.tokenAttempt = true;
+      login(req, res, next);
+    } else {
+      next();
+    }
+  })
   // ----------------------------------------------------------------------------
   // Authorization endpoints
   // ----------------------------------------------------------------------------

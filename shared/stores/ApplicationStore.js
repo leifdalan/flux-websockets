@@ -127,14 +127,58 @@ export default class ApplicationStore extends BaseStore {
   login(payload) {
     debug(payload);
     const {userLevel, local, _id, avatar} = payload;
-    debug('logging in', _id);
-    debug('AVATAR');
+    debug('LOGIN PAYLOAd');
     debug(avatar);
+    if (!avatar) {
+      this.avatar = {
+        _id: '55f3331fda8585f70da2d187',
+        __v: 0,
+        lastUpdated: '2015-09-11T20:01:35.457Z',
+        created: '2015-09-11T20:01:35.456Z',
+        retinaWebp: {
+          width: 1024,
+          height: 1365,
+          filename: 'default-avatar-e4eac9a5-ffa9-425f-8730-4a1cc691617e1024x1365.webp'
+        },
+        mediumWebp: {
+          width: 768,
+          height: 1024,
+          filename: 'default-avatar-e4eac9a5-ffa9-425f-8730-4a1cc691617e768x1024.webp'
+        },
+        mobileWebp: {
+          width: 320,
+          height: 427,
+          filename: 'default-avatar-e4eac9a5-ffa9-425f-8730-4a1cc691617e320x427.webp'
+        },
+        retina: {
+          width: 1024,
+          height: 1365,
+          filename: 'default-avatar-e4eac9a5-ffa9-425f-8730-4a1cc691617e1024x1365.jpg'
+        },
+        medium: {
+          width: 768,
+          height: 1024,
+          filename: 'default-avatar-e4eac9a5-ffa9-425f-8730-4a1cc691617e768x1024.jpg'
+        },
+        mobile: {
+          width: 320,
+          height: 427,
+          filename: 'default-avatar-e4eac9a5-ffa9-425f-8730-4a1cc691617e320x427.jpg'
+        },
+        original: {
+          height: 800,
+          width: 600,
+          filename: 'default-avatar-e4eac9a5-ffa9-425f-8730-4a1cc691617e.png'
+        }
+      };
+    } else {
+      this.avatar = avatar;
+    }
     this.loggedIn = true;
     this.username = local.username;
     this.userLevel = userLevel;
     this.userId = _id;
-    this.avatar = avatar;
+
     this.emitChange();
     this.user = payload;
   }
