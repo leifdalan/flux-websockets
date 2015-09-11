@@ -51,7 +51,6 @@ export function sendData({data, req, res, next}) {
   } else {
     // TODO handle bad requests on the pass-a-long
     debug('Passing data along to server render.');
-    debug('================================================', req.chatRooms);
     req.preRender = data;
     req.preRender.chatRooms = req.chatRooms;
     next();

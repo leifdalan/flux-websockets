@@ -14,6 +14,7 @@ import {
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import {getTimeAgo} from '../../utils';
 import {includes, pull, clone} from 'lodash';
+import {CheckLoginWillTransitionTo} from '../mixins/authMixins';
 const debug = require('debug')('Component:ChatRoom');
 debug();
 
@@ -48,6 +49,8 @@ class ChatRoom extends Component {
     store: pt.object.isRequired,
     appStore: pt.object.isRequired
   }
+
+  static willTransitionTo = CheckLoginWillTransitionTo
 
   onInputChange(ref, e) {
     e.preventDefault();
@@ -184,7 +187,9 @@ class ChatRoom extends Component {
             <section ref="chatBody" className="chat-body">
               {this.props.store.chats.map((chat, i) =>
                 <div className="chat-message" key={`chat${i}`}>
-                  <div className="body">{chat.user ? chat.user.local.username : 'Anon'}: {chat.content}</div>
+                  <div className="body">
+                    {chat.user ? chat.user.local.username : 'Anon'}: {chat.content}
+                  </div>
                   <div className="time">{getTimeAgo(chat.created)}</div>
                 </div>
               )}

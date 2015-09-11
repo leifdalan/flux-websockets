@@ -4,6 +4,7 @@ import debug from 'debug';
 debug('Mixin:CheckAuthMixin');
 
 export const CheckLoginWillTransitionTo = function(transition) {
+  debug('checking will transition to===========================================');
   const {loggedIn} =
     transition
       .context

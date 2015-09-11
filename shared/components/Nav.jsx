@@ -92,7 +92,7 @@ export default class Nav extends Component {
               </Link>
             </li>
           }
-          {this.props.loggedIn && loggedInLinks}
+          {loggedInLinks}
           {this.props.userLevel > 1 && adminLink}
         </ul>
         {this.props.loggedIn &&

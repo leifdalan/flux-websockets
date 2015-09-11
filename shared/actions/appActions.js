@@ -28,6 +28,24 @@ export const uploadFileAction = ({dispatch}, payload, done) => {
   debug(payload);
   var xhr = new window.XMLHttpRequest();
 
+  function sendToS3(res) {
+    debug('sending to s3');
+    debug(res);
+    res.socketId = payload.socketId;
+
+    request
+      .post('/s3')
+      .set('Accept', 'application/json')
+      .set('X-Requested-With', 'XMLHttpRequest')
+      .send(res)
+      .end((err, response) => {
+        debug(err);
+
+        debug(response);
+        payload.callback(response.body);
+      });
+  }
+
   xhr.open('POST', '/upload', true);
   xhr.setRequestHeader('X-SocketId', payload.socketId);
   xhr.onreadystatechange = function (e) {
@@ -47,22 +65,5 @@ export const uploadFileAction = ({dispatch}, payload, done) => {
   };
   xhr.send(payload.formData);
   debug(payload);
-  function sendToS3(res) {
-    debug('sending to s3');
-    debug(res);
-    res.socketId = payload.socketId;
-
-    request
-      .post('/s3')
-      .set('Accept', 'application/json')
-      .set('X-Requested-With', 'XMLHttpRequest')
-      .send(res)
-      .end((err, response) => {
-        debug(err);
-
-        debug(response);
-        payload.callback(response.body);
-      });
-  }
   done();
 };
