@@ -159,8 +159,6 @@ export function getOneChatroom(req, res, next) {
 }
 
 export function getChatRooms(req, res, next) {
-  debug('QUERY=============================');
-  debug(req.query);
 
   ChatRoom.find({}, (error, chatrooms) => {
     let data;
@@ -170,6 +168,7 @@ export function getChatRooms(req, res, next) {
         error: `No chatrooms.`
       };
     } else {
+      debug(`Found ${chatrooms.length} chatrooms`);
       chatrooms = chatrooms.map((chatroom) => {
         chatroom = chatroom.toObject();
         chatroom.connectedUsers = connectedMap[chatroom._id] || [];
@@ -178,7 +177,7 @@ export function getChatRooms(req, res, next) {
       data = chatrooms;
       data.success = true;
     }
-    debug('CONNECTED MAPzzz', connectedMap);
+
     req.chatRooms = data;
     next();
   });

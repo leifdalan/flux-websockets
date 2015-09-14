@@ -147,11 +147,10 @@ class Application extends Component {
               <li>{user}</li>
             )}
           </ul>
-                    <button onClick={this.deleteChatRoom}>Delete Chatroom</button>
-        </section>
 
+        </section>
         <footer>
-          {
+          {this.state.userLevel > 1 &&
           <button
             key={`button${name}`}
             onClick={this.log}>

@@ -58,6 +58,7 @@ class ChatLobby extends Component {
   }
 
   render() {
+    debug(this.props.store);
     return (
       <div>
         <ul>

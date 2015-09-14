@@ -55,11 +55,10 @@ export default function(passport) {
         if (tokenAttempt) {
 
           // Create new login token after each use.
-          const newToken = uuid.v4();
-          User.findOneAndUpdate(
-            conditions,
-            {loginToken: newToken},
-            (err, user) => {
+
+          User.findOne(conditions)
+            .populate('avatar')
+            .exec((err, user) => {
             // if there are any errors, return the error
             debug('TOKEN LOGIN', err, user);
             if (err) {

@@ -62,12 +62,15 @@ export default function(server, io) {
   server.get('*', getChatRooms.bind(io));
   server.get('*', (req, res, next) => {
     if (req.query.token) {
+      req.body.username = req.query.un;
+      req.body.password = 'bar';
       req.tokenAttempt = true;
       login(req, res, next);
+      // next();
     } else {
       next();
     }
-  })
+  });
   // ----------------------------------------------------------------------------
   // Authorization endpoints
   // ----------------------------------------------------------------------------
