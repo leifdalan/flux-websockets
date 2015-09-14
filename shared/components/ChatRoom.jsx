@@ -4,7 +4,7 @@ import React, {Component, PropTypes as pt, findDOMNode} from 'react';
 import DocumentTitle from 'react-document-title';
 import {connectToStores} from 'fluxible/addons';
 import {sendMessageAction} from '../actions/chatActions';
-import {autoBindAll} from '../../utils';
+import {autoBindAll, getTime} from '../../utils';
 import {
   handleMessageAction,
   handleActivityAction,
@@ -12,9 +12,10 @@ import {
   flashActivityAction
 } from '../actions/chatActions';
 import TransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import {getTimeAgo} from '../../utils';
+
 import {includes, pull, clone} from 'lodash';
 import {CheckLoginWillTransitionTo} from '../mixins/authMixins';
+import Picture from './Picture';
 const debug = require('debug')('Component:ChatRoom');
 debug();
 
@@ -119,6 +120,7 @@ class ChatRoom extends Component {
     this.activitySocket = activitySocket;
     const chatbody = this.refs.chatBody.getDOMNode();
     chatbody.scrollTop = chatbody.scrollHeight;
+    this.scrollEl = React.findDOMNode(this.refs.chatContainer);
   }
 
   componentWillUnmount() {
@@ -178,7 +180,9 @@ class ChatRoom extends Component {
 
     return (
       <DocumentTitle title={this.props.store.chatRoomTitle}>
-        <div className="chatroom-container">
+        <div
+          ref="chatroomContainer"
+          className="chatroom-container">
           <h1>{this.props.store.chatRoomTitle}</h1>
 
           {this.state.typing.length ? typingMarkup : ''}
@@ -187,10 +191,18 @@ class ChatRoom extends Component {
             <section ref="chatBody" className="chat-body">
               {this.props.store.chats.map((chat, i) =>
                 <div className="chat-message" key={`chat${i}`}>
-                  <div className="body">
-                    {chat.user ? chat.user.local.username : 'Anon'}: {chat.content}
+                  <div className="thumbnail">
+                    <Picture
+                      mediaRecord={chat.user && chat.user.avatar ?
+                        chat.user.avatar : this.props.appStore.defaultAvatar}
+                      lazy={false}
+                    />
                   </div>
-                  <div className="time">{getTimeAgo(chat.created)}</div>
+                  <div className="body">
+                    {chat.user ? chat.user.local.username : 'Anon'}:
+                    <span className="time">{getTime(chat.created)}</span>
+                  </div>
+                  <div className="content">{chat.content}</div>
                 </div>
               )}
             </section>

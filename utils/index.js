@@ -130,6 +130,26 @@ export function getTimeAgo(isoDate) {
 }
 
 /**
+ * Return the time from an ISO date
+ *
+ * @param {Date} JS Date Object
+ * @return {String} Human readable string
+ * @public
+ */
+
+export function getTime(isoDate) {
+  let comparitor = new XDate(isoDate),
+      now = new XDate(),
+      returnString;
+  if (comparitor.diffDays(now) !== 0) {
+    returnString = getTimeAgo(isoDate);
+  } else {
+    returnString = comparitor.toString('h:mm tt');
+  }
+  return returnString;
+}
+
+/**
  * Some console methods
  */
 

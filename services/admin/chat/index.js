@@ -43,8 +43,10 @@ function listenOnChannel(io, chatroom) {
             if (popError) {
               nsp.emit('chatError');
             } else {
-              debug('NEWCHAT', popChat);
-              nsp.emit('chat', newChat);
+              popChat.user.populate('avatar', (chatErr, avatarChat) => {
+                debug('NEWCHAT', popChat);
+                nsp.emit('chat', popChat);
+              });
             }
           });
         }
@@ -141,18 +143,38 @@ export function getOneChatroom(req, res, next) {
         data = chatroom.toObject();
         data.success = true;
       }
+      let chats = [],
+          avatarPromises = [];
       Chat
         .find({room: chatroom.title})
-        .sort({created: 1})
+        .sort({created: -1})
         .populate('user')
         .populate('user.avatar')
         .exec((errorWithTitle, chatsWithTitle) => {
+        chatsWithTitle.forEach((chatWithTitle) => {
+          debug('chats...');
+          if (chatWithTitle.user) {
+            const avatarPromise = new Promise((resolve, reject) => {
+              chatWithTitle.user.populate('avatar', (err, chat) => {
+                if (err) {
+                  reject(err);
+                }
+                chats.unshift(chat);
+                resolve(chat);
+              });
+            });
+            avatarPromises.unshift(avatarPromise);
+          }
+        });
+        Promise.all(avatarPromises).then(() => {
+          debug('promise all!!!');
+          data.chats = chatsWithTitle;
+          sendData({data, req, res, next});
+        });
 
         // chatsWithTitle.user.populate('avatar', (err, chatWAvatar) => {
         //   debug(chatWAvatar);
         // });
-        data.chats = chatsWithTitle;
-        sendData({data, req, res, next});
       });
     }
   });

@@ -23,6 +23,9 @@ class Picture extends Component {
       isVisible: false,
       isLoaded: false
     };
+
+    this._scrollElement = props.scrollElement || window;
+    debug('scroll', props);
   }
 
   static displayName = 'Picture'
@@ -36,22 +39,24 @@ class Picture extends Component {
   static propTypes = {
     mediaRecord: pt.object.isRequired,
     store: pt.object.isRequired,
-    onClick: pt.func
+    onClick: pt.func,
+    lazy: pt.bool
   }
 
   componentDidMount() {
     const DOMNode = React.findDOMNode(this);
-    debug('Width of thing ==', DOMNode.clientWidth);
     const boundFunc = this.debouncedScroll.bind(this, DOMNode);
     this.throttled = throttle(boundFunc, 250);
-    window.addEventListener('scroll', this.throttled, false);
-    window.addEventListener('resize', this.throttled, false);
+
+    this._scrollElement.addEventListener('scroll', this.throttled, false);
+    this._scrollElement.addEventListener('resize', this.throttled, false);
     this.throttled();
   }
 
   debouncedScroll(DOMNode) {
-
-    if (DOMNode.getBoundingClientRect().top < window.innerHeight) {
+    debug('scroll.....');
+    if (!this.props.lazy ||
+      DOMNode.getBoundingClientRect().top < this._scrollElement.innerHeight) {
       this.setState({
         isVisible: true
       }, this.waitForLoad);
@@ -75,8 +80,8 @@ class Picture extends Component {
   }
 
   removeListener() {
-    window.removeEventListener('scroll', this.throttled, false);
-    window.removeEventListener('resize', this.throttled, false);
+    this._scrollElement.removeEventListener('scroll', this.throttled, false);
+    this._scrollElement.removeEventListener('resize', this.throttled, false);
   }
 
   componentWillUnmount() {

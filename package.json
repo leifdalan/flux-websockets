@@ -108,6 +108,7 @@
     "iso": "DEBUG=*,-babel,-express*,-socket.io*,-engine*,-connect*,-morgan,-Fluxible*,-send,-eslint* && gulp dev --iso --admin",
     "prod": "NODE_ENV=production && REACT_SERVER_RENDER=true && DEBUG=-* && gulp build --prod && node index",
     "setup": "DEBUG=*,-babel && node ./setup.js",
+    "deploy": "git push heroku master && gulp deploy && rm dist/* && gulp less",
     "start": "npm cache clean && npm install && npm run setup --no-spin && npm run client"
   },
   "main": "index.js",
