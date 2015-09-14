@@ -92,6 +92,7 @@ class Application extends Component {
   componentDidMount() {
     try {
       const socket = io();
+      window.socket = socket;
       socket.on('id', (payload) => {
         this.context.executeAction(storeSocketIdAction, payload);
       });

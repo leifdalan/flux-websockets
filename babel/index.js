@@ -112,6 +112,11 @@ io.use(passportSocketIo.authorize({
   key: SESSION_KEY,
   secret: SESSION_SECRET,
   store: sessionStore,
+  success: (...args) => {
+    const accept = args[1];
+    debug('Passport socket.io authorization success');
+    accept(null, true);
+  },
   fail: (...args) => {
     const accept = args[3];
     debug('authorize failure for socket');

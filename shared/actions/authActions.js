@@ -32,6 +32,9 @@ export const loginAction = (
         } else {
           dispatch('FLASH_MESSAGE', message);
         }
+
+        window.socket.disconnect();
+        window.socket.connect();
         done && done();
       }
     );
@@ -49,6 +52,8 @@ export const logoutAction = ({dispatch}, {router}, done) => {
       dispatch('LOGOUT');
       router.transitionTo('/');
       dispatch('FLASH_MESSAGE', 'Come back soon!');
+      window.socket.disconnect();
+      window.socket.connect();
       done && done();
     }
   );
@@ -75,6 +80,8 @@ export const signUpAction = (
       } else {
         dispatch('FLASH_MESSAGE', message);
       }
+      window.socket.disconnect();
+      window.socket.connect();
       done && done();
     }
   );
