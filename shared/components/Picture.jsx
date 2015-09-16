@@ -39,12 +39,14 @@ class Picture extends Component {
     mediaRecord: pt.object.isRequired,
     store: pt.object.isRequired,
     onClick: pt.func,
-    lazy: pt.bool
+    lazy: pt.bool,
+    scrollElement: pt.bool
   }
 
   componentDidMount() {
     const DOMNode = React.findDOMNode(this);
     const boundFunc = this.debouncedScroll.bind(this, DOMNode);
+    this._scrollElement = this.props.scrollElement || window;
     this.throttled = throttle(boundFunc, 250);
 
     this._scrollElement.addEventListener('scroll', this.throttled, false);
