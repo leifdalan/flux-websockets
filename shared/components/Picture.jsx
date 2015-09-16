@@ -24,7 +24,6 @@ class Picture extends Component {
       isLoaded: false
     };
 
-    this._scrollElement = props.scrollElement || window;
     debug('scroll', props);
   }
 
