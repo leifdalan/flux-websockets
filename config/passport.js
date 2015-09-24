@@ -1,6 +1,5 @@
 import {Strategy} from 'passport-local';
 import User from '../models/user';
-import uuid from 'uuid';
 const debug = require('debug')('Passport');
 
 export default function(passport) {

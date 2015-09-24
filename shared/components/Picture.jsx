@@ -55,7 +55,6 @@ class Picture extends Component {
   }
 
   debouncedScroll(DOMNode) {
-    debug('scroll.....');
     if (!this.props.lazy ||
       DOMNode.getBoundingClientRect().top < this._scrollElement.innerHeight) {
       this.setState({

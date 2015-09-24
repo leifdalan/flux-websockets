@@ -215,7 +215,7 @@ class ChatRoom extends Component {
               value={this.state.inputValue} />
             <button type="submit">Submit</button>
             {this.props.appStore.user && this.props.appStore.user.userLevel > 1 &&
-              <button onClick={this.deleteChatRoom}>Delete Chatroom</button>
+              <button onClick={this.deleteChatRoom}>&#10005;</button>
             }
           </form>
 

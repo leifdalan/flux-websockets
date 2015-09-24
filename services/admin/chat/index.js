@@ -43,7 +43,10 @@ function listenOnChannel(io, chatroom) {
             if (popError) {
               nsp.emit('chatError');
             } else {
-              popChat.user.populate('avatar', (chatErr, avatarChat) => {
+              popChat.user.populate('avatar', (chatErr) => {
+                if (chatErr) {
+                  nsp.emit(chatErr);
+                }
                 debug('NEWCHAT', popChat);
                 nsp.emit('chat', popChat);
               });
