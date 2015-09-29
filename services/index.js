@@ -33,6 +33,8 @@ import {
   updateManyPages
 } from './admin/pages';
 
+import passport from 'passport';
+
 import upload, {s3} from './upload';
 const debug = require('debug')('Routes');
 
@@ -78,6 +80,31 @@ export default function(server, io) {
   server.post('/signup', signUp);
   server.post('/login', login);
   server.post('/logout', logOut);
+
+  server.get('/auth/google',
+    passport.authenticate(
+      'google',
+      { scope: ['profile', 'email'] }
+    )
+  );
+
+  server.get('/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/'
+  }));
+
+  server.get('/auth/facebook',
+    passport.authenticate('facebook',
+    {scope: 'email' }
+    )
+  );
+
+  server.get('/auth/facebook/callback',
+  passport.authenticate('facebook', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/'
+  }));
 
   // ----------------------------------------------------------------------------
   // Admin Users CRUD (/admin/users)

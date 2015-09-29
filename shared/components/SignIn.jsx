@@ -123,6 +123,12 @@ class Signin extends Component {
         {this.state.flashWarning &&
           <p>HEY! only letters and numbers, please.</p>
         }
+        <a href="/auth/google" className="btn btn-danger">
+          <span className="fa fa-google-plus"></span> Google+
+        </a>
+        <a href="/auth/facebook" className="btn btn-danger">
+          <span className="fa fa-google-plus"></span> Facebook
+        </a>
       </form>
     );
   }

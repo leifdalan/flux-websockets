@@ -18,8 +18,18 @@ var defaults = {
   CSS_PATH: 'main.css',
   AWS_KEY : '',
   AWS_SECRET : '',
-  AWS_BUCKET : ''
-
+  AWS_BUCKET : '',
+  SESSION_KEY: '',
+  SESSION_SECRET: '',
+  CLOUD_NAME: '',
+  CLOUD_API_KEY: '',
+  CLOUD_SECRET: '',
+  GOOGLE_CLIENT_ID: '',
+  GOOGLE_CLIENT_SECRET: '',
+  GOOGLE_CALLBACK_URL: '',
+  FACEBOOK_CLIENT_ID: '',
+  FACEBOOK_CLIENT_SECRET: '',
+  FACEBOOK_CALLBACK_URL: ''
 };
 
 // For deployment

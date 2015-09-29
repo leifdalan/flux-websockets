@@ -155,7 +155,6 @@ export function getOneChatroom(req, res, next) {
         .populate('user.avatar')
         .exec((errorWithTitle, chatsWithTitle) => {
         chatsWithTitle.forEach((chatWithTitle) => {
-          debug('chats...');
           if (chatWithTitle.user) {
             const avatarPromise = new Promise((resolve, reject) => {
               chatWithTitle.user.populate('avatar', (err, chat) => {
@@ -170,14 +169,9 @@ export function getOneChatroom(req, res, next) {
           }
         });
         Promise.all(avatarPromises).then(() => {
-          debug('promise all!!!');
           data.chats = chatsWithTitle;
           sendData({data, req, res, next});
         });
-
-        // chatsWithTitle.user.populate('avatar', (err, chatWAvatar) => {
-        //   debug(chatWAvatar);
-        // });
       });
     }
   });

@@ -19,6 +19,18 @@ const userSchema = mongoose.Schema({
    type: mongoose.Schema.ObjectId,
    ref: 'Media'
   },
+  google: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
+  },
+  facebook: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
+  },
   created: { type: Date, 'default': Date.now },
   lastUpdated: { type: Date, 'default': Date.now }
 });
