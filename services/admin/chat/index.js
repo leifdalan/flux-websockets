@@ -17,7 +17,10 @@ function listenOnChannel(io, chatroom) {
   nsp.on('connection', function (socket) {
     debug('connected');
     const user = socket.request.user.logged_in ?
-      socket.request.user.local.username :
+      socket.request.user.local.username ||
+      socket.request.user.google.name ||
+      socket.request.user.twitter.name ||
+      socket.request.user.facebook.name :
       `Anon-${uuid.v4()}`;
 
     if (!includes(connectedUsers, user)) {

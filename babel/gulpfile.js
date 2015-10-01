@@ -278,10 +278,12 @@ gulp.task('server-only', ['clean', 'watch', 'browser-sync', 'less', 'server']);
 
 gulp.task('deploy', ['awsJS'], () => {
   const manifest = require('../rev-manifest.json');
-  let herokuCommand = `heroku config:set CSS_PATH=${manifest['main.css']} ` +
-        `JS_PATH=${manifest['client.js']} ` +
-        `PUBLIC_ASSET_DOMAIN=s3-${aws.region}.amazonaws.com ` +
-        `PUBLIC_PATH=/${aws.bucket}`;
+  let herokuCommand =
+`heroku config:set
+CSS_PATH=${manifest['main.css']}
+JS_PATH=${manifest['client.js']}
+PUBLIC_ASSET_DOMAIN=s3-${aws.region}.amazonaws.com
+PUBLIC_PATH=/${aws.bucket}`;
   debug(herokuCommand);
   $.run(herokuCommand).exec();
 

@@ -3,6 +3,7 @@ import User from '../models/user';
 import config from '../config';
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy  = require('passport-twitter').Strategy;
 const debug = require('debug')('Passport');
 
 export default function(passport) {
@@ -233,6 +234,8 @@ export default function(passport) {
                     newUser.google.name  = profile.displayName;
                     newUser.google.email =
                       (profile.emails[0].value || '').toLowerCase(); // pull the first email
+                    newUser.google.avatar =
+                      profile.photos[0].value; // pull the first photo
 
                     newUser.save(function(newUserErr) {
                       if (newUserErr) {
@@ -294,6 +297,7 @@ export default function(passport) {
               user.facebook.token = token;
               user.facebook.name  = profile.displayName || profile.username;
               user.facebook.email = (profile.emails[0].value || '').toLowerCase();
+              user.facebook.avatar = profile.photos[0].value;
               user.save(function(saveErr) {
                 if (saveErr) {
                   return done(saveErr);
@@ -348,4 +352,84 @@ export default function(passport) {
     });
 
   }));
+  // =========================================================================
+// TWITTER =================================================================
+// =========================================================================
+/*eslint-disable*/
+passport.use(new TwitterStrategy({
+
+    consumerKey     : config.TWITTER_CLIENT_ID,
+    consumerSecret  : config.TWITTER_CLIENT_SECRET,
+    callbackURL     : config.TWITTER_CALLBACK_URL,
+    passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+
+},
+function(req, token, tokenSecret, profile, done) {
+    console.log('profile', profile);
+    // asynchronous
+    process.nextTick(function() {
+
+        // check if the user is already logged in
+        if (!req.user) {
+
+            User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+                if (err)
+                    return done(err);
+
+                if (user) {
+                    // if there is a user id already but no token (user was linked at one point and then removed)
+                    if (!user.twitter.token) {
+                        user.twitter.token       = token;
+                        user.twitter.username    = profile.username;
+                        user.twitter.displayName = profile.displayName;
+
+                        user.save(function(err) {
+                            if (err)
+                                return done(err);
+
+                            return done(null, user);
+                        });
+                    }
+
+                    return done(null, user); // user found, return that user
+                } else {
+                    // if there is no user, create them
+                    var newUser                 = new User();
+
+                    newUser.twitter.id          = profile.id;
+                    newUser.twitter.token       = token;
+                    newUser.twitter.username    = profile.username;
+                    newUser.twitter.displayName = profile.displayName;
+                    newUser.twitter.avatar = profile.photos[0].value;
+
+                    newUser.save(function(err) {
+                        if (err)
+                            return done(err);
+
+                        return done(null, newUser);
+                    });
+                }
+            });
+
+        } else {
+            // user already exists and is logged in, we have to link accounts
+            var user                 = req.user; // pull the user out of the session
+
+            user.twitter.id          = profile.id;
+            user.twitter.token       = token;
+            user.twitter.username    = profile.username;
+            user.twitter.displayName = profile.displayName;
+
+            user.save(function(err) {
+                if (err)
+                    return done(err);
+
+                return done(null, user);
+            });
+        }
+
+    });
+
+}));
+/*eslint-enable*/
 }

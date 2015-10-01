@@ -30,6 +30,9 @@ var defaults = {
   FACEBOOK_CLIENT_ID: '',
   FACEBOOK_CLIENT_SECRET: '',
   FACEBOOK_CALLBACK_URL: ''
+  TWITTER_CLIENT_ID: '',
+  TWITTER_CLIENT_SECRET: '',
+  TWITTER_CALLBACK_URL: ''
 };
 
 // For deployment

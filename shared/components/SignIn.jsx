@@ -129,6 +129,9 @@ class Signin extends Component {
         <a href="/auth/facebook" className="btn btn-danger">
           <span className="fa fa-google-plus"></span> Facebook
         </a>
+        <a href="/auth/twitter" className="btn btn-danger">
+          <span className="fa fa-google-plus"></span> Twitter
+        </a>
       </form>
     );
   }

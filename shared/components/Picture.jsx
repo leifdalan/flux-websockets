@@ -89,17 +89,29 @@ class Picture extends Component {
   }
 
   render() {
+    let original, mobile, medium, retina, mobileWebp, mediumWebp, retinaWebp, alt;
+
     const pre = `http://${this.props.store.appConfig.bucket}`;
-    const {
-      original,
-      mobile,
-      medium,
-      retina,
-      mobileWebp,
-      mediumWebp,
-      retinaWebp,
-      alt
-    } = this.props.mediaRecord;
+    if (typeof this.props.mediaRecord !== 'string') {
+       original = this.props.mediaRecord.original;
+       mobile = this.props.mediaRecord.mobile;
+       medium = this.props.mediaRecord.medium;
+       retina = this.props.mediaRecord.retina;
+       mobileWebp = this.props.mediaRecord.mobileWebp;
+       mediumWebp = this.props.mediaRecord.mediumWebp;
+       retinaWebp = this.props.mediaRecord.retinaWebp;
+       alt = this.props.mediaRecord.alt;
+    } else {
+      original =
+      mobile =
+      medium =
+      retina =
+      mobileWebp =
+      mediumWebp =
+      retinaWebp =
+      this.props.mediaRecord;
+    }
+
     const ratio = original.height / original.width * 100;
     const classes = classnames({
       'picture-figure': true,

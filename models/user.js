@@ -23,13 +23,22 @@ const userSchema = mongoose.Schema({
     id: String,
     token: String,
     email: String,
-    name: String
+    name: String,
+    avatar: String
   },
   facebook: {
     id: String,
     token: String,
     email: String,
-    name: String
+    name: String,
+    avatar: String
+  },
+  twitter: {
+    id: String,
+    token: String,
+    email: String,
+    name: String,
+    avatar: String
   },
   created: { type: Date, 'default': Date.now },
   lastUpdated: { type: Date, 'default': Date.now }

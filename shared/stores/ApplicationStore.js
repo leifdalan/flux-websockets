@@ -167,7 +167,7 @@ export default class ApplicationStore extends BaseStore {
 
   login(payload) {
     debug(payload);
-    const {userLevel, local, _id, avatar} = payload;
+    const {userLevel, local, _id, avatar, google, facebook, twitter} = payload;
     debug('LOGIN PAYLOAd');
     debug(avatar);
     if (!avatar) {
@@ -176,7 +176,7 @@ export default class ApplicationStore extends BaseStore {
       this.avatar = avatar;
     }
     this.loggedIn = true;
-    this.username = local.username;
+    this.username = local.username || google.name || facebook.name || twitter.name;
     this.userLevel = userLevel;
     this.userId = _id;
 

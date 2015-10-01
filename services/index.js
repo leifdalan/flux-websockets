@@ -106,6 +106,21 @@ export default function(server, io) {
     failureRedirect: '/'
   }));
 
+  // send to twitter to do the authentication
+  server.get('/auth/twitter',
+    passport.authenticate(
+      'twitter',
+      { scope: 'email' }
+    )
+  );
+
+  // handle the callback after twitter has authenticated the user
+  server.get('/auth/twitter/callback',
+    passport.authenticate('twitter', {
+      successRedirect: '/dashboard',
+      failureRedirect: '/'
+    }));
+
   // ----------------------------------------------------------------------------
   // Admin Users CRUD (/admin/users)
   // ----------------------------------------------------------------------------

@@ -59,7 +59,7 @@ class ChatRoom extends Component {
       inputValue: e.target.value
     });
     this.socket.emit('typing', {
-      user: this.props.appStore.user.local.username,
+      user: this.props.appStore.username,
       typing: true
     });
   }
@@ -148,12 +148,37 @@ class ChatRoom extends Component {
     const channel = `/${this.props.store.chatRoomTitle}`;
     this.context.executeAction(sendMessageAction, {content, user, channel});
     this.socket.emit('typing', {
-      user: this.props.appStore.user.local.username,
+      user: this.props.appStore.username,
       typing: false
     });
     this.setState({
       inputValue: ''
     });
+  }
+
+  getUsername(user) {
+    /*eslint-disable*/
+    return user.local ? user.local.username :
+      user.google ? user.google.name :
+      user.twitter ? user.twitter.name :
+      user.facebook ? user.facebook.name :
+      'Anon';
+    /*eslint-enable*/
+  }
+
+  getAvatar(user) {
+    /*eslint-disable*/
+    var avatar = user.avatar ? user.avatar :
+      user.google ? user.google.avatar :
+      user.twitter ? user.twitter.avatar :
+      user.facebook ? user.facebook.avatar :
+      this.props.appStore.defaultAvatar;
+    /*eslint-enable*/
+    if (!avatar) {
+      avatar = this.props.appStore.defaultAvatar;
+    }
+    return avatar;
+
   }
 
   render() {
@@ -193,13 +218,12 @@ class ChatRoom extends Component {
                 <div className="chat-message" key={`chat${i}`}>
                   <div className="thumbnail">
                     <Picture
-                      mediaRecord={chat.user && chat.user.avatar ?
-                        chat.user.avatar : this.props.appStore.defaultAvatar}
+                      mediaRecord={chat.user && this.getAvatar(chat.user)}
                       lazy={false}
                     />
                   </div>
                   <div className="body">
-                    {chat.user ? chat.user.local.username : 'Anon'}:
+                    {chat.user ? this.getUsername(chat.user) : 'Anon'}:
                     <span className="time">{getTime(chat.created)}</span>
                   </div>
                   <div className="content">{chat.content}</div>
