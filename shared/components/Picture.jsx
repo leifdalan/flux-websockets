@@ -92,7 +92,7 @@ class Picture extends Component {
     let original, mobile, medium, retina, mobileWebp, mediumWebp, retinaWebp, alt, ratio;
 
     const pre = `http://${this.props.store.appConfig.bucket}`;
-    if (typeof this.props.mediaRecord === 'object') {
+    if (typeof this.props.mediaRecord === 'object' && !!this.props.mediaRecord) {
        original = this.props.mediaRecord.original;
        mobile = this.props.mediaRecord.mobile;
        medium = this.props.mediaRecord.medium;
