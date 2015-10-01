@@ -97,9 +97,9 @@ class Picture extends Component {
       mediumWebp = {},
       retinaWebp = {},
       alt,
-      ratio;
+      ratio,
+      pre;
 
-    const pre = `http://${this.props.store.appConfig.bucket}`;
     if (typeof this.props.mediaRecord === 'object' && !!this.props.mediaRecord) {
        original = this.props.mediaRecord.original;
        mobile = this.props.mediaRecord.mobile;
@@ -110,6 +110,7 @@ class Picture extends Component {
        retinaWebp = this.props.mediaRecord.retinaWebp;
        alt = this.props.mediaRecord.alt;
        ratio = original.height / original.width * 100;
+       pre = `http://${this.props.store.appConfig.bucket}`;
     } else {
       original.filename =
       mobile.filename =
@@ -120,6 +121,7 @@ class Picture extends Component {
       retinaWebp.filename =
       this.props.mediaRecord;
       ratio = 100;
+      pre = '';
     }
 
     const classes = classnames({
