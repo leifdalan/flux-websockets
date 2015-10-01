@@ -111,7 +111,7 @@ class Picture extends Component {
       mediumWebp =
       retinaWebp =
       this.props.mediaRecord;
-      ratio = 1;
+      ratio = 100;
     }
 
     const classes = classnames({
@@ -131,10 +131,7 @@ class Picture extends Component {
           <i className="loading"></i>
         }
         {this.state.isVisible &&
-          <picture
-            data-width={original.width}
-            data-height={original.height}
-            >
+          <picture>
             {/*eslint-disable*/}
             <source
               srcSet={`${pre}${mobileWebp.filename}, ${pre}${mediumWebp.filename} 2x`}
