@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 import React, {Component, PropTypes as pt, findDOMNode} from 'react';
 import DocumentTitle from 'react-document-title';

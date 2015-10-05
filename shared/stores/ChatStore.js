@@ -28,7 +28,7 @@ export default class ChatStore extends BaseStore {
   populateChatroom(payload) {
     this.chatRoomId = payload._id;
     this.chatRoomTitle = payload.title;
-    this.chats = payload.chats.reverse() || [];
+    this.chats = payload.chats ? payload.chats.reverse() : [];
     this.connectedUsers = this.connectedUsers || [];
     this.emitChange();
   }

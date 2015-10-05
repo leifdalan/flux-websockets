@@ -86,3 +86,52 @@ export const signUpAction = (
     }
   );
 };
+
+export const changePasswordAction = (
+  {dispatch},
+  {password, router},
+  done) => {
+  debug('change password action');
+  request
+    .post('/passwordReset')
+    .set('Accept', 'application/json')
+    .set('X-Requested-With', 'XMLHttpRequest')
+    .send({password})
+    .end((err, {body}) => {
+      const {success, message} = body;
+      debug('RESPONSE?!');
+      debug(err);
+      if (success) {
+        router.transitionTo('/dashboard');
+        dispatch('FLASH_MESSAGE', 'Password Changed.');
+      } else {
+        dispatch('FLASH_MESSAGE', message);
+      }
+      done && done();
+    }
+  );
+};
+export const sendPasswordResetAction = (
+  {dispatch},
+  {username, router},
+  done) => {
+  debug('change password action');
+  request
+    .post('/sendPasswordReset')
+    .set('Accept', 'application/json')
+    .set('X-Requested-With', 'XMLHttpRequest')
+    .send({username})
+    .end((err, {body}) => {
+      const {success, message} = body;
+      debug('RESPONSE?!');
+      debug(err);
+      if (success) {
+        router.transitionTo('/dashboard');
+        dispatch('FLASH_MESSAGE', 'Password reset successfully sent.');
+      } else {
+        dispatch('FLASH_MESSAGE', message);
+      }
+      done && done();
+    }
+  );
+};

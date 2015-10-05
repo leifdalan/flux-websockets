@@ -163,7 +163,7 @@ class Application extends Component {
     );
 
     return (
-      <DocumentTitle title="Isomorphic Auth Flow">
+      <DocumentTitle title="React Chap App">
         <div className="app">
           <Hamburger
             className="hamburger"

@@ -1,6 +1,6 @@
 'use strict';
-import React, {Component, PropTypes as pt} from 'react';
-import {loginAction, signUpAction} from '../actions/authActions';
+import React, {Component, PropTypes as pt, findDOMNode} from 'react';
+import {loginAction, signUpAction, sendPasswordResetAction} from '../actions/authActions';
 import {autoBindAll} from '../../utils';
 const debug = require('debug')('Component:SignIn');
 debug();
@@ -14,7 +14,8 @@ class Signin extends Component {
       'signUp',
       'usernameHandler',
       'passwordHandler',
-      'numberHandler'
+      'numberHandler',
+      'sendPasswordReset'
     ]);
     this.state = props;
   }
@@ -77,6 +78,14 @@ class Signin extends Component {
     });
   }
 
+  sendPasswordReset(e) {
+    e.preventDefault();
+    this.context.executeAction(sendPasswordResetAction, {
+      router: this.context.router,
+      username: findDOMNode(this.refs.username).value
+    });
+  }
+
   render() {
     return (
       <form className="signin-form"
@@ -123,6 +132,7 @@ class Signin extends Component {
         {this.state.flashWarning &&
           <p>HEY! only letters and numbers, please.</p>
         }
+        <a onClick={this.sendPasswordReset}>Forgot Password?</a>
         <a href="/auth/google" className="btn btn-danger">
           <span className="fa fa-google-plus"></span> Google+
         </a>

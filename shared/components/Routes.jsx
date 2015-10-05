@@ -9,12 +9,14 @@ import User from './Admin/Users/User';
 import CreateUser from './Admin/Users/CreateUser';
 import ChatLobby from './ChatLobby';
 import ChatRoom from './ChatRoom';
+import PasswordReset from './PasswordReset';
 import NotFound from './NotFound';
 
 export default (
   <Route name="app" path="/" handler={Application}>
     <Route name="home" path="/" handler={ChatLobby}/>
     <Route name="dashboard" handler={Dashboard}/>
+    <Route name="passwordReset" handler={PasswordReset}/>
     <Route name="signin" handler={SignIn}/>
     <Route name="chat">
       <DefaultRoute name="chatIndex" handler={ChatLobby}/>

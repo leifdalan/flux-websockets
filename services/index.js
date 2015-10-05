@@ -3,7 +3,8 @@ import {
   logOut,
   login,
   isAdmin,
-  isLoggedIn
+  isLoggedIn,
+  changePassword
 } from './authentication';
 
 import {
@@ -32,6 +33,11 @@ import {
   deletePage,
   updateManyPages
 } from './admin/pages';
+
+import User from '../models/user';
+
+import {sendMail} from './mail';
+import config from '../config';
 
 import passport from 'passport';
 
@@ -158,6 +164,46 @@ export default function(server, io) {
     const data = {success: true};
     sendData({data, req, res, next});
   });
+  server.get('/passwordReset', (req, res, next) => {
+    const data = {success: true};
+    sendData({data, req, res, next});
+  });
+
+  server.post('/passwordReset', isLoggedIn, changePassword);
+  server.post('/sendPasswordReset', (req, res, next) => {
+    User.findOne({'local.username': req.body.username}, (err, user) => {
+      if (!err && user) {
+        const {PROTOCOL, HOSTNAME, DEVELOPMENT_PORT} = config;
+        const suffix = DEVELOPMENT_PORT ? `:${DEVELOPMENT_PORT}` : '';
+        sendMail({
+          from: 'farts@farts.com',
+          to: 'leifdalan@gmail.com',
+          subject: 'Password Reset Requested',
+          html: `<a href="${PROTOCOL}${HOSTNAME}${suffix}` +
+            `/passwordReset?token=${user.loginToken}&` +
+            `un=${user.local.username}">Reset password</a>`
+        }, () => {
+          const data = {success: true};
+          sendData({data, req, res, next});
+        });
+      }
+    });
+  });
+
+  server.get('/sendMail', (req, res, next) => {
+    debug('SENDING MAIL----------------------------------------');
+    sendMail({
+      from: 'farts@farts.com',
+      to: 'leifdalan@gmail.com',
+      subject: 'hi there',
+      text: 'anotherone'
+    }, () => {
+      debug('custom callback');
+    });
+    const data = {success: true};
+    sendData({data, req, res, next});
+  });
+
   server.get('/chat', getChatRooms.bind(io));
   server.post('/chat/', createChat.bind(io));
   server.delete('/chat/:id', deleteChat.bind(io));

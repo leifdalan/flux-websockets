@@ -1,4 +1,6 @@
 import passport from 'passport';
+import User from '../models/user';
+import {sendData} from '../services';
 const debug = require('debug')('Routes:Authentication');
 
 export function signUp(req, res, next) {
@@ -97,7 +99,7 @@ export function isLoggedIn(req, res, next) {
     req.abortNavigation = {
       to: '/signin',
       params: {
-        reason: 'UNAUTHENTICATED'
+      reason: 'UNAUTHENTICATED'
       }
     };
     next();
@@ -118,4 +120,23 @@ export function isAdmin(req, res, next) {
     };
     next();
   }
+}
+
+export function changePassword(req, res, next) {
+  User.findOne(req.user._id, (userErr, user) => {
+    var newUser = new User();
+    user.local.password = newUser.generateHash(req.body.password);
+    user.save((saveErr) => {
+      if (saveErr) {
+        debug(saveErr);
+        req.flash(`Error changing password: ${saveErr}`);
+      } else {
+        const data = {
+          success: true,
+          message: 'Changed password'
+        };
+        sendData({data, req, res, next});
+      }
+    });
+  });
 }
