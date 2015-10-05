@@ -38,7 +38,7 @@ import User from '../models/user';
 
 import {sendMail} from './mail';
 import config from '../config';
-import Email from '../shared/components/email';
+import Email from '../shared/components/Email';
 import React from 'react';
 import passport from 'passport';
 
