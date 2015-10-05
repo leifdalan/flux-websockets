@@ -94,7 +94,7 @@ class Uploader extends Component {
 
     debug('totalProgress / subProgresses', totalProgress / subProgresses);
     debug('this._progress', this._progress);
-    if (Math.round(totalProgress / subProgresses) === 1) {
+    if ((totalProgress / subProgresses) > 0.95) {
       this.setState({
         isUploading: false
       });

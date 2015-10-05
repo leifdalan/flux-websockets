@@ -38,7 +38,8 @@ import User from '../models/user';
 
 import {sendMail} from './mail';
 import config from '../config';
-
+import Email from '../shared/components/email';
+import React from 'react';
 import passport from 'passport';
 
 import upload, {s3} from './upload';
@@ -175,13 +176,25 @@ export default function(server, io) {
       if (!err && user) {
         const {PROTOCOL, HOSTNAME, DEVELOPMENT_PORT} = config;
         const suffix = DEVELOPMENT_PORT ? `:${DEVELOPMENT_PORT}` : '';
+        const href = `${PROTOCOL}${HOSTNAME}${suffix}` +
+          `/passwordReset?token=${user.loginToken}&` +
+          `un=${user.local.username}`;
+        const markup = React.renderToStaticMarkup(React.createFactory(Email)({
+          callToAction: href
+        }));
+        const html = `<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"` +
+        ` "http://www.w3.org/TR/html4/loose.dtd">` +
+        `${markup}`;
+        debug(html);
         sendMail({
           from: 'farts@farts.com',
           to: 'leifdalan@gmail.com',
           subject: 'Password Reset Requested',
-          html: `<a href="${PROTOCOL}${HOSTNAME}${suffix}` +
-            `/passwordReset?token=${user.loginToken}&` +
-            `un=${user.local.username}">Reset password</a>`
+          html: html
+
+          // : `<a href="${PROTOCOL}${HOSTNAME}${suffix}` +
+          //   `/passwordReset?token=${user.loginToken}&` +
+          //   `un=${user.local.username}">Reset password</a>` +
         }, () => {
           const data = {success: true};
           sendData({data, req, res, next});

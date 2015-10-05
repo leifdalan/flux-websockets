@@ -88,7 +88,8 @@ export default function(req, res) {
       debug(mimetype);
       const unique = uuid.v4();
       const extension = path.extname(filename);
-      const uniqueFilename = `${filename.replace(extension, '')}-${unique}`;
+      const filenameNoSpaces = filename.replace(' ', '_');
+      const uniqueFilename = `${filenameNoSpaces.replace(extension, '')}-${unique}`;
 
       // Stream content to cloudinary API
       const cloudStream = cloudinaryClient.uploader.upload_stream((result) => {
@@ -195,7 +196,8 @@ export function singleS3Push({cloudObj, publicId, io, socketId, i}) {
         'Content-Type': cloudRes.headers['content-type'],
         'x-amz-acl': 'public-read'
       };
-      const filename = `${publicId}${cloudObj.width}x${cloudObj.height}.${sizes[i].format}`;
+      const underscores = publicId.replace(' ', '_');
+      const filename = `${underscores}${cloudObj.width}x${cloudObj.height}.${sizes[i].format}`;
       const s3Req = s3client.put(filename, headers, (s3err, s3Res) => {
         if (s3err) {
           debug(s3err);
