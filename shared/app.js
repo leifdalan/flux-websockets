@@ -1,8 +1,4 @@
 import Fluxible from 'fluxible';
-// const io = require('socket.io-client');
-// if (typeof window === 'object') {
-//   window.io = io;
-// }
 
 const app = new Fluxible({
   component: require('./components/Routes.jsx')

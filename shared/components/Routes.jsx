@@ -12,7 +12,7 @@ import ChatRoom from './ChatRoom';
 import PasswordReset from './PasswordReset';
 import NotFound from './NotFound';
 
-export default (
+const router = (
   <Route name="app" path="/" handler={Application}>
     <Route name="home" path="/" handler={ChatLobby}/>
     <Route name="dashboard" handler={Dashboard}/>
@@ -52,3 +52,5 @@ export default (
     <NotFoundRoute handler={NotFound}/>
   </Route>
 );
+
+export default router;
