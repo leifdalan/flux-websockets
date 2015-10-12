@@ -163,8 +163,9 @@ export default function(passport) {
             /*eslint-disable*/
             newUser.save((saveErr) => {
               if (saveErr) {
-                return done(saveErr);
                 debug('User saving failed.', saveErr);
+                return done(saveErr);
+
               }
               return done(null, newUser);
             });

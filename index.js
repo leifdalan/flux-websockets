@@ -1,4 +1,4 @@
-'use scrict';
+'use strict';
 var BABEL_STAGE = require('./config').BABEL_STAGE;
 
 // Babel entry point

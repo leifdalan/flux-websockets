@@ -1,7 +1,6 @@
 'use strict';
 
 import React, {Component, PropTypes as pt} from 'react';
-import {autoBindAll} from '../../../utils';
 const debug = require('debug')('Component:EmailTemplate');
 debug();
 

@@ -271,6 +271,7 @@ gulp.task('awsCSS', ['g-zip'], function() {
 });
 
 gulp.task('dev', ['clean', 'watch', 'devserver', 'browser-sync', 'less', 'server']);
+gulp.task('devNoServer', ['clean', 'watch', 'devserver', 'browser-sync', 'less']);
 
 gulp.task('build', ['clean', 'less', 'bundleJS']);
 

@@ -87,7 +87,7 @@ class Uploader extends Component {
     let totalProgress = 0;
     Object.keys(this._progress).forEach((key) => {
       totalProgress += this._progress[key];
-    }.bind(this));
+    });
     this.setState({
       totalProgress: totalProgress / subProgresses
     });

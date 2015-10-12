@@ -124,7 +124,7 @@ class PageForm extends Component {
         content: this.props.store.dict[block.id],
         mediaRecord: block.mediaRecord
       };
-    }.bind(this));
+    });
     debug('REPORT:', report);
   }
 

@@ -114,7 +114,7 @@ class ChatRoom extends Component {
     // set interval
     this.interval = window.setInterval(() => {
       this.forceUpdate();
-    }.bind(this), 10000);
+    }, 10000);
 
     this.socket = socket;
     this.activitySocket = activitySocket;

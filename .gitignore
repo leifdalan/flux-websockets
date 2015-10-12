@@ -8,3 +8,4 @@ config/secrets.js
 rev-manifest.json
 aws.js
 data
+.idea

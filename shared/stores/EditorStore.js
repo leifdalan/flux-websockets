@@ -67,11 +67,7 @@ export default class EditorStore extends BaseStore {
     debug(payload);
     find(this.blocks, (block) => block.id === payload.blockId);
     this.blocks.forEach((block) => {
-      if (block.id === payload.blockId) {
-        block.focused = true;
-      } else {
-        block.focused = false;
-      }
+      block.focused = block.id === payload.blockId;
     });
     this._currentTag = this.blocks[payload.index].tag;
     this.focusPos = payload.index;

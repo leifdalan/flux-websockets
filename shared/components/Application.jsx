@@ -163,7 +163,7 @@ class Application extends Component {
     );
 
     return (
-      <DocumentTitle title="React Chap App">
+    <DocumentTitle title="React Chap App">
         <div className="app">
           <Hamburger
             className="hamburger"
@@ -173,13 +173,13 @@ class Application extends Component {
           </Hamburger>
           <TransitionGroup component="div" transitionName="go-away">
             {this.state.flashMessage &&
-              <button
-                key="flashMessage"
-                ref="flashMessage"
-                onClick={this.clearFlash}
-                className="u-full-width button button-prima2y flash">
-                {this.state.flashMessage}
-              </button>
+            <button
+              key="flashMessage"
+              ref="flashMessage"
+              onClick={this.clearFlash}
+              className="u-full-width button button-prima2y flash">
+              {this.state.flashMessage}
+            </button>
             }
           </TransitionGroup>
 

@@ -290,7 +290,7 @@ export function s3(req, res) {
       socketId,
       i
     }));
-  }.bind(this));
+  });
 
   // When all promises have been fulfilled, send an HTTP response.
   Promise.all(promises).then((resArray) => {
